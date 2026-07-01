@@ -1,0 +1,384 @@
+<!--
+  Advanced Flight Instruction — Shaurye Chakravarty
+  Third page in the set. Single-page, self-contained. For GitHub Pages: instruction.html
+
+  TO EDIT LATER:
+   • Links / email: search for "EDIT:" below.
+   • Ratings, offerings, and approach live in sections 01–02.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advanced Flight Instruction — Shaurye Chakravarty</title>
+<meta name="description" content="Advanced flight instruction with Shaurye Chakravarty — CFI, CFII, MEI. Instrument, multi-engine, and the commercial standard, in North Phoenix, Arizona.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#0F1319;
+    --ground-2:#141922;
+    --ink:#E8E3D6;
+    --ink-soft:#9A958A;
+    --ink-faint:#615F59;
+    --brass:#C6A15B;
+    --brass-dim:#8C7643;
+    --steel:#6E93A6;
+    --line:rgba(232,227,214,0.12);
+    --line-soft:rgba(232,227,214,0.06);
+
+    --display:"Fraunces",Georgia,serif;
+    --body:"Spectral",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+    --measure:38rem;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--ground);color:var(--ink);
+    font-family:var(--body);font-weight:400;line-height:1.72;
+    font-size:clamp(1rem,0.96rem + 0.2vw,1.12rem);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(198,161,91,0.22);color:var(--ink)}
+
+  .wrap{width:100%;max-width:var(--measure);margin:0 auto;padding:0 1.5rem}
+
+  .eyebrow{
+    font-family:var(--mono);font-size:0.7rem;font-weight:500;
+    letter-spacing:0.22em;text-transform:uppercase;color:var(--brass);
+  }
+
+  /* ---- top bar ---- */
+  .topbar{padding-top:2rem;padding-bottom:0.4rem}
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:0.9rem 1.4rem;flex-wrap:wrap;
+  }
+  .brand{
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.26em;
+    text-transform:uppercase;color:var(--ink);text-decoration:none;
+    transition:color .25s ease;
+  }
+  .brand:hover,.brand:focus-visible{color:var(--brass)}
+  .nav-links{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+  .nav-links a{
+    font-family:var(--mono);font-size:0.66rem;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;
+    padding-bottom:3px;border-bottom:1px solid transparent;
+    transition:color .25s ease,border-color .25s ease;
+  }
+  .nav-links a:hover,.nav-links a:focus-visible{color:var(--brass)}
+  .nav [aria-current="page"]{color:var(--brass)}
+  .nav-links [aria-current="page"]{border-bottom-color:var(--brass-dim)}
+  .beat{
+    width:7px;height:7px;border-radius:50%;background:var(--brass);
+    box-shadow:0 0 0 0 rgba(198,161,91,0.5);
+    animation:tick 1s steps(1,end) infinite;
+  }
+  @keyframes tick{
+    0%{opacity:1;transform:scale(1);box-shadow:0 0 0 0 rgba(198,161,91,0.45)}
+    40%{opacity:1}
+    50%{opacity:0.28;transform:scale(0.82);box-shadow:0 0 0 5px rgba(198,161,91,0)}
+    100%{opacity:1;transform:scale(1)}
+  }
+
+  /* ---- dial-track divider ---- */
+  .rule{
+    height:9px;margin:4.5rem 0;
+    background-image:repeating-linear-gradient(to right,
+      var(--line) 0,var(--line) 1px,transparent 1px,transparent 11px);
+    background-position:left center;background-repeat:repeat-x;background-size:auto 9px;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);
+            mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);
+  }
+
+  /* ---- hero ---- */
+  .hero{padding-top:3.2rem}
+  .hero .eyebrow{display:block;margin-bottom:1.6rem}
+  .hero h1{
+    font-family:var(--display);font-weight:300;
+    font-size:clamp(2.3rem,1.4rem + 5vw,4.1rem);
+    line-height:1.04;letter-spacing:-0.01em;margin:0 0 1.1rem;color:var(--ink);
+  }
+  .hero h1 em{font-style:italic;font-weight:400;color:var(--brass)}
+  .hero .lede{max-width:34rem;color:var(--ink-soft);font-size:1.08rem;margin:0}
+  .hero .lede strong{color:var(--ink);font-weight:500}
+
+  /* ---- method readout ---- */
+  .method{
+    margin-top:2.4rem;padding:1.15rem 1.25rem;
+    border:1px solid var(--line);border-left:2px solid var(--brass-dim);
+    background:var(--ground-2);
+    font-family:var(--mono);font-size:0.82rem;letter-spacing:0.04em;color:var(--ink);
+    display:flex;flex-wrap:wrap;gap:0.15rem 0.9rem;
+  }
+  .method .step{opacity:0;transform:translateY(3px);
+    transition:opacity .5s ease,transform .5s ease;white-space:nowrap}
+  .method .step.in{opacity:1;transform:none}
+  .method .dot{color:var(--brass);margin-right:0.55rem}
+
+  /* ---- section shell ---- */
+  section{padding-top:0.5rem}
+  .sec-head{display:flex;align-items:baseline;gap:0.9rem;margin-bottom:1.8rem}
+  .sec-head .num{
+    font-family:var(--mono);font-size:0.66rem;letter-spacing:0.2em;color:var(--brass-dim);
+  }
+  .sec-head h2{
+    font-family:var(--display);font-weight:400;font-size:1.5rem;
+    letter-spacing:0.01em;margin:0;color:var(--ink);
+  }
+
+  p{margin:0 0 1.15rem;max-width:var(--measure)}
+  p:last-child{margin-bottom:0}
+  p em{font-style:italic;color:var(--ink)}
+
+  /* ---- what I teach (record) ---- */
+  .record{margin-top:1rem;border-top:1px solid var(--line-soft)}
+  .rec-row{
+    display:grid;grid-template-columns:9.5rem 1fr;gap:0.4rem 1.2rem;
+    padding:0.95rem 0;border-bottom:1px solid var(--line-soft);
+  }
+  .rec-row dt{
+    font-family:var(--mono);font-size:0.66rem;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--brass-dim);padding-top:0.15rem;
+  }
+  .rec-row dd{margin:0;color:var(--ink);font-size:0.98rem;line-height:1.55}
+  .rec-row dd span{color:var(--ink-soft)}
+
+  /* ---- how I teach (principles) ---- */
+  .principles{margin-top:1rem;border-top:1px solid var(--line-soft)}
+  .pr{
+    display:grid;grid-template-columns:1.6rem 1fr;gap:0 1.1rem;
+    padding:1.3rem 0;border-bottom:1px solid var(--line-soft);align-items:baseline;
+  }
+  .pr .mark{
+    font-family:var(--mono);font-size:1rem;color:var(--brass);line-height:1.2;
+  }
+  .pr h3{
+    font-family:var(--body);font-weight:500;font-size:1.02rem;
+    letter-spacing:0.02em;margin:0 0 0.3rem;color:var(--ink);
+  }
+  .pr p{margin:0;color:var(--ink-soft);font-size:0.98rem;line-height:1.55}
+
+  /* ---- links ---- */
+  .links{display:flex;flex-wrap:wrap;gap:0.8rem;margin-top:1.6rem}
+  .lnk{
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;padding:0.7rem 1.1rem;
+    border:1px solid var(--line);border-radius:2px;
+    transition:border-color .25s ease,color .25s ease,background-color .25s ease;
+  }
+  .lnk:hover,.lnk:focus-visible{border-color:var(--brass);color:var(--brass);background:rgba(198,161,91,0.04)}
+  .lnk .arw{color:var(--ink-faint);margin-left:0.5rem;transition:color .25s ease}
+  .lnk:hover .arw,.lnk:focus-visible .arw{color:var(--brass)}
+
+  /* ---- coda ---- */
+  .coda{margin-top:1rem}
+  .coda .line{
+    font-family:var(--display);font-weight:300;font-style:italic;
+    font-size:clamp(1.3rem,1rem + 1.4vw,1.7rem);line-height:1.4;
+    color:var(--ink);margin:0;padding-left:1.2rem;
+    border-left:2px solid var(--brass-dim);max-width:33rem;
+  }
+
+  /* ---- footer ---- */
+  footer{
+    margin-top:5rem;padding:2.4rem 0 3rem;border-top:1px solid var(--line-soft);
+  }
+  .footer-nav{margin-bottom:1.6rem}
+  .footer-meta{
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  }
+  footer .sig,footer .kt{
+    font-family:var(--mono);font-size:0.64rem;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--ink-faint);
+  }
+  footer .kt{display:flex;align-items:center;gap:0.55rem}
+
+  a{color:var(--brass)}
+  :focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:2px}
+
+  @media (max-width:560px){
+    .nav{flex-direction:column;align-items:flex-start;gap:0.7rem}
+    .rule{margin:3.4rem 0}
+    .rec-row{grid-template-columns:1fr;gap:0.15rem}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .beat{animation:none;opacity:1}
+    .method .step{opacity:1;transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <div class="topbar">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="index.html">Shaurye Chakravarty</a>
+        <div class="nav-links">
+          <a href="conscience.html">The Book</a>
+          <a href="instruction.html" aria-current="page">Flight Instruction</a>
+          <span class="beat" aria-hidden="true"></span>
+        </div>
+      </nav>
+    </div>
+
+    <!-- hero -->
+    <header class="hero">
+      <span class="eyebrow">Advanced Flight Instruction</span>
+      <h1>Ratings are the record. The training is learning to <em>think at altitude.</em></h1>
+      <p class="lede">I'm a CFI, CFII, and MEI based in North Phoenix. I work with rated and nearly-rated pilots on the advanced end — instrument, multi-engine, the commercial standard — and on the thing underneath all of it: <strong>reading the airplane, and trusting the reading when it counts.</strong></p>
+
+      <div class="method" aria-label="The method: feel it, decouple from it, act, observe, fix it.">
+        <span class="step"><span class="dot">›</span>Feel it.</span>
+        <span class="step"><span class="dot">›</span>Decouple from it.</span>
+        <span class="step"><span class="dot">›</span>Act.</span>
+        <span class="step"><span class="dot">›</span>Observe.</span>
+        <span class="step"><span class="dot">›</span>Fix it.</span>
+      </div>
+    </header>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- what I teach -->
+    <section aria-labelledby="teach-h">
+      <div class="sec-head">
+        <span class="num">01</span>
+        <h2 id="teach-h">What I Teach</h2>
+      </div>
+
+      <p>The focus is the advanced end of the certificate ladder — the training where judgment matters as much as stick-and-rudder, and where good habits either hold or don't.</p>
+
+      <dl class="record">
+        <div class="rec-row">
+          <dt>Instrument</dt>
+          <dd>Instrument rating and IPCs. <span>Honest IFR proficiency — flying the system in real conditions, not just to minimums on a good day.</span></dd>
+        </div>
+        <div class="rec-row">
+          <dt>Multi-Engine</dt>
+          <dd>AMEL add-on and multi-engine instruction. <span>Engine-out decision-making that stays intact under pressure, not just memorized.</span></dd>
+        </div>
+        <div class="rec-row">
+          <dt>Commercial</dt>
+          <dd>The maneuvers to standard. <span>Chandelles, lazy eights, eights-on-pylons, the power-off 180 — precision as a habit, not a stunt.</span></dd>
+        </div>
+        <div class="rec-row">
+          <dt>Endorsements</dt>
+          <dd>Complex and high-performance sign-offs, flight reviews, and stage- and checkride prep. <span>Currency turned back into competence.</span></dd>
+        </div>
+      </dl>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- how I teach -->
+    <section aria-labelledby="how-h">
+      <div class="sec-head">
+        <span class="num">02</span>
+        <h2 id="how-h">How I Teach</h2>
+      </div>
+
+      <p>My background is aviation and safety science, and it shapes how I run a lesson. The maneuvers are the vocabulary. The point is the thinking they're built to serve.</p>
+
+      <div class="principles">
+        <div class="pr">
+          <div class="mark">›</div>
+          <div>
+            <h3>Scenarios, not just maneuvers</h3>
+            <p>You'll fly situations, not a rote sequence — decisions with real inputs and real consequences, so the reasoning is trained alongside the hands.</p>
+          </div>
+        </div>
+        <div class="pr">
+          <div class="mark">›</div>
+          <div>
+            <h3>Read the airplane</h3>
+            <p>The aircraft keeps its own aerodynamic time. I teach you to hear that — to fly by what the machine is telling you and cross-check it against the panel, so instinct and instruments agree.</p>
+          </div>
+        </div>
+        <div class="pr">
+          <div class="mark">›</div>
+          <div>
+            <h3>One variable at a time</h3>
+            <p>Energy management as the organizing idea. Reduce a crowded cockpit to the single thing that matters right now — and the workload stops fighting you.</p>
+          </div>
+        </div>
+        <div class="pr">
+          <div class="mark">›</div>
+          <div>
+            <h3>Judgment before the moment</h3>
+            <p>The go/no-go, the diversion, the go-around — decided on the ground, loaded before you need them. When the moment comes, you're reading a decision you already made, not making one under pressure.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- who it's for -->
+    <section aria-labelledby="who-h">
+      <div class="sec-head">
+        <span class="num">03</span>
+        <h2 id="who-h">Who It's For</h2>
+      </div>
+
+      <p>Pilots working toward an instrument, multi-engine, or commercial certificate. Certificated pilots who want real proficiency instead of bare currency. And anyone who'd rather understand the machine than simply operate it — the pilot who wants the record to read <em>competent</em>, not just <em>compliant.</em></p>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- start -->
+    <section aria-labelledby="start-h">
+      <div class="sec-head">
+        <span class="num">04</span>
+        <h2 id="start-h">Start</h2>
+      </div>
+
+      <p>Instruction runs out of the North Phoenix / Anthem area. Tell me where you are on the ladder and what you're flying, and we'll build a plan from there.</p>
+
+      <div class="links">
+        <!-- EDIT: your real email -->
+        <a class="lnk" href="mailto:hello@example.com">Get in touch<span class="arw">↗</span></a>
+        <!-- EDIT: add scheduling / logbook / other links, or delete -->
+        <a class="lnk" href="index.html">About me<span class="arw">↗</span></a>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- coda -->
+    <section class="coda" aria-label="Closing">
+      <p class="line">The airplane is a clock. Advanced training is learning to read it — in the weather, in the dark, on one engine, when the checkride is over and it's just you.</p>
+    </section>
+
+    <footer>
+      <nav class="nav footer-nav" aria-label="Footer">
+        <a class="brand" href="index.html">Shaurye Chakravarty</a>
+        <div class="nav-links">
+          <a href="conscience.html">The Book</a>
+          <a href="instruction.html" aria-current="page">Flight Instruction</a>
+        </div>
+      </nav>
+      <div class="footer-meta">
+        <span class="sig">© <span id="yr"></span> Shaurye Chakravarty</span>
+        <span class="kt">Still keeping time <span class="beat" aria-hidden="true"></span></span>
+      </div>
+    </footer>
+
+  </div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var steps = document.querySelectorAll('.method .step');
+    if(reduce){ steps.forEach(function(s){ s.classList.add('in'); }); return; }
+    steps.forEach(function(s,i){ setTimeout(function(){ s.classList.add('in'); }, 260 + i*300); });
+  })();
+</script>
+</body>
+</html>
