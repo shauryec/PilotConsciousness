@@ -3,360 +3,347 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pilot Consciousness — Advanced Flight Instruction</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --black:#0D0D0D;
-    --white:#FFFFFF;
-    --off:#FAFAF8;
-    --red:#C41C1C;
-    --gray:#6B6B6B;
-    --lightgray:#E4E4E1;
-    --line:#D8D8D4;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    font-family:'Inter',Arial,sans-serif;
-    background:var(--off);
-    color:var(--black);
-    overflow-x:hidden;
-  }
-  @media (min-width:900px){
-    html{scroll-snap-type:y proximity;}
-    section{scroll-snap-align:start;}
-  }
-  h1,h2,h3,.disp{
-    font-family:'Oswald',Arial,sans-serif;
-    text-transform:uppercase;
-    letter-spacing:0.01em;
-  }
-  .mono{
-    font-family:'JetBrains Mono',monospace;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-  }
-  a{color:inherit;}
-  section{
-    min-height:100vh;
-    width:100%;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:6vh 6vw;
-  }
-  .inner{ max-width:1080px; width:100%; margin:0 auto; }
-
-  /* ---------- fixed instrument mark ---------- */
-  #mark{
-    position:fixed;
-    top:22px; right:22px;
-    width:46px; height:46px;
-    z-index:50;
-    pointer-events:none;
-  }
-  #mark svg{ width:100%; height:100%; display:block; }
-  #mark .arcTop, #mark .arcBottom{
-    fill:none; stroke-width:6; stroke-linecap:round;
-    transition:stroke-dashoffset .12s linear;
-  }
-  #mark .arcTop{ stroke:var(--red); }
-  #mark .arcBottom{ stroke:var(--black); }
-
-  /* ---------- top nav ---------- */
-  #nav{
-    position:fixed; top:0; left:0; right:0; z-index:40;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:20px 6vw;
-    mix-blend-mode:normal;
-    pointer-events:none;
-  }
-  #nav .word{ font-size:12px; font-weight:600; letter-spacing:0.22em; pointer-events:auto; }
-  #nav.on-dark{ color:var(--white); }
-  #nav.on-light{ color:var(--black); }
-
-  /* ---------- HERO ---------- */
-  #hero{
-    background:var(--black);
-    color:var(--white);
-    flex-direction:column;
-    text-align:center;
-    gap:28px;
-  }
-  #hero .roundel{ width:96px; height:96px; opacity:0; animation:fadeUp 1s ease .15s forwards; }
-  #hero .roundel svg{ width:100%; height:100%; }
-  #hero h1{
-    font-size:clamp(44px,9vw,104px);
-    line-height:0.94;
-    font-weight:700;
-    opacity:0; animation:fadeUp 1s ease .35s forwards;
-  }
-  #hero .tagline{
-    font-size:clamp(14px,1.6vw,19px);
-    color:#B8B8B8;
-    font-style:italic;
-    font-family:'Inter',sans-serif;
-    text-transform:none;
-    letter-spacing:0;
-    opacity:0; animation:fadeUp 1s ease .55s forwards;
-  }
-  #hero .rule{
-    width:64px; height:3px; background:var(--red);
-    opacity:0; animation:fadeUp 1s ease .5s forwards;
-  }
-  #hero .notfor{
-    margin-top:10px;
-    color:var(--red);
-    font-weight:700;
-    font-style:italic;
-    font-family:'Inter',sans-serif;
-    text-transform:none;
-    letter-spacing:0;
-    font-size:15px;
-    opacity:0; animation:fadeUp 1s ease .75s forwards;
-  }
-  #hero .scrollcue{
-    position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
-    font-size:10px; color:#888; letter-spacing:0.3em;
-    opacity:0; animation:fadeUp 1s ease 1.1s forwards;
-  }
-  @keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
-
-  /* ---------- PHILOSOPHY ---------- */
-  #philosophy{ background:var(--off); }
-  #philosophy .inner{ display:grid; grid-template-columns:1fr; gap:36px; }
-  .eyebrow{
-    font-size:12px; color:var(--red); font-weight:600;
-    display:flex; align-items:center; gap:12px;
-  }
-  .eyebrow::before{ content:""; width:26px; height:2px; background:var(--red); display:inline-block; }
-  #philosophy h2{ font-size:clamp(30px,4.4vw,52px); font-weight:600; line-height:1.05; max-width:16ch; }
-  #philosophy .lede{
-    font-size:clamp(17px,1.7vw,21px);
-    line-height:1.6;
-    color:#2A2A2A;
-    max-width:62ch;
-  }
-  .quoteblock{
-    border-left:3px solid var(--red);
-    padding-left:22px;
-    font-style:italic;
-    color:var(--gray);
-    font-size:18px;
-    max-width:56ch;
-    line-height:1.55;
-  }
-  .quoteblock .attr{ display:block; margin-top:8px; color:var(--red); font-style:normal; font-weight:600; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; font-family:'Inter',sans-serif;}
-
-  /* ---------- WHO ---------- */
-  #who{ background:var(--black); color:var(--white); }
-  #who .eyebrow{ color:var(--red); }
-  #who h2{ font-size:clamp(28px,4vw,46px); font-weight:600; max-width:20ch; margin-bottom:26px; line-height:1.1; }
-  #who p{ font-size:clamp(16px,1.5vw,19px); line-height:1.7; color:#C9C9C9; max-width:66ch; margin-bottom:18px; }
-  #who .signal{
-    margin-top:30px; padding:22px 26px;
-    border:1px solid #333; border-left:3px solid var(--red);
-    background:#141414;
-    font-family:'JetBrains Mono',monospace;
-    font-size:14px; line-height:1.8; color:#E8E8E8;
-    max-width:60ch;
-  }
-  #who .signal b{ color:var(--red); }
-
-  /* ---------- METHOD ---------- */
-  #method{ background:var(--off); }
-  #method .inner{ width:100%; }
-  #method h2{ font-size:clamp(30px,4.4vw,52px); font-weight:600; margin-bottom:8px; }
-  #method .lede{ color:var(--gray); font-size:17px; max-width:56ch; margin-bottom:48px; }
-  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--line); }
-  .step{
-    padding:30px 26px 10px 0;
-    border-bottom:1px solid var(--line);
-  }
-  .step + .step{ border-left:1px solid var(--line); padding-left:26px; }
-  .step .num{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--red); letter-spacing:0.1em; margin-bottom:14px; display:block;}
-  .step h3{ font-size:20px; font-weight:600; margin-bottom:12px; letter-spacing:0.01em;}
-  .step p{ font-size:14.5px; line-height:1.65; color:#4A4A4A; text-transform:none; letter-spacing:0; font-family:'Inter',sans-serif; }
-  @media (max-width:800px){
-    .steps{ grid-template-columns:1fr; }
-    .step + .step{ border-left:none; padding-left:0; }
-  }
-
-  /* ---------- DOCTRINE STRIP ---------- */
-  #doctrine{ background:var(--red); color:var(--white); min-height:auto; padding:64px 6vw; }
-  #doctrine .inner{ display:flex; flex-direction:column; gap:20px; align-items:flex-start; }
-  #doctrine .eyebrow{ color:rgba(255,255,255,0.85); }
-  #doctrine .eyebrow::before{ background:rgba(255,255,255,0.85); }
-  #doctrine p.big{
-    font-family:'Oswald',sans-serif;
-    font-size:clamp(22px,3vw,34px);
-    line-height:1.25;
-    font-weight:500;
-    max-width:20ch;
-    text-transform:none;
-  }
-
-  /* ---------- CTA ---------- */
-  #cta{ background:var(--black); color:var(--white); flex-direction:column; text-align:center; gap:26px; }
-  #cta h2{ font-size:clamp(32px,5vw,64px); font-weight:700; line-height:1.02; }
-  #cta p{ color:#B8B8B8; font-family:'Inter',sans-serif; text-transform:none; letter-spacing:0; font-size:16px; max-width:44ch; }
-  #cta .btnrow{ display:flex; gap:16px; margin-top:14px; flex-wrap:wrap; justify-content:center; }
-  .btn{
-    display:inline-block;
-    padding:15px 30px;
-    font-family:'Inter',sans-serif;
-    font-size:14px; font-weight:600; letter-spacing:0.04em;
-    text-decoration:none;
-    border:1.5px solid var(--white);
-    transition:background .15s ease, color .15s ease;
-  }
-  .btn.solid{ background:var(--red); border-color:var(--red); color:var(--white); }
-  .btn.solid:hover{ background:#A31616; }
-  .btn.ghost:hover{ background:var(--white); color:var(--black); }
-  #cta .footline{ margin-top:36px; color:var(--red); font-weight:700; font-style:italic; font-family:'Inter',sans-serif; text-transform:none; letter-spacing:0; font-size:14px; }
-  footer{
-    background:var(--black); color:#666;
-    text-align:center; font-size:11px;
-    padding:18px 6vw 26px;
-    letter-spacing:0.08em;
-    font-family:'JetBrains Mono',monospace;
-    text-transform:uppercase;
-  }
-</style>
+<title>Pilot Consciousness — Shaurye Chakravarty</title>
+<meta name="description" content="Pilot Consciousness is an internet harbor for CONSCIENCE — monument, manifesto, garden, museum, and ecosphere for a body of work on safety, accountability, and conscience.">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div id="mark" aria-hidden="true">
-  <svg viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="40" fill="none" stroke="#2A2A2A" stroke-width="1" opacity="0.25"/>
-    <path class="arcTop" d="M 15 45 A 35 35 0 0 1 85 45" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-    <path class="arcBottom" d="M 15 55 A 35 35 0 0 0 85 55" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
-  </svg>
-</div>
-
-<nav id="nav" class="on-dark"><span class="word">PC</span><span class="word" style="opacity:.55">01</span></nav>
-
-<!-- HERO -->
-<section id="hero">
-  <div class="roundel">
-    <svg viewBox="0 0 100 100">
-      <path d="M 15 45 A 35 35 0 0 1 85 45" fill="none" stroke="var(--red)" stroke-width="4" stroke-linecap="round"/>
-      <path d="M 15 55 A 35 35 0 0 0 85 55" fill="none" stroke="var(--white)" stroke-width="4" stroke-linecap="round"/>
-      <path d="M50 20 L54 46 L64 50 L54 54 L58 74 L50 68 L42 74 L46 54 L36 50 L46 46 Z" fill="var(--white)"/>
-    </svg>
+<header class="site-nav">
+  <div class="nav-row">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="#A9803E" stroke-width="1.6"/>
+        <circle cx="20" cy="20" r="2" fill="#A9803E"/>
+        <g class="mini-needle"><line x1="20" y1="20" x2="20" y2="6" stroke="#A9803E" stroke-width="1.6" stroke-linecap="round"/></g>
+      </svg>
+      PILOT&nbsp;CONSCIOUSNESS <small>Shaurye Chakravarty</small>
+    </a>
+    <button class="navtoggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">MENU</button>
+    <nav>
+      <ul class="navlinks" id="navLinks">
+        <li><a href="index.html" class="active">Harbor</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="manuscript.html">The Manuscript</a></li>
+        <li><a href="teaching.html">Teaching</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
   </div>
-  <h1>Pilot<br>Consciousness</h1>
-  <div class="rule"></div>
-  <p class="tagline">Advanced human-factors flight instruction.<br>Test your envelope. Widen your window.</p>
-  <p class="notfor">Not for beginners.</p>
-  <div class="scrollcue">SCROLL</div>
-</section>
+</header>
 
-<!-- PHILOSOPHY -->
-<section id="philosophy">
-  <div class="inner">
-    <div class="eyebrow">Philosophy</div>
-    <h2>The environment is not a threat.<br>It's a window.</h2>
-    <p class="lede">Every flight holds two bounded envelopes: the aircraft's, and yours. Pilot Consciousness is the practice of keeping them matched — reading the environment objectively, under load, until the operating world stops feeling like a threat matrix and starts reading like a game you already know how to play.</p>
-    <div class="quoteblock">
-      A superior pilot uses superior judgment to avoid situations that require the use of superior skill.
-      <span class="attr">— commonly attributed to Frank Borman</span>
+<!-- ============ HERO: THE HARBOR ============ -->
+<section class="panel-dark">
+  <div class="hero">
+    <div>
+      <p class="eyebrow">An internet harbor</p>
+      <h1>Every ship needs<br>a harbor. Every<br><em style="font-style:italic; color:var(--brass-pale);">conscience, a record.</em></h1>
+      <p style="max-width:47ch; margin-top:1.3rem;">Pilot Consciousness is the standing home of a body of work — a monument to what got set down, a manifesto for picking it back up, a garden where the ideas keep growing, a museum of the instrument itself, and an ecosphere for the people who carry it.</p>
+      <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:2rem;">
+        <a class="btn on-dark" href="#harbor">Enter the harbor</a>
+        <a class="btn primary" href="manuscript.html">Read CONSCIENCE</a>
+      </div>
+    </div>
+    <div class="hero-dial-wrap">
+      <svg class="dial-face" width="380" height="380" viewBox="0 0 400 400" role="img" aria-label="An instrument dial: an outer gear ring turning slowly, minute ticks, and a needle sweeping like a clock">
+        <!-- outer gear ring, slow ambient rotation -->
+        <g class="gear-slow" style="transform-origin:200px 200px;">
+          <circle cx="200" cy="200" r="196" fill="none" stroke="#A9803E" stroke-width="2" opacity="0.55"/>
+          <g fill="#A9803E" opacity="0.55">
+            <rect x="196" y="0" width="8" height="12" transform="rotate(0 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(20 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(40 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(60 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(80 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(100 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(120 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(140 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(160 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(180 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(200 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(220 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(240 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(260 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(280 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(300 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(320 200 200)"/>
+            <rect x="196" y="0" width="8" height="12" transform="rotate(340 200 200)"/>
+          </g>
+        </g>
+        <circle cx="200" cy="200" r="176" fill="#0E1B2C" stroke="#C9A25C" stroke-width="1.5"/>
+        <!-- cardinal ticks -->
+        <g stroke="#C9A25C" stroke-width="2.5">
+          <line x1="200" y1="34" x2="200" y2="58"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(30 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(60 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(90 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(120 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(150 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(180 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(210 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(240 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(270 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(300 200 200)"/>
+          <line x1="200" y1="34" x2="200" y2="58" transform="rotate(330 200 200)"/>
+        </g>
+        <text x="200" y="128" text-anchor="middle" fill="#8FAE9B" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="2">CON-SCIRE</text>
+        <text x="200" y="292" text-anchor="middle" fill="#5B6B72" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="3">TO KNOW WITH ONESELF</text>
+        <g class="dial-needle">
+          <line x1="200" y1="200" x2="200" y2="66" stroke="#E8D9AE" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="200" y1="200" x2="235" y2="230" stroke="#E8D9AE" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+        </g>
+        <circle cx="200" cy="200" r="7" fill="#C9A25C"/>
+        <circle cx="200" cy="200" r="2.5" fill="#0E1B2C"/>
+      </svg>
     </div>
   </div>
 </section>
 
-<!-- WHO -->
-<section id="who">
-  <div class="inner">
-    <div class="eyebrow">Who this is for</div>
-    <h2>The CFI who's started to see the gaps.</h2>
-    <p>You've been through the training. You're certificated, current, competent — and somewhere along the way you felt the moment your training ran out underneath you. You've begun to suspect that the system was built to protect the non-flying public, not you.</p>
-    <p>You don't want to hang your life on incomplete preparation. That instinct is the only prerequisite this course has.</p>
-    <div class="signal">
-      The candidate we're looking for begins answering a scenario from trained procedure — stops halfway — and questions what the procedure doesn't address. Most end with:<br><b>&ldquo;I don't know.&rdquo;</b><br><br>That's the admission ticket. You can't audit a pilot who doesn't know they have gaps.
+<!-- ============ THE FIVE WINGS ============ -->
+<section id="harbor">
+  <div class="wrap">
+    <p class="eyebrow reveal">The harbor has five wings</p>
+    <h2 class="reveal" style="max-width:22ch;">One body of work, held five ways.</h2>
+    <p class="reveal" style="max-width:60ch;">A harbor isn't a destination — it's where a vessel is kept, maintained, and sent back out. Everything here belongs to one argument. These are the five rooms it lives in.</p>
+  </div>
+  <div class="wrap" style="margin-top:2.6rem;">
+    <div class="harbor">
+
+      <a class="wing reveal" href="manuscript.html">
+        <svg class="wing-glyph" width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+          <!-- obelisk / monument -->
+          <path d="M18 38 L20 8 L24 8 L26 38 Z"/>
+          <line x1="12" y1="38" x2="32" y2="38"/>
+          <line x1="22" y1="8" x2="22" y2="4"/>
+        </svg>
+        <div class="wing-word">Monument</div>
+        <h3>What was set down</h3>
+        <p>The standing record: people are dying at the exact coordinates where conscience used to be. The manuscript preserves that finding so it cannot drift out of memory the way it drifted out of practice.</p>
+        <span class="wing-go">The Manuscript →</span>
+      </a>
+
+      <a class="wing reveal" href="manuscript.html#method">
+        <svg class="wing-glyph" width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+          <!-- raised flag / declaration -->
+          <line x1="14" y1="6" x2="14" y2="38"/>
+          <path d="M14 8 L32 12 L14 18"/>
+          <line x1="10" y1="38" x2="20" y2="38"/>
+        </svg>
+        <div class="wing-word">Manifesto</div>
+        <h3>The method, declared</h3>
+        <p>Feel it. Decouple from it. Act. Observe. Fix it. One sentence, run once by every reader on the way through — the only thing the work actually asks. Everything else is demonstration.</p>
+        <span class="wing-go">The Method →</span>
+      </a>
+
+      <a class="wing reveal" href="manuscript.html#horizon">
+        <svg class="wing-glyph" width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+          <!-- seedling -->
+          <line x1="22" y1="38" x2="22" y2="20"/>
+          <path d="M22 24 C22 16, 14 14, 10 12 C12 20, 16 24, 22 24 Z"/>
+          <path d="M22 20 C22 13, 29 11, 34 9 C32 17, 28 20, 22 20 Z"/>
+          <line x1="14" y1="38" x2="30" y2="38"/>
+        </svg>
+        <div class="wing-word">Garden</div>
+        <h3>What's still growing</h3>
+        <p>Two movements underway, more on the horizon, and material deliberately held in reserve for the moment it's built to land in. This is a living work — planted in public, tended in order.</p>
+        <span class="wing-go">On the Horizon →</span>
+      </a>
+
+      <a class="wing reveal" href="about.html">
+        <svg class="wing-glyph" width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+          <!-- museum pediment -->
+          <path d="M8 16 L22 6 L36 16"/>
+          <line x1="10" y1="16" x2="10" y2="34"/>
+          <line x1="18" y1="16" x2="18" y2="34"/>
+          <line x1="26" y1="16" x2="26" y2="34"/>
+          <line x1="34" y1="16" x2="34" y2="34"/>
+          <line x1="6" y1="36" x2="38" y2="36"/>
+        </svg>
+        <div class="wing-word">Museum</div>
+        <h3>The instrument &amp; its maker</h3>
+        <p>The exhibits behind the argument: a cockpit, a filmmaker's eye, a Safety Science graduate program, and the eight-hundred-year-old substrate the whole operation is built on.</p>
+        <span class="wing-go">About →</span>
+      </a>
+
+    </div>
+
+    <!-- Ecosphere spans full width below -->
+    <div class="harbor" style="grid-template-columns:1fr; margin-top:2px; border-top:none;">
+      <a class="wing reveal" href="teaching.html">
+        <svg class="wing-glyph" width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+          <!-- orbiting bodies -->
+          <circle cx="22" cy="22" r="4"/>
+          <ellipse cx="22" cy="22" rx="16" ry="7"/>
+          <ellipse cx="22" cy="22" rx="16" ry="7" transform="rotate(60 22 22)"/>
+          <circle cx="38" cy="22" r="2"/>
+          <circle cx="14" cy="10" r="2"/>
+        </svg>
+        <div class="wing-word">Ecosphere</div>
+        <h3>The people who carry it</h3>
+        <p style="max-width:62ch;">A framework only lives if it's running in other minds. Talks, workshops, and advisory work bring the instrument to flight crews, safety departments, and anyone with the authority to stop work — the community this harbor exists to serve.</p>
+        <span class="wing-go">Teaching →</span>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- METHOD -->
-<section id="method">
-  <div class="inner">
-    <div class="eyebrow">The method</div>
-    <h2>From audit to evolution.</h2>
-    <p class="lede">A structured, individualized program built on your actual profile — your aircraft, your environment, your history — not a generic syllabus.</p>
-    <div class="steps">
-      <div class="step">
-        <span class="num">PHASE 01</span>
-        <h3>The Pilot Audit</h3>
-        <p>A forensic pre-flight review. We sit with NTSB and ASAP data matched to your specific profile, run a structured hazard analysis, and build a documented mitigation plan. This becomes your syllabus.</p>
+<!-- ============ INSCRIPTION (monument moment) ============ -->
+<section class="panel-dark tight" style="padding:110px 0;">
+  <div class="wrap">
+    <p class="inscription reveal">The instrument did not break. It was <em>set down</em>. A thing that has only been set down can be <em>picked back up</em>.</p>
+    <p class="mono reveal" style="text-align:center; margin-top:2.2rem; color:#8B93A0;">— CONSCIENCE, Movement II</p>
+  </div>
+</section>
+
+<!-- ============ THE DECODER RING ============ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow reveal">The decoder ring</p>
+    <h2 class="reveal" style="max-width:20ch;">Every regulated system has the same four organs.</h2>
+    <p class="reveal" style="max-width:60ch;">The work opens with an instrument, not an argument: a clock, not a lever. Fly it, run it, sit inside an institution built on it — the same four parts are always doing the same four jobs.</p>
+  </div>
+  <div class="wrap" style="margin-top:2.4rem;">
+    <div class="grid-4">
+      <div class="organ reveal">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#A9803E" stroke-width="1.4" aria-hidden="true">
+          <path d="M18 18 m0 -2 a4 4 0 1 1 -4 4 a7 7 0 1 0 7 -7 a11 11 0 1 0 8 8"/>
+        </svg>
+        <div class="num">01 / MAINSPRING</div>
+        <h3>Raw energy</h3>
+        <p style="max-width:none;">The wound, unbound reservoir — fuel, capital, attention, will. What a system has before it does anything.</p>
       </div>
-      <div class="step">
-        <span class="num">PHASE 02</span>
-        <h3>The Five Flights</h3>
-        <p>A deliberate progression — obstacle, recognition, the edge of your framework, opportunity, fluency. Each flight integrates your audit findings in the air, under an instructor who holds the tether.</p>
+      <div class="organ reveal">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#A9803E" stroke-width="1.4" aria-hidden="true">
+          <circle cx="18" cy="18" r="11"/>
+          <path d="M18 7 L21 12 L15 12 Z" fill="#A9803E" stroke="none"/>
+          <line x1="18" y1="18" x2="18" y2="10"/>
+          <line x1="18" y1="18" x2="24" y2="21"/>
+        </svg>
+        <div class="num">02 / ESCAPEMENT</div>
+        <h3>The metering</h3>
+        <p style="max-width:none;">What keeps raw energy from unspooling all at once. Drag, procedure, conscience — resisted and restored, beat by beat.</p>
       </div>
-      <div class="step">
-        <span class="num">PHASE 03</span>
-        <h3>Pilot Evolution</h3>
-        <p>Not a rating. A threshold. The environment stops being adversarial. Latent threats are seen early enough to never become active ones. The practice continues — this is where it begins.</p>
+      <div class="organ reveal">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#A9803E" stroke-width="1.4" aria-hidden="true">
+          <path d="M6 18 Q10 8 18 18 T30 18"/>
+          <line x1="18" y1="18" x2="18" y2="30"/>
+          <line x1="14" y1="30" x2="22" y2="30"/>
+        </svg>
+        <div class="num">03 / RESTORING FORCE</div>
+        <h3>The constant</h3>
+        <p style="max-width:none;">What pulls the system back to baseline every time it swings away. Gravity for the airplane. Substrate for the mind.</p>
+      </div>
+      <div class="organ reveal">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#A9803E" stroke-width="1.4" aria-hidden="true">
+          <circle cx="18" cy="18" r="12"/>
+          <line x1="18" y1="18" x2="18" y2="9"/>
+          <line x1="18" y1="18" x2="24" y2="22"/>
+          <circle cx="18" cy="18" r="1.5" fill="#A9803E"/>
+        </svg>
+        <div class="num">04 / DIAL</div>
+        <h3>What the world reads</h3>
+        <p style="max-width:none;">The visible output. The record everyone checks — and the thing that can read <em>stable</em> long after the rhythm underneath has begun to die.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- DOCTRINE STRIP -->
-<section id="doctrine">
-  <div class="inner">
-    <div class="eyebrow">Doctrine</div>
-    <p class="big">Overload and complacency are the same failure, in opposite directions. The skill is the match.</p>
+<!-- ============ THE FINDING ============ -->
+<section style="background:var(--parchment-light); border-top:1px solid var(--paper-line); border-bottom:1px solid var(--paper-line);">
+  <div class="wrap two-col">
+    <div class="reveal">
+      <p class="eyebrow">The finding</p>
+      <h2>People are dying at the exact coordinates where conscience used to be.</h2>
+      <p class="lede">That's not rhetoric. It's a finding.</p>
+      <p>Read past the proximate cause in the long accident reports — the real ones, timelined second by second — and the same shape appears again and again. Someone knew. Not suspected. Knew. And then, in the most ordinary way in the world, nothing happened.</p>
+      <p>Not because anyone broke a rule. Because every sophisticated safety system we've built also, quietly, taught its operators that their own internal account was no longer load-bearing.</p>
+      <a class="btn" href="manuscript.html">Read Movement II — The Drift →</a>
+    </div>
+    <div class="reveal">
+      <blockquote>Con-scire. To know with ourselves. Conscience is the faculty by which a mind keeps an account of itself.</blockquote>
+      <blockquote>We must be so scared to do this to ourselves.</blockquote>
+      <blockquote>Isn't it easy to fly when there's only one variable to control?</blockquote>
+    </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section id="cta">
-  <h2>Ready to be audited?</h2>
-  <p>Applications begin with a structured intake interview — background, experience, and a set of scenario probes designed to find your edge, not your résumé.</p>
-  <div class="btnrow">
-    <a href="mailto:hello@pilotconsciousness.com" class="btn solid">Apply for intake</a>
-    <a href="mailto:hello@pilotconsciousness.com" class="btn ghost">Ask a question</a>
+<!-- ============ THE GARDEN STRIP ============ -->
+<section class="garden">
+  <div class="wrap">
+    <p class="eyebrow reveal">From the garden</p>
+    <h2 class="reveal" style="max-width:22ch;">The work is alive. Three beds are already in bloom.</h2>
+    <div class="seed-row">
+      <div class="seed reveal">
+        <span class="mono">Movement I — Grown</span>
+        <h3>Isochronism</h3>
+        <p style="max-width:none;">The clock handed over before anything is at stake. The four organs. The mechanism's indifference.</p>
+      </div>
+      <div class="seed reveal">
+        <span class="mono">Movement IV — Budding</span>
+        <h3>The Dreamscape</h3>
+        <p style="max-width:none;">The document at full speed inside real weather — and the turn from indictment to compassion.</p>
+      </div>
+      <div class="seed reveal">
+        <span class="mono">Movement V — Seeded</span>
+        <h3>The Needle</h3>
+        <p style="max-width:none;">Integrity redefined: not a virtue, not a value — alignment to the record, grounded in physical law.</p>
+      </div>
+    </div>
+    <div class="reveal" style="margin-top:2.4rem;">
+      <a class="btn" href="manuscript.html">Walk the whole garden →</a>
+    </div>
   </div>
-  <div class="footline">Not for beginners.</div>
 </section>
 
-<footer>Pilot Consciousness — Advanced Flight Instruction · © 2026</footer>
+<!-- ============ ECOSPHERE / TEACHING ============ -->
+<section class="panel-dark">
+  <div class="wrap" style="text-align:center; position:relative; z-index:2;">
+    <p class="eyebrow reveal" style="justify-content:center;">The ecosphere</p>
+    <h2 class="reveal" style="max-width:26ch; margin:0 auto 0.6rem;">Conscience has to be pre-loaded before the moment it's needed.</h2>
+    <p class="reveal" style="max-width:56ch; margin:0 auto 1.6rem; text-align:left;">Shaurye teaches this framework directly — to flight crews, safety departments, and anyone whose job includes the authority to stop work. The talks and workshops are built from the same material as the book.</p>
+    <a class="btn on-dark reveal" href="teaching.html" style="display:inline-flex;">See the teaching page →</a>
+  </div>
+</section>
 
-<script>
-  // scroll progress -> instrument arcs
-  const arcTop = document.querySelector('.arcTop');
-  const arcBottom = document.querySelector('.arcBottom');
-  function onScroll(){
-    const h = document.documentElement;
-    const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
-    const pct = Math.max(0, Math.min(1, scrolled));
-    const offset = 100 - (pct*100);
-    arcTop.style.strokeDashoffset = offset;
-    arcBottom.style.strokeDashoffset = offset;
+<!-- ============ EMAIL ============ -->
+<section>
+  <div class="wrap" style="max-width:640px;">
+    <p class="eyebrow reveal">Moor here</p>
+    <h2 class="reveal">Get the next movement as it's written.</h2>
+    <p class="reveal">No newsletter machinery. Just the movements, as they're finished, sent directly.</p>
+    <form action="#" method="post" data-capture class="reveal">
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <input type="email" required placeholder="you@domain.com" aria-label="Email address"
+          style="flex:1; min-width:220px; padding:13px 14px; font-family:var(--body); font-size:1rem; border:1px solid var(--ink-soft); background:var(--parchment-light);">
+        <button class="btn primary" type="submit">Notify me</button>
+      </div>
+      <p class="form-confirm mono" style="display:none; color:var(--verdigris); margin-top:14px;"></p>
+    </form>
+    <p class="note reveal">This form isn't wired to a mail service yet — it's a placeholder ready for Mailchimp, Buttondown, or a simple form endpoint once the site goes live.</p>
+  </div>
+</section>
 
-    // nav contrast + page counter
-    const sections = document.querySelectorAll('section');
-    let idx = 1, current = null;
-    sections.forEach((s,i)=>{
-      const r = s.getBoundingClientRect();
-      if(r.top <= window.innerHeight*0.5 && r.bottom >= window.innerHeight*0.5){ current = s; idx = i+1; }
-    });
-    const nav = document.getElementById('nav');
-    if(current){
-      const dark = ['hero','who','cta'].includes(current.id);
-      nav.className = dark ? 'on-dark' : 'on-light';
-      nav.querySelectorAll('.word')[1].textContent = String(idx).padStart(2,'0');
-    }
-  }
-  document.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
-</script>
+<footer>
+  <div class="footer-row">
+    <div>
+      <div class="brand" style="color:var(--parchment-light); margin-bottom:14px;">PILOT&nbsp;CONSCIOUSNESS</div>
+      <p class="footer-tagline">Feel it. Decouple from it. Act. Observe. Fix it.</p>
+    </div>
+    <div>
+      <ul class="navlinks" style="flex-direction:column; align-items:flex-start;">
+        <li><a href="about.html" style="color:#DCE0E5;">About</a></li>
+        <li><a href="manuscript.html" style="color:#DCE0E5;">The Manuscript</a></li>
+        <li><a href="teaching.html" style="color:#DCE0E5;">Teaching</a></li>
+        <li><a href="contact.html" style="color:#DCE0E5;">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Shaurye Chakravarty. Pilot Consciousness.</span>
+    <span>Anthem, Arizona · Monument · Manifesto · Garden · Museum · Ecosphere</span>
+  </div>
+</footer>
 
+<script src="script.js"></script>
 </body>
 </html>
