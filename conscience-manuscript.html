@@ -1,0 +1,376 @@
+<!--
+  CONSCIENCE — manuscript site
+  Matched pair to the author site. Single-page, self-contained.
+
+  TO EDIT LATER:
+   • Links / email: search for "EDIT:" below.
+   • Movement synopses and preserved lines live in the "movements" block.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CONSCIENCE — Shaurye Chakravarty</title>
+<meta name="description" content="CONSCIENCE: A Radical View on Safety and Accountability — a manuscript by Shaurye Chakravarty.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#0F1319;
+    --ground-2:#141922;
+    --ink:#E8E3D6;
+    --ink-soft:#9A958A;
+    --ink-faint:#615F59;
+    --brass:#C6A15B;
+    --brass-dim:#8C7643;
+    --steel:#6E93A6;
+    --line:rgba(232,227,214,0.12);
+    --line-soft:rgba(232,227,214,0.06);
+
+    --display:"Fraunces",Georgia,serif;
+    --body:"Spectral",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+    --measure:38rem;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--body);
+    font-weight:400;
+    line-height:1.72;
+    font-size:clamp(1rem,0.96rem + 0.2vw,1.12rem);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(198,161,91,0.22);color:var(--ink)}
+
+  .wrap{width:100%;max-width:var(--measure);margin:0 auto;padding:0 1.5rem}
+
+  .eyebrow{
+    font-family:var(--mono);font-size:0.7rem;font-weight:500;
+    letter-spacing:0.22em;text-transform:uppercase;color:var(--brass);
+  }
+
+  /* ---- top bar ---- */
+  .bar{
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    padding-top:2rem;padding-bottom:0.4rem;
+  }
+  .bar .name{
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.28em;
+    text-transform:uppercase;color:var(--ink);
+  }
+  .bar .meta{
+    display:flex;align-items:center;gap:0.95rem;
+    font-family:var(--mono);font-size:0.66rem;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--ink-faint);
+  }
+  .navlink{
+    font-family:var(--mono);font-size:0.66rem;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;
+    transition:color .25s ease;
+  }
+  .navlink:hover,.navlink:focus-visible{color:var(--brass)}
+  .navlink .arw{color:var(--ink-faint);margin-left:0.4rem;transition:color .25s ease}
+  .navlink:hover .arw,.navlink:focus-visible .arw{color:var(--brass)}
+  .beat{
+    width:7px;height:7px;border-radius:50%;background:var(--brass);
+    box-shadow:0 0 0 0 rgba(198,161,91,0.5);
+    animation:tick 1s steps(1,end) infinite;
+  }
+  @keyframes tick{
+    0%{opacity:1;transform:scale(1);box-shadow:0 0 0 0 rgba(198,161,91,0.45)}
+    40%{opacity:1}
+    50%{opacity:0.28;transform:scale(0.82);box-shadow:0 0 0 5px rgba(198,161,91,0)}
+    100%{opacity:1;transform:scale(1)}
+  }
+
+  /* ---- dial-track divider ---- */
+  .rule{
+    height:9px;margin:4.5rem 0;
+    background-image:repeating-linear-gradient(to right,
+      var(--line) 0,var(--line) 1px,transparent 1px,transparent 11px);
+    background-position:left center;background-repeat:repeat-x;background-size:auto 9px;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);
+            mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);
+  }
+
+  /* ---- hero: the title lockup ---- */
+  .hero{padding-top:3.2rem;text-align:center}
+  .hero .eyebrow{margin-bottom:1.8rem;display:block}
+  .book-title{
+    font-family:var(--display);font-weight:300;
+    font-size:clamp(2.9rem,1.6rem + 7vw,5.4rem);
+    letter-spacing:0.07em;line-height:0.98;margin:0 0 0.7rem;color:var(--ink);
+  }
+  .book-sub{
+    font-family:var(--body);font-style:italic;color:var(--ink-soft);
+    font-size:clamp(1.05rem,0.98rem + 0.4vw,1.25rem);margin:0 0 1.4rem;
+  }
+  .byline{
+    font-family:var(--mono);font-size:0.68rem;letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--ink-faint);margin:0;
+  }
+
+  /* ---- the method readout ---- */
+  .method{
+    margin:2.6rem auto 0;max-width:32rem;
+    padding:1.15rem 1.25rem;
+    border:1px solid var(--line);border-left:2px solid var(--brass-dim);
+    background:var(--ground-2);
+    font-family:var(--mono);font-size:0.82rem;letter-spacing:0.04em;color:var(--ink);
+    display:flex;flex-wrap:wrap;justify-content:center;gap:0.15rem 0.9rem;
+    text-align:left;
+  }
+  .method .step{opacity:0;transform:translateY(3px);
+    transition:opacity .5s ease,transform .5s ease;white-space:nowrap}
+  .method .step.in{opacity:1;transform:none}
+  .method .dot{color:var(--brass);margin-right:0.55rem}
+
+  /* ---- section shell ---- */
+  section{padding-top:0.5rem}
+  .sec-head{display:flex;align-items:baseline;gap:0.9rem;margin-bottom:1.8rem}
+  .sec-head .num{
+    font-family:var(--mono);font-size:0.66rem;letter-spacing:0.2em;color:var(--brass-dim);
+  }
+  .sec-head h2{
+    font-family:var(--display);font-weight:400;font-size:1.5rem;
+    letter-spacing:0.01em;margin:0;color:var(--ink);
+  }
+
+  p{margin:0 0 1.15rem;max-width:var(--measure)}
+  p:last-child{margin-bottom:0}
+  p em{font-style:italic;color:var(--ink)}
+
+  .argument{
+    font-family:var(--display);font-weight:300;font-style:italic;
+    font-size:clamp(1.15rem,1rem + 1vw,1.45rem);line-height:1.5;
+    color:var(--ink-soft);max-width:34rem;margin:2.6rem auto 0;text-align:center;
+  }
+  .argument b{color:var(--brass);font-weight:400;font-style:normal}
+
+  /* ---- movements: the contents dial ---- */
+  .movements{margin-top:1rem;border-top:1px solid var(--line-soft)}
+  .mv{padding:1.5rem 0;border-bottom:1px solid var(--line-soft)}
+  .mv .top{
+    display:grid;grid-template-columns:2.6rem 1fr;gap:0 1.1rem;align-items:baseline;
+  }
+  .mv .numeral{
+    font-family:var(--display);font-weight:400;font-size:1.2rem;
+    color:var(--brass);letter-spacing:0.05em;line-height:1.2;
+  }
+  .mv h3{
+    font-family:var(--body);font-weight:500;font-size:1.05rem;
+    letter-spacing:0.02em;margin:0 0 0.3rem;color:var(--ink);
+  }
+  .mv .syn{margin:0;color:var(--ink-soft);font-size:0.98rem;line-height:1.55}
+  .mv .line{
+    grid-column:2;
+    margin:0.85rem 0 0;padding-left:0.9rem;
+    border-left:2px solid var(--brass-dim);
+    font-family:var(--display);font-style:italic;font-weight:300;
+    font-size:1.02rem;line-height:1.4;color:var(--ink);
+  }
+
+  /* ---- the reader ---- */
+  .reader p{max-width:var(--measure)}
+
+  /* ---- coda ---- */
+  .coda{text-align:center;margin-top:1rem}
+  .coda .lead{color:var(--ink-soft);max-width:30rem;margin:0 auto 1.8rem}
+  .coda .heals{
+    font-family:var(--display);font-weight:300;font-style:italic;
+    font-size:clamp(2rem,1.4rem + 3vw,3rem);letter-spacing:0.02em;
+    color:var(--brass);margin:0;line-height:1;
+  }
+
+  /* ---- footer ---- */
+  footer{
+    margin-top:5rem;padding:2.2rem 0 3rem;border-top:1px solid var(--line-soft);
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  }
+  footer .sig,footer .kt{
+    font-family:var(--mono);font-size:0.64rem;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--ink-faint);
+  }
+  footer .kt{display:flex;align-items:center;gap:0.55rem}
+
+  a{color:var(--brass)}
+  :focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:2px}
+
+  .links{display:flex;flex-wrap:wrap;gap:0.8rem;margin-top:1.6rem}
+  .lnk{
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;padding:0.7rem 1.1rem;
+    border:1px solid var(--line);border-radius:2px;
+    transition:border-color .25s ease,color .25s ease,background-color .25s ease;
+  }
+  .lnk:hover,.lnk:focus-visible{border-color:var(--brass);color:var(--brass);background:rgba(198,161,91,0.04)}
+  .lnk .arw{color:var(--ink-faint);margin-left:0.5rem;transition:color .25s ease}
+  .lnk:hover .arw,.lnk:focus-visible .arw{color:var(--brass)}
+
+  @media (max-width:560px){
+    .bar{flex-direction:column;align-items:flex-start;gap:0.6rem}
+    .rule{margin:3.4rem 0}
+    .mv .line{grid-column:1}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .beat{animation:none;opacity:1}
+    .method .step{opacity:1;transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <div class="bar">
+      <div class="name">Conscience</div>
+      <div class="meta">
+        <!-- EDIT: rename href if your author page uses a different filename -->
+        <a class="navlink" href="shaurye-chakravarty.html">About the author<span class="arw">↗</span></a>
+        <span class="beat" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <!-- hero: title lockup -->
+    <header class="hero">
+      <span class="eyebrow">A manuscript in four movements</span>
+      <h1 class="book-title">CONSCIENCE</h1>
+      <p class="book-sub">A Radical View on Safety and Accountability</p>
+      <p class="byline">Shaurye Chakravarty</p>
+
+      <div class="method" aria-label="The method: feel it, decouple from it, act, observe, fix it.">
+        <span class="step"><span class="dot">›</span>Feel it.</span>
+        <span class="step"><span class="dot">›</span>Decouple from it.</span>
+        <span class="step"><span class="dot">›</span>Act.</span>
+        <span class="step"><span class="dot">›</span>Observe.</span>
+        <span class="step"><span class="dot">›</span>Fix it.</span>
+      </div>
+
+      <p class="argument">Institutions are levers built by mortals who couldn't bear the discomfort of being clocks. This book is <b>not an indictment</b> of that. It is compassion for it.</p>
+    </header>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- before we begin -->
+    <section aria-labelledby="note-h">
+      <div class="sec-head">
+        <span class="num">00</span>
+        <h2 id="note-h">Before We Begin</h2>
+      </div>
+
+      <p>We may feel radicalized by the end of this. I didn't set out to radicalize anyone, and I don't think of myself as a radical — only as someone who looked carefully at something everyone was already looking at, and saw what was plainly there.</p>
+
+      <p>But the truth, plainly stated, can feel like an attack on the person who has been trained not to see it. So if the heat rises while reading — if at some point you want to close the book — the move is to notice that feeling, and not run from it. <em>Feel it. Decouple from it. Act. Observe. Fix it.</em> That sentence is the whole method. Everything else is only the demonstration.</p>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- the movements -->
+    <section aria-labelledby="mv-h">
+      <div class="sec-head">
+        <span class="num">01</span>
+        <h2 id="mv-h">The Movements</h2>
+      </div>
+
+      <div class="movements">
+        <div class="mv">
+          <div class="top">
+            <div class="numeral">I</div>
+            <div>
+              <h3>Isochronism</h3>
+              <p class="syn">An instrument, handed over before anything is at stake. Every regulated system has the same four organs — mainspring, escapement, restoring force, dial — and reveals itself the moment you stop reading it as a lever.</p>
+            </div>
+          </div>
+          <p class="line">The fundamental machine is the clock.</p>
+        </div>
+
+        <div class="mv">
+          <div class="top">
+            <div class="numeral">II</div>
+            <div>
+              <h3>The Drift</h3>
+              <p class="syn">There is always a moment — forty seconds, ninety, four unhurried minutes — in which someone knew. How the one instrument that registered it got set down, not through crime but through drift, one reasonable decision at a time.</p>
+            </div>
+          </div>
+          <p class="line">People are dying at the exact coordinates where conscience used to be.</p>
+        </div>
+
+        <div class="mv">
+          <div class="top">
+            <div class="numeral">III</div>
+            <div>
+              <h3>The Document</h3>
+              <p class="syn">The mind is not a judge. It is a record that registers what passes through it, holds it, and reads it back — kept forward for safety, read backward for accountability. One document, read from two ends.</p>
+            </div>
+          </div>
+          <p class="line">We have described the document at rest. What remains is to watch it run.</p>
+        </div>
+
+        <div class="mv">
+          <div class="top">
+            <div class="numeral">IV</div>
+            <div>
+              <h3>The Dreamscape</h3>
+              <p class="syn">The document at full speed. A pilot in the cloud, flying the vector of the inevitable — one variable to control. And then the return: why frightened mortals build institutions to forget they are keeping time at all.</p>
+            </div>
+          </div>
+          <p class="line">Timing the inevitable.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- the reader -->
+    <section class="reader" aria-labelledby="reader-h">
+      <div class="sec-head">
+        <span class="num">02</span>
+        <h2 id="reader-h">Who It's For</h2>
+      </div>
+
+      <p>Not only pilots. Not only safety professionals. Anyone who has ever been inside a system that told them their instinct was the problem — anyone who holds stop-work authority and needs their account loaded before the moment of decision, not after.</p>
+
+      <p>The surface is aviation and safety science. Underneath is a larger argument about what institutions do to conscience over time, and why. It does not end in crisis. It does not end in prescription. It ends in flight — and then in compassion.</p>
+
+      <div class="links">
+        <!-- EDIT: replace with a real link (excerpt, mailing list, contact) or delete -->
+        <a class="lnk" href="#">Read an excerpt<span class="arw">↗</span></a>
+        <!-- EDIT: your email -->
+        <a class="lnk" href="mailto:hello@example.com">Enquiries<span class="arw">↗</span></a>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- coda -->
+    <section class="coda" aria-label="Closing">
+      <p class="lead">The pilot timing the inevitable is not a superhero. Only someone who made peace with the one thing institutions cannot metabolize — their own death. The last word is not blame.</p>
+      <p class="heals">Time heals.</p>
+    </section>
+
+    <footer>
+      <div class="sig">© <span id="yr"></span> Shaurye Chakravarty</div>
+      <div class="kt">Still keeping time <span class="beat" aria-hidden="true"></span></div>
+    </footer>
+
+  </div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var steps = document.querySelectorAll('.method .step');
+    if(reduce){ steps.forEach(function(s){ s.classList.add('in'); }); return; }
+    steps.forEach(function(s,i){ setTimeout(function(){ s.classList.add('in'); }, 260 + i*300); });
+  })();
+</script>
+</body>
+</html>
