@@ -5,13 +5,17 @@
   TO EDIT LATER:
    • Email / links: search for "EDIT:" below.
    • Everything is one file — no build step, no dependencies beyond Google Fonts.
+
+  REVISION: front door re-weighted. The book is the monument (§01), the two
+  practices sit a tier below it as "the argument, applied" (§02), then the
+  record (§03) and contact (§04). Nothing removed — the hierarchy is now explicit.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Shaurye Chakravarty</title>
-<meta name="description" content="Pilot, Safety Science researcher, and author of CONSCIENCE: A Radical View on Safety and Accountability.">
+<meta name="description" content="Pilot, Safety Science researcher, and author of CONSCIENCE: A Radical View on Safety and Accountability. The argument, and the argument applied.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -272,6 +276,66 @@
     line-height:1.55;
   }
 
+  /* read-into-the-book link, under the movements */
+  .book-more{margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:0.8rem}
+
+  /* ---- the argument, applied: two practices, a tier below the monument ---- */
+  .applied-intro{
+    font-family:var(--display);
+    font-weight:300;
+    font-style:italic;
+    font-size:clamp(1.2rem,1rem + 1vw,1.5rem);
+    line-height:1.4;
+    color:var(--ink-soft);
+    max-width:33rem;
+    margin:0 0 2rem;
+  }
+  .applied-intro b{color:var(--ink);font-weight:400;font-style:normal}
+  .applied{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.6rem 2.2rem;
+    border-top:1px solid var(--line-soft);
+    padding-top:1.8rem;
+  }
+  .practice{display:flex;flex-direction:column}
+  .practice .plabel{
+    font-family:var(--mono);
+    font-size:0.62rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--brass-dim);
+    margin-bottom:0.85rem;
+  }
+  .practice h3{
+    font-family:var(--display);
+    font-weight:500;
+    font-size:1.2rem;
+    letter-spacing:0.01em;
+    margin:0 0 0.6rem;
+    color:var(--ink);
+  }
+  .practice p{
+    margin:0 0 1.2rem;
+    max-width:none;
+    color:var(--ink-soft);
+    font-size:0.96rem;
+    line-height:1.55;
+  }
+  .practice .go{
+    margin-top:auto;
+    font-family:var(--mono);
+    font-size:0.68rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink);
+    text-decoration:none;
+    transition:color .25s ease;
+  }
+  .practice .go .arw{color:var(--ink-faint);margin-left:0.45rem;transition:color .25s ease}
+  .practice .go:hover,.practice .go:focus-visible{color:var(--brass)}
+  .practice .go:hover .arw,.practice .go:focus-visible .arw{color:var(--brass)}
+
   /* ---- the record (about) ---- */
   .record{
     margin-top:1rem;
@@ -354,6 +418,7 @@
 
   @media (max-width:560px){
     .rec-row{grid-template-columns:1fr;gap:0.15rem}
+    .applied{grid-template-columns:1fr;gap:2rem}
     .nav{flex-direction:column;align-items:flex-start;gap:0.7rem}
     .rule{margin:3.4rem 0}
   }
@@ -385,7 +450,7 @@
     <header class="hero">
       <div class="eyebrow roles">Pilot · Safety Scientist · Writer</div>
       <h1>Conscience is not a feeling.<br>It is the faculty by which a mind <em>keeps an account of itself.</em></h1>
-      <p class="lede">I look carefully at things everyone is already looking at, and try to say what is plainly there. My work sits where aviation, safety science, and philosophy meet — <strong>the moment someone knows something is wrong, and what happens next.</strong></p>
+      <p class="lede">I look carefully at things everyone is already looking at, and try to say what is plainly there. It began as a book. It is now also how I fly, teach, and read an organization — <strong>one argument about the moment someone knows something is wrong, and what happens next.</strong></p>
 
       <div class="method" aria-label="The method: feel it, decouple from it, act, observe, fix it.">
         <span class="step"><span class="dot">›</span>Feel it.</span>
@@ -398,7 +463,7 @@
 
     <div class="rule" aria-hidden="true"></div>
 
-    <!-- the book -->
+    <!-- §01 the book — the monument -->
     <section aria-labelledby="book-h">
       <div class="sec-head">
         <span class="num">01</span>
@@ -445,14 +510,46 @@
           </div>
         </div>
       </div>
+
+      <div class="book-more">
+        <a class="lnk" href="conscience.html">Enter the book<span class="arw">↗</span></a>
+        <a class="lnk" href="excerpt.html">Read an excerpt<span class="arw">↗</span></a>
+      </div>
     </section>
 
     <div class="rule" aria-hidden="true"></div>
 
-    <!-- the record / about -->
-    <section aria-labelledby="rec-h">
+    <!-- §02 the argument, applied — a tier below the book -->
+    <section aria-labelledby="applied-h">
       <div class="sec-head">
         <span class="num">02</span>
+        <h2 id="applied-h">The Argument, Applied</h2>
+      </div>
+
+      <p class="applied-intro">The book is the argument. These two practices are the argument <b>at work</b> — and they take their credibility from it, not the other way around.</p>
+
+      <div class="applied">
+        <div class="practice">
+          <div class="plabel">For pilots</div>
+          <h3>Advanced Flight Instruction</h3>
+          <p>Instrument, multi-engine, and the commercial standard — and the thing underneath all of it: reading the airplane, and trusting the reading when it counts.</p>
+          <a class="go" href="instruction.html">Flight Instruction<span class="arw">↗</span></a>
+        </div>
+        <div class="practice">
+          <div class="plabel">For operations</div>
+          <h3>Safety Consultancy</h3>
+          <p>Reading an organization as a document — past the clean dial to where its people knew something was wrong and the system taught them to wait. Then restoring the instrument.</p>
+          <a class="go" href="consultancy.html">Safety Consultancy<span class="arw">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- §03 the record / about -->
+    <section aria-labelledby="rec-h">
+      <div class="sec-head">
+        <span class="num">03</span>
         <h2 id="rec-h">The Record</h2>
       </div>
 
@@ -480,14 +577,14 @@
 
     <div class="rule" aria-hidden="true"></div>
 
-    <!-- contact -->
+    <!-- §04 contact -->
     <section aria-labelledby="reach-h">
       <div class="sec-head">
-        <span class="num">03</span>
+        <span class="num">04</span>
         <h2 id="reach-h">Reach Me</h2>
       </div>
 
-      <p>For the book, for talks on safety and conscience, or for anything that produces change and teaches people to think — get in touch.</p>
+      <p>For the book, for talks on safety and conscience, for flight instruction or a consultancy engagement — or for anything that produces change and teaches people to think — get in touch.</p>
 
       <div class="links">
         <!-- EDIT: replace the address below with your real email -->
