@@ -1,0 +1,463 @@
+<!--
+  Shaurye Chakravarty — Safety Consultancy
+  consultancy.html · self-contained, deploy on GitHub Pages alongside the other four pages.
+
+  TO EDIT LATER — search for "EDIT:" below:
+   • Contact email
+   • Any outbound links (LinkedIn / booking) — real URLs or delete
+  NOTE: the four existing pages (index / conscience / instruction / excerpt-nav)
+  need a "Consultancy" link added to their nav to match. Snippet at the bottom of chat.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Safety Consultancy — Shaurye Chakravarty</title>
+<meta name="description" content="Safety consultancy grounded in a single premise: the instrument that knows something is wrong was set down. The work is picking it back up.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#0F1319;        /* gunmetal, instrument panel at night */
+    --ground-2:#141922;      /* raised panel */
+    --ink:#E8E3D6;           /* bone / aged lume */
+    --ink-soft:#9A958A;      /* faded ink */
+    --ink-faint:#615F59;     /* engraving shadow */
+    --brass:#C6A15B;         /* aged brass — the single accent */
+    --brass-dim:#8C7643;
+    --steel:#6E93A6;         /* blued steel — used only for the record */
+    --line:rgba(232,227,214,0.12);
+    --line-soft:rgba(232,227,214,0.06);
+
+    --display:"Fraunces",Georgia,serif;
+    --body:"Spectral",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+    --measure:38rem;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--body);
+    font-weight:400;
+    line-height:1.72;
+    font-size:clamp(1rem,0.96rem + 0.2vw,1.12rem);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(198,161,91,0.22);color:var(--ink)}
+
+  .wrap{
+    width:100%;
+    max-width:var(--measure);
+    margin:0 auto;
+    padding:0 1.5rem;
+  }
+
+  a{color:inherit}
+
+  /* ---- instrument register ---- */
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:0.7rem;
+    font-weight:500;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--brass);
+  }
+  .label{
+    font-family:var(--mono);
+    font-size:0.66rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+
+  /* ---- nav bar (top & bottom) ---- */
+  .bar{
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(20,25,34,0.6),transparent);
+  }
+  .bar--foot{border-bottom:0;border-top:1px solid var(--line);background:none}
+  .bar .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    padding-top:1.1rem;
+    padding-bottom:1.1rem;
+  }
+  .brand{
+    font-family:var(--display);
+    font-weight:500;
+    font-size:1rem;
+    letter-spacing:0.01em;
+    text-decoration:none;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .nav{
+    display:flex;
+    gap:1.15rem;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+  .nav a{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--ink-soft);
+    padding-bottom:2px;
+    border-bottom:1px solid transparent;
+    transition:color .25s ease,border-color .25s ease;
+  }
+  .nav a:hover{color:var(--ink)}
+  .nav a[aria-current="page"]{
+    color:var(--brass);
+    border-bottom-color:var(--brass-dim);
+  }
+
+  /* ---- dial-track tick divider ---- */
+  .rule{
+    height:14px;
+    margin:3.4rem 0;
+    background-image:repeating-linear-gradient(90deg,
+      var(--line) 0, var(--line) 1px,
+      transparent 1px, transparent 12px);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    opacity:.9;
+  }
+  .rule--short{margin:2.4rem 0}
+
+  /* ---- hero ---- */
+  header.hero{padding:4.2rem 0 0.6rem}
+  .hero .eyebrow{display:block;margin-bottom:1.5rem}
+  h1{
+    font-family:var(--display);
+    font-weight:300;
+    font-size:clamp(1.9rem,1.4rem + 2.4vw,2.9rem);
+    line-height:1.14;
+    letter-spacing:-0.01em;
+    margin:0 0 1.3rem;
+  }
+  h1 em{font-style:italic;color:var(--brass)}
+  .lede{
+    font-size:1.12rem;
+    color:var(--ink);
+    max-width:34rem;
+  }
+  .lede + .lede{margin-top:1.1rem;color:var(--ink-soft)}
+
+  /* ---- method line (the through-line of the whole body of work) ---- */
+  .method{
+    margin:2.6rem 0 0.4rem;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.55rem 0.9rem;
+    align-items:baseline;
+  }
+  .method .step{
+    font-family:var(--mono);
+    font-size:0.74rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    opacity:0;
+    transform:translateY(4px);
+    transition:opacity .5s ease,transform .5s ease;
+  }
+  .method .step b{color:var(--brass);font-weight:500}
+  .method .step.in{opacity:1;transform:none}
+
+  /* ---- sections ---- */
+  section{padding:0.6rem 0}
+  h2{
+    font-family:var(--display);
+    font-weight:400;
+    font-size:1.5rem;
+    line-height:1.2;
+    margin:0 0 1.1rem;
+  }
+  h2 .num{
+    font-family:var(--mono);
+    font-size:0.8rem;
+    color:var(--brass);
+    letter-spacing:0.1em;
+    margin-right:0.7rem;
+    vertical-align:0.18em;
+  }
+  p{margin:0 0 1.15rem}
+  p:last-child{margin-bottom:0}
+  .soft{color:var(--ink-soft)}
+
+  /* ---- the three engagements, set on a dial ---- */
+  .dial{margin-top:0.4rem}
+  .item{
+    padding:1.5rem 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .item:first-child{border-top:0}
+  .item .head{
+    display:flex;
+    align-items:baseline;
+    gap:0.8rem;
+    margin-bottom:0.55rem;
+  }
+  .item .mk{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    color:var(--brass);
+    letter-spacing:0.14em;
+    flex:none;
+  }
+  .item h3{
+    font-family:var(--display);
+    font-weight:500;
+    font-size:1.16rem;
+    margin:0;
+    letter-spacing:0.01em;
+  }
+  .item p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:1rem;
+  }
+  .item p .lead-in{color:var(--ink)}
+
+  /* ---- grounding / credentials ---- */
+  .ground-list{
+    list-style:none;
+    margin:0.4rem 0 0;
+    padding:0;
+  }
+  .ground-list li{
+    font-family:var(--mono);
+    font-size:0.8rem;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    padding:0.5rem 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .ground-list li:first-child{border-top:0}
+  .ground-list li span{color:var(--ink-faint)}
+
+  /* ---- contact / the ask ---- */
+  .ask{padding:0.6rem 0 0}
+  .ask h2 em{font-style:italic;color:var(--brass)}
+  .contact{
+    margin-top:1.4rem;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.9rem;
+  }
+  .btn{
+    font-family:var(--mono);
+    font-size:0.74rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--ink);
+    padding:0.7rem 1.15rem;
+    border:1px solid var(--brass-dim);
+    transition:background .25s ease,color .25s ease,border-color .25s ease;
+  }
+  .btn:hover{background:var(--brass);color:var(--ground);border-color:var(--brass)}
+  .btn--ghost{border-color:var(--line)}
+  .btn--ghost:hover{background:transparent;color:var(--ink);border-color:var(--ink-soft)}
+  .arw{margin-left:0.4rem}
+
+  /* ---- footer ---- */
+  footer.sig{
+    padding:2.2rem 0 3rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .sig .c{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    color:var(--ink-faint);
+  }
+  .kt{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+    display:flex;
+    align-items:center;
+    gap:0.55rem;
+  }
+  /* the single 1 Hz beat — the only ambient motion */
+  .beat{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--brass);
+    display:inline-block;
+    animation:pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:0.28;transform:scale(0.86)}
+    50%{opacity:1;transform:scale(1)}
+  }
+
+  :focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .beat{animation:none;opacity:0.8}
+    .method .step{opacity:1;transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ TOP NAV ============ -->
+  <div class="bar">
+    <div class="wrap">
+      <a class="brand" href="index.html">Shaurye Chakravarty</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="conscience.html">Conscience</a>
+        <a href="instruction.html">Instruction</a>
+        <a href="consultancy.html" aria-current="page">Consultancy</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- ============ HERO ============ -->
+    <header class="hero">
+      <span class="eyebrow">Safety Consultancy</span>
+      <h1>Most safety work asks the one instrument that knows something is wrong to <em>stand down.</em></h1>
+      <p class="lede">This does the opposite. It is grounded in a single premise, argued at length elsewhere on this site: the faculty that registers <em>this is wrong</em> before there are words for it did not break. It was set down — gently, thoroughly, one reasonable decision at a time. The work is picking it back up.</p>
+      <p class="lede">Not a compliance shop. Nobody here will help an organization pass an audit it should fail. The engagement is with the record underneath the clean dial.</p>
+
+      <div class="method" aria-label="Method">
+        <span class="step"><b>Feel it.</b></span>
+        <span class="step"><b>Decouple</b> from it.</span>
+        <span class="step"><b>Act.</b></span>
+        <span class="step"><b>Observe.</b></span>
+        <span class="step"><b>Fix it.</b></span>
+      </div>
+    </header>
+
+    <div class="rule" role="separator"></div>
+
+    <!-- ============ THE PREMISE ============ -->
+    <section>
+      <h2>The drift, at organizational scale</h2>
+      <p>Every mature safety system is an instrument for moving judgment out of the individual and into the institution. That is not a flaw in the design. It is the design, and for most of the work it is exactly right — nobody wants a tired operator reinventing the emergency drill from first principles at the worst possible moment.</p>
+      <p>But the same machinery, built and certified and audited over decades, quietly teaches the people inside it that their own internal account is no longer load-bearing. That instinct is a liability. That the correct move, when something reads wrong, is to wait for confirmation that never comes.</p>
+      <p class="soft">A watchmaker has a name for what happens next. An escapement does not shatter on schedule; it decays. The beat lengthens by fractions no single inspection can catch. And the dial — the audit passed, the certificate renewed, the record unblemished — reads <em>stable</em> the whole way down. The consultancy exists to read the beat, not the dial.</p>
+    </section>
+
+    <div class="rule rule--short" role="separator"></div>
+
+    <!-- ============ THE ENGAGEMENTS ============ -->
+    <section>
+      <span class="label">The Engagements</span>
+      <div class="dial">
+
+        <article class="item">
+          <div class="head">
+            <span class="mk">I</span>
+            <h3>The Audit</h3>
+          </div>
+          <p><span class="lead-in">Reading the organization as a document.</span> Not a gap-analysis against a standard — that work is already being done, and done well. This reads past the proximate causes in an operation's own records, its reports, its near-misses, its quiet write-arounds, to find the moments people knew and did not speak, and the arithmetic that produced the silence. The finding is never a broken part. It is where conscience was set down, and why it was rational to set it down.</p>
+        </article>
+
+        <article class="item">
+          <div class="head">
+            <span class="mk">II</span>
+            <h3>Restoring the Instrument</h3>
+          </div>
+          <p><span class="lead-in">Making the operator's account load-bearing again.</span> Stop-work authority that costs nothing to use. Just culture practiced as honest record-keeping rather than exoneration theater. The specific, structural work of building an operation where speaking up is faster than the arithmetic of deferral — because the moral work is finished before the action begins, and a system can be designed so its people are already loaded.</p>
+        </article>
+
+        <article class="item">
+          <div class="head">
+            <span class="mk">III</span>
+            <h3>The Debrief</h3>
+          </div>
+          <p><span class="lead-in">Learning from normal work, not only from wreckage.</span> Training the people who lead debriefs to read arousal state and co-regulate — to govern the mismatch between the demand and the window a person has to meet it, so overload and complacency are treated as one failure in opposite directions. Grounded in Safety-II and the Window of Tolerance, run for teams in high-consequence operations, not for beginners.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <div class="rule rule--short" role="separator"></div>
+
+    <!-- ============ GROUNDING ============ -->
+    <section>
+      <h2>Where this comes from</h2>
+      <p class="soft">The framework is not borrowed. It was built at four hundred feet with a warning light on, and then written down. The operational credibility and the philosophy are the same object, read from two ends.</p>
+      <ul class="ground-list">
+        <li>Commercial Pilot — ASEL, AMEL, Instrument <span>· CFI / CFII / MEI</span></li>
+        <li>M.Sc. Safety Science <span>· Embry-Riddle Aeronautical University, Prescott</span></li>
+        <li>Author, <em>CONSCIENCE: A Radical View on Safety and Accountability</em></li>
+        <li>Working substrate <span>· Reason's latent conditions · Hollnagel's Safety-I / Safety-II · Siegel's Window of Tolerance</span></li>
+      </ul>
+    </section>
+
+    <div class="rule" role="separator"></div>
+
+    <!-- ============ THE ASK ============ -->
+    <section class="ask">
+      <h2>If your operation reads <em>stable</em> and you can hear the drift underneath</h2>
+      <p class="soft">The right engagements are small, precise, and sized to the actual need. Tell me what your records are telling you — or what they have stopped telling you — and we will start there.</p>
+      <div class="contact">
+        <!-- EDIT: real contact email below -->
+        <a class="btn" href="mailto:hello@example.com">Start a conversation<span class="arw">→</span></a>
+        <!-- EDIT: real URL or delete -->
+        <a class="btn btn--ghost" href="conscience.html">Read the premise first</a>
+      </div>
+    </section>
+
+    <div class="rule rule--short" role="separator"></div>
+
+  </div>
+
+  <!-- ============ BOTTOM NAV ============ -->
+  <div class="bar bar--foot">
+    <div class="wrap">
+      <a class="brand" href="index.html">Shaurye Chakravarty</a>
+      <nav class="nav" aria-label="Secondary">
+        <a href="conscience.html">Conscience</a>
+        <a href="instruction.html">Instruction</a>
+        <a href="consultancy.html" aria-current="page">Consultancy</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <footer class="sig">
+      <div class="c">© <span id="yr"></span> Shaurye Chakravarty</div>
+      <div class="kt">Still keeping time <span class="beat" aria-hidden="true"></span></div>
+    </footer>
+  </div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Orchestrated load: the method line ticks in, beat by beat.
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var steps = document.querySelectorAll('.method .step');
+    if(reduce){ steps.forEach(function(s){ s.classList.add('in'); }); return; }
+    steps.forEach(function(s,i){
+      setTimeout(function(){ s.classList.add('in'); }, 260 + i*300);
+    });
+  })();
+</script>
+</body>
+</html>
