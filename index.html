@@ -1,9 +1,28 @@
+<!--
+  Pilot Consciousness — Decentralized Safety Management
+  The LLC's page. Brand = "Pilot Consciousness", voice = company (we/our),
+  founder appears as attribution in §05 only. Footer copyright = the LLC.
 
+  REVISION: sharpened the core claim. The client keeps only what the FAA
+  requires to stay internal — a signatory and the Accountable Executive.
+  Pilot Consciousness builds and runs the operational SMS itself: SRM,
+  Safety Assurance, Safety Promotion, records, reporting, reading across
+  clients. This is a materially bigger claim than "we advise while you run
+  it" — worded generally ("the roles the FAA requires to stay internal")
+  rather than naming a fixed list, since which specific positions are
+  non-delegable varies by a certificate's size and structure. Confirm exact
+  scope with an aviation attorney before this becomes contract language.
+
+  TO EDIT LATER — search for "EDIT:":
+   • Contact email — currently hello@pilotconsciousness.com, confirm real inbox
+   • Formal entity name in the footer once formation is final
+   • Exact non-delegable-roles language, once confirmed by counsel
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pilot Consciousness —  Safety Management, Outsourced</title>
+<title>Pilot Consciousness — Decentralized Safety Management</title>
 <meta name="description" content="Decentralized safety management for Part 135 operators. Keep the signature. Hand us the system. Built for the FAA's May 2027 Part 5 deadline.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -279,7 +298,109 @@
   a{color:var(--brass)}
   :focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:2px}
 
+  /* ---- rolodex: flip-card examples ---- */
+  .rolodex{margin-top:1.8rem}
+  .rlx-spine{
+    height:7px;margin-bottom:-1px;
+    background-image:radial-gradient(circle,var(--brass-dim) 1.1px,transparent 1.2px);
+    background-size:13px 7px;background-repeat:repeat-x;background-position:2px center;
+    opacity:0.55;
+  }
+  .rlx-row{display:flex;align-items:center;gap:1.1rem}
+  .rlx-stack{
+    position:relative;min-height:6rem;overflow:hidden;flex:1;min-width:0;
+    transition:height .35s ease;
+  }
+  .rlx-track{
+    display:flex;align-items:flex-start;
+    transition:transform .5s cubic-bezier(.4,0,.2,1);
+  }
+  .rlx-card{
+    flex:0 0 100%;min-width:100%;box-sizing:border-box;padding:1.3rem 0;
+  }
+  .rlx-tag{
+    font-family:var(--mono);font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--brass);margin-bottom:0.55rem;
+  }
+  .rlx-card h4{
+    font-family:var(--display);font-weight:400;font-size:1.2rem;
+    margin:0 0 0.55rem;color:var(--ink);
+  }
+  .rlx-card p{
+    margin:0;color:var(--ink-soft);font-size:0.95rem;line-height:1.58;max-width:76rem;
+  }
+  .rlx-card.rlx-synth h4{color:var(--brass)}
+  .rlx-btn{
+    flex:none;
+    font-family:var(--mono);font-size:0.85rem;color:var(--ink-soft);
+    background:none;border:1px solid var(--line);border-radius:2px;
+    width:2rem;height:2rem;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:color .2s ease,border-color .2s ease;
+  }
+  .rlx-btn:hover,.rlx-btn:focus-visible{color:var(--brass);border-color:var(--brass-dim)}
+  .rlx-dots-row{
+    display:flex;align-items:center;justify-content:center;gap:0.9rem;
+    margin-top:1rem;
+  }
+  .rlx-dots{display:flex;gap:0.45rem}
+  .rlx-dot{
+    width:6px;height:6px;border-radius:50%;background:var(--line);border:none;padding:0;cursor:pointer;
+    transition:background .2s ease,transform .2s ease;
+  }
+  .rlx-dot.is-active{background:var(--brass);transform:scale(1.2)}
+  .rlx-count{
+    font-family:var(--mono);font-size:0.64rem;letter-spacing:0.12em;color:var(--ink-faint);
+  }
+
+  /* ---- drift band: full-bleed ticker + relocated rolodex ---- */
+  .drift-full-bleed{
+    width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+    background:var(--ground-2);
+    border-top:1px solid var(--brass-dim);border-bottom:1px solid var(--brass-dim);
+  }
+  .drift-ticker{
+    display:flex;align-items:stretch;
+    background:var(--ground);border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .dt-badge{
+    flex:none;display:flex;align-items:center;gap:0.55rem;
+    padding:0.6rem 1.1rem;
+    font-family:var(--mono);font-size:0.64rem;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--brass);background:var(--ground-2);border-right:1px solid var(--brass-dim);
+    white-space:nowrap;
+  }
+  .dt-track{flex:1;overflow:hidden;position:relative}
+  .dt-scroll{
+    display:flex;align-items:center;white-space:nowrap;width:max-content;
+    padding:0.65rem 0;
+    animation:dt-marquee 48s linear infinite;
+  }
+  .dt-track:hover .dt-scroll{animation-play-state:paused}
+  .dt-item{
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.03em;text-transform:uppercase;
+    color:var(--ink-soft);padding:0 1.5rem;white-space:nowrap;
+    border:none;background:none;cursor:pointer;
+    -webkit-appearance:none;appearance:none;margin:0;line-height:inherit;
+    transition:color .2s ease;
+  }
+  .dt-item:hover,.dt-item:focus-visible{color:var(--ink)}
+  .dt-item .dt-tag{color:var(--brass);margin-right:0.55rem}
+  .dt-sep{color:var(--brass-dim)}
+  @keyframes dt-marquee{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
+  }
+  .drift-inner{max-width:none;padding:2.2rem 1.5rem 2.4rem}
+  .drift-inner .rolodex{margin-top:0}
+
   @media (max-width:560px){
+    .dt-badge{padding:0.55rem 0.8rem;font-size:0.6rem}
+    .dt-item{padding:0 1.1rem;font-size:0.68rem}
+    .drift-inner{padding:1.8rem 1.2rem 2rem}
+    .rlx-count{display:none}
+    .rlx-dots{gap:0.34rem}
     .nav{flex-direction:column;align-items:flex-start;gap:0.7rem}
     .rule{margin:3.4rem 0}
     .split{grid-template-columns:1fr}
@@ -287,6 +408,7 @@
     .split-col + .split-col{padding-left:0;border-left:0;border-top:1px solid var(--line-soft)}
   }
   @media (prefers-reduced-motion:reduce){
+    .dt-scroll{animation:none}
     .beat{animation:none;opacity:1}
     .method .step{opacity:1;transform:none;transition:none}
   }
@@ -313,7 +435,7 @@
       <span class="eyebrow">Decentralized Safety Management</span>
       <h1>Keep the signature. Hand us <em>the system.</em></h1>
       <p class="lede">The FAA requires a Part 135 operator to keep certain roles internal — a signatory, an Accountable Executive with real authority. Everything else an SMS actually requires — building it, running it, reading it, keeping it alive between audits — does not have to live inside your operation at all.</p>
-      <p class="lede">We build and run your SMS end to end. Your reports come to us. We read the stats, across every operator we work with, side by side rather than merged — because a pattern that looks like noise inside one operation is often the third time we've seen it this quarter, somewhere else. <strong>You sign. We run.</strong></p>
+      <p class="lede">We build and run your SMS end to end — SRM, safety assurance, safety promotion, records, reporting. Your reports come to us, and we read them alongside every other operator's — separately, never merged — because the risks you're flying through rarely stop at your fleet. <strong>You sign. We run.</strong></p>
 
       <div class="deadline"><a class="dd-link" href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-A/part-5" target="_blank" rel="noopener">FAA Part 5</a>&nbsp;— full SMS compliance required by 28 May 2027</div>
 
@@ -334,12 +456,107 @@
         <h2 id="why-h">Why Now</h2>
       </div>
 
-      <p>The FAA's Part 5 rule requires every Part 135 charter and commuter operator — not just the large ones — to develop, implement, and declare a compliant Safety Management System. Implementation plans were due in late 2024. The full declaration of compliance is due <strong>28 May 2027</strong>. Operators who wait until the deadline is close are already behind; a functioning SMS has to be demonstrated in operation, not assembled the month before.</p>
+      <p>Every Part 135 charter and commuter operator — not just the large ones — must declare a compliant Safety Management System by <strong>28 May 2027</strong>. A functioning SMS has to be demonstrated in operation, not assembled the month before, and most operators this size have never run one and don't have the headcount to stand up a safety department just to satisfy a filing.</p>
 
-      <p>Most operators this size have never had to run one, and don't have the headcount to build a safety department from scratch just to satisfy a filing. They have an operations manual, a chief pilot who is also flying the line, and now a federal requirement to prove — with evidence, not paperwork — that someone is reading the safety record and acting on it.</p>
-
-      <p class="soft">A template manual satisfies the letter of that requirement and misses the point of it entirely. An SMS nobody reads is a dial with nothing behind it — the audit passed, the binder complete, and no one who would notice the beat lengthening. We exist to be the ones who notice — and to carry the operational weight of the system so you don't have to build a department to meet a deadline.</p>
+      <p class="soft">A template manual satisfies the letter of that requirement and misses the point of it entirely. An SMS nobody reads is a dial with nothing behind it — the audit passed, the binder complete, and no one who would notice the beat lengthening. We exist to be the ones who notice, and to carry that operational weight so you don't have to build a department to meet a deadline.</p>
     </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+  </div>
+
+  <div class="drift-full-bleed">
+    <div class="drift-ticker" aria-label="Drift incidents, scrolling">
+      <div class="dt-badge"><span class="beat" aria-hidden="true"></span> Drift Watch</div>
+      <div class="dt-track">
+        <div class="dt-scroll">
+          <button class="dt-item" type="button" data-slide="0"><span class="dt-tag">2020–2021</span>COVID — divergent protocols, no shared baseline</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="1"><span class="dt-tag">Oct–Nov 2025</span>The shutdown — 13,000 controllers unpaid, no shared mitigation plan</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="2"><span class="dt-tag">2025–2026</span>Tariffs — supplier swaps, performance unknown</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="3"><span class="dt-tag">2025</span>Supply chain — $11B+ in deferrals, no shared standard</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="4"><span class="dt-tag">2025–2026</span>Chip shortage — workarounds untracked industry-wide</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="5"><span class="dt-tag">Winter 2025–26</span>La Niña — same pattern, no peer benchmark</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="6"><span class="dt-tag">Feb–May 2026</span>Jet fuel doubles — margins cut alone, never compared</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="0"><span class="dt-tag">2020–2021</span>COVID — divergent protocols, no shared baseline</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="1"><span class="dt-tag">Oct–Nov 2025</span>The shutdown — 13,000 controllers unpaid, no shared mitigation plan</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="2"><span class="dt-tag">2025–2026</span>Tariffs — supplier swaps, performance unknown</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="3"><span class="dt-tag">2025</span>Supply chain — $11B+ in deferrals, no shared standard</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="4"><span class="dt-tag">2025–2026</span>Chip shortage — workarounds untracked industry-wide</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="5"><span class="dt-tag">Winter 2025–26</span>La Niña — same pattern, no peer benchmark</button><span class="dt-sep" aria-hidden="true">•</span>
+          <button class="dt-item" type="button" data-slide="6"><span class="dt-tag">Feb–May 2026</span>Jet fuel doubles — margins cut alone, never compared</button><span class="dt-sep" aria-hidden="true">•</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drift-inner">
+      <div class="rolodex" role="group" aria-roledescription="carousel" aria-label="Cross-operator examples">
+        <div class="rlx-spine" aria-hidden="true"></div>
+        <div class="rlx-row">
+          <button class="rlx-btn" type="button" data-dir="-1" aria-label="Previous card">‹</button>
+          <div class="rlx-stack">
+          <div class="rlx-track">
+          <article class="rlx-card is-active" data-slide="0">
+            <span class="rlx-tag">Public Health · 2020–2021</span>
+            <h4>COVID</h4>
+            <p>Every operator faced the same virus and answered it alone. Quarantine rules, cabin sanitization procedures, and crew rest adjustments were drafted independently, then revised again as guidance shifted, sometimes contradicting the operator down the ramp. Fatigue and procedural-deviation reports moved at rates that differed sharply operator to operator, with no shared baseline for what counted as normal. A risk framework built around one operator's own numbers has no way to tell an adaptation from a drift.</p>
+          </article>
+          <article class="rlx-card" data-slide="1">
+            <span class="rlx-tag">Labor · Oct–Nov 2025</span>
+            <h4>The shutdown</h4>
+            <p>A 43-day lapse in federal funding left roughly 13,000 air traffic controllers working without pay. Control towers ran understaffed or at reduced capacity nationwide. Confidential safety reports, including submissions to NASA's Aviation Safety Reporting System, rose over the same period. With no shared mitigation plan, individual operators designed their own workarounds, and decentralized, sometimes conflicting procedures spread across the national airspace system. No single operator's risk framework is built to register a pattern at that scale — which is why it went unseen for weeks.</p>
+          </article>
+          <article class="rlx-card" data-slide="2">
+            <span class="rlx-tag">Trade Policy · 2025–2026</span>
+            <h4>Tariffs</h4>
+            <p>Tariffs of 25% on steel and aluminum, introduced in 2025, added an estimated $5 billion a year in industry-wide production costs. Individual manufacturers absorbed hundreds of millions of dollars each and responded by qualifying new suppliers under time pressure, independently, with no shared data on how those substitute parts were performing. Whether the substitutions hold up over time isn't known yet — and no operator's own risk framework is built to find out before it matters, industry-wide.</p>
+          </article>
+          <article class="rlx-card" data-slide="3">
+            <span class="rlx-tag">Maintenance · 2025</span>
+            <h4>Supply chain</h4>
+            <p>IATA estimates airlines absorbed more than $11 billion in unplanned costs from supply chain disruption in 2025 alone, as the industry's aircraft order backlog passed 17,000. Facing parts and MRO delays, individual operators extended maintenance intervals and deferred non-critical work, each under its own internal pressure, none checked against a shared standard. No record exists of how many operators were deferring the same category of work at the same time — only that each one believed it was the exception.</p>
+          </article>
+          <article class="rlx-card" data-slide="4">
+            <span class="rlx-tag">Components · 2025–2026</span>
+            <h4>Chip shortage</h4>
+            <p>A persistent semiconductor shortage has delayed avionics deliveries since the pandemic, and operators have responded by deferring minimum equipment list items and substituting components as parts become available. Each deferral is evaluated and logged inside a single operator's own maintenance program. No registry tracks which substitutions have held up in service and which haven't, industry-wide. A workaround proven safe at one operator is invisible to the next one making the identical call, blind.</p>
+          </article>
+          <article class="rlx-card" data-slide="5">
+            <span class="rlx-tag">Weather · Winter 2025–26</span>
+            <h4>La Niña</h4>
+            <p>A weak La Niña shaped the winter of 2025–26: heavier snow and cold in the north, drought and dry, turbulence-prone air in the south. De-ice planning and routing decisions were made operator by operator, each against its own historical baseline, with no reference to how peers were handling the identical weather pattern. Every adjustment read, locally, as routine seasonal judgment. Whether any operator's risk tolerance had quietly shifted from the last comparable winter wasn't something any one operator's framework was built to notice.</p>
+          </article>
+          <article class="rlx-card" data-slide="6">
+            <span class="rlx-tag">Energy · Feb–May 2026</span>
+            <h4>Jet fuel doubles</h4>
+            <p>A Middle East conflict closed the Strait of Hormuz in February 2026, pulling 10 to 15 million barrels a day off the global market. Jet fuel prices more than doubled within ten weeks. Individual carriers revised fuel-reserve and alternate-planning margins under cost pressure, each against its own historical baseline, none checked against the others. Every revision looked, internally, like ordinary cost discipline. None of it was compared across operators, so no one could tell prudent trimming from a fleet-wide erosion of margin.</p>
+          </article>
+          <article class="rlx-card rlx-synth" data-slide="7">
+            <span class="rlx-tag">Analysis</span>
+            <h4>The pattern is drift</h4>
+            <p>None of the seven incidents above were unique to one operator. Each read locally as routine, because every operator's own risk framework, measured only against itself, had no way to register the pattern. That's not a data gap. It's the operating condition of a decentralized system — and it's exactly what a cross-operator practice is built to see first.</p>
+          </article>
+          </div>
+          </div>
+          <button class="rlx-btn" type="button" data-dir="1" aria-label="Next card">›</button>
+        </div>
+        <div class="rlx-dots-row">
+          <div class="rlx-dots" role="tablist" aria-label="Choose card">
+            <button class="rlx-dot is-active" type="button" data-slide="0" role="tab" aria-selected="true" aria-label="Card 1: COVID"></button>
+            <button class="rlx-dot" type="button" data-slide="1" role="tab" aria-selected="false" aria-label="Card 2: The shutdown"></button>
+            <button class="rlx-dot" type="button" data-slide="2" role="tab" aria-selected="false" aria-label="Card 3: Tariffs"></button>
+            <button class="rlx-dot" type="button" data-slide="3" role="tab" aria-selected="false" aria-label="Card 4: Supply chain"></button>
+            <button class="rlx-dot" type="button" data-slide="4" role="tab" aria-selected="false" aria-label="Card 5: Chip shortage"></button>
+            <button class="rlx-dot" type="button" data-slide="5" role="tab" aria-selected="false" aria-label="Card 6: La Niña"></button>
+            <button class="rlx-dot" type="button" data-slide="6" role="tab" aria-selected="false" aria-label="Card 7: Jet fuel doubles"></button>
+            <button class="rlx-dot" type="button" data-slide="7" role="tab" aria-selected="false" aria-label="Card 8: The pattern is drift"></button>
+          </div>
+          <span class="rlx-count" aria-hidden="true">01 / 08</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
 
     <div class="rule" aria-hidden="true"></div>
 
@@ -403,8 +620,8 @@
         <div class="fl">
           <div class="numeral">III</div>
           <div>
-            <h3>We read across every operator we run</h3>
-            <p><span class="lead-in">The part a single in-house hire cannot do.</span> A pattern that looks like an isolated fluke inside one operation is often the third time we've seen it this quarter, at a different operator, on the same equipment or route structure. That comparison only exists because we're reading more than one operation's record.</p>
+            <h3>Many operators. One environment.</h3>
+            <p><span class="lead-in">Weather patterns, geopolitical risk, seasonal surges.</span> Every pilot is flying through the same environment, but each operator only ever sees their own slice of it — logged in one hazard register, compared to nothing. Reading across every operator we run means those signals surface before they'd show up in any single operation's record.</p>
           </div>
         </div>
         <div class="fl">
@@ -448,10 +665,68 @@
 
     <div class="rule" aria-hidden="true"></div>
 
+    <!-- audit readiness -->
+    <section aria-labelledby="audit-h">
+      <div class="sec-head">
+        <span class="num">05</span>
+        <h2 id="audit-h">Audit-Ready by Design</h2>
+      </div>
+
+      <p class="pull">You don't prepare for the audit. <em>You're already in it.</em></p>
+
+      <p>Most operators experience an audit as an event — weeks of reconstructing records, explaining gaps, and hoping the story holds together under an inspector's questions. That scramble is itself evidence of an SMS that exists more on paper than in practice.</p>
+
+      <p>Because we run your SMS continuously rather than assembling it before a deadline, alignment isn't something we build in the weeks before an evaluation. It's the condition your operation is already in.</p>
+
+      <div class="flow">
+        <div class="fl">
+          <div class="numeral">I</div>
+          <div>
+            <h3>One point of contact</h3>
+            <p><span class="lead-in">We interface with the FAA directly.</span> Initial and continuing evaluations, correspondence, corrective action — coordinated through one expert who already knows your operation's full record, so no one is translating between an inspector and internal staff who weren't in the room.</p>
+          </div>
+        </div>
+        <div class="fl">
+          <div class="numeral">II</div>
+          <div>
+            <h3>No pre-audit scramble</h3>
+            <p><span class="lead-in">Audit prep isn't a special project.</span> The record an inspector wants to see is the record we've already been keeping, in the ordinary course of running your system — not reconstructed the week the letter arrives.</p>
+          </div>
+        </div>
+        <div class="fl">
+          <div class="numeral">III</div>
+          <div>
+            <h3>We carry the pattern across every audit we sit through</h3>
+            <p><span class="lead-in">Every evaluation teaches us what the current cycle of scrutiny is looking for.</span> That knowledge moves into your next one.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="soft" style="margin-top:1.4rem">We bring the headache, so the regulator doesn't have to come looking for it.</p>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- privileged information / advocacy for a data-sharing framework -->
+    <section aria-labelledby="priv-h">
+      <div class="sec-head">
+        <span class="num">06</span>
+        <h2 id="priv-h">A Framework for Sharing Safety Information</h2>
+      </div>
+
+      <p class="pull">Safety data should move freely between the people who need it. <em>And nowhere else.</em></p>
+
+      <p><strong>Your data is never pooled with another operator's.</strong> Cross-operator findings we share back with you are de-identified and pattern-level only — never another operator's records, never anything that could expose them competitively or legally. Any boundary beyond that is set by you before an engagement begins, in writing, not discovered afterward.</p>
+
+      <p class="soft">Part 5 already requires a confidential internal reporting channel inside every operator, because safety data only tells the truth when the person filing it isn't afraid of what happens next. That protection has no equivalent for information moving <em>between</em> operators — the layer a cross-operator practice like ours sits in. We think aviation safety data eventually needs its own version of what HIPAA did for medical records, and we're involved in early work on what that could look like. Until it exists, contractual confidentiality is what does that job.</p>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
     <!-- who it's for -->
     <section aria-labelledby="who-h">
       <div class="sec-head">
-        <span class="num">05</span>
+        <span class="num">07</span>
         <h2 id="who-h">Who It's For</h2>
       </div>
 
@@ -463,7 +738,7 @@
     <!-- founder attribution — quiet, not a bio page -->
     <section aria-labelledby="found-h">
       <div class="sec-head">
-        <span class="num">06</span>
+        <span class="num">08</span>
         <h2 id="found-h">Behind It</h2>
       </div>
 
@@ -477,7 +752,7 @@
     <!-- start -->
     <section aria-labelledby="start-h" id="start">
       <div class="sec-head">
-        <span class="num">07</span>
+        <span class="num">09</span>
         <h2 id="start-h">Start</h2>
       </div>
 
@@ -498,7 +773,7 @@
 
     <footer>
       <div class="footer-meta">
-        <span class="sig">© <span id="yr"></span> Pilot Consciousness Safety Company LLC</span>
+        <span class="sig">© <span id="yr"></span> Pilot Consciousness Safety Company</span>
         <span class="kt">Still keeping time <span class="beat" aria-hidden="true"></span></span>
       </div>
     </footer>
@@ -512,6 +787,62 @@
     var steps = document.querySelectorAll('.method .step');
     if(reduce){ steps.forEach(function(s){ s.classList.add('in'); }); return; }
     steps.forEach(function(s,i){ setTimeout(function(){ s.classList.add('in'); }, 260 + i*300); });
+  })();
+
+  (function(){
+    var stack = document.querySelector('.rlx-stack');
+    if(!stack) return;
+    var track = stack.querySelector('.rlx-track');
+    var cards = Array.prototype.slice.call(stack.querySelectorAll('.rlx-card'));
+    var dots = Array.prototype.slice.call(document.querySelectorAll('.rlx-dot'));
+    var count = document.querySelector('.rlx-count');
+    var prevBtn = document.querySelector('.rlx-btn[data-dir="-1"]');
+    var nextBtn = document.querySelector('.rlx-btn[data-dir="1"]');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var idx = 0;
+    function sizeStack(){
+      var h = cards[idx].offsetHeight;
+      if(h) stack.style.height = h + 'px';
+    }
+    function render(){
+      cards.forEach(function(c,i){
+        c.classList.toggle('is-active', i === idx);
+        c.setAttribute('aria-hidden', i === idx ? 'false' : 'true');
+      });
+      dots.forEach(function(d,i){
+        d.classList.toggle('is-active', i === idx);
+        d.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+      });
+      if(count){ count.textContent = ('0'+(idx+1)).slice(-2) + ' / 0' + cards.length; }
+      if(track){ track.style.transform = 'translateX(' + (-idx * 100) + '%)'; }
+      sizeStack();
+    }
+    render();
+    if(reduceMotion && track){ track.style.transition = 'none'; }
+    if(document.fonts && document.fonts.ready){ document.fonts.ready.then(sizeStack); }
+    var resizeTimer;
+    window.addEventListener('resize', function(){
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(sizeStack, 120);
+    });
+    function go(next){ idx = (next + cards.length) % cards.length; render(); }
+    function goTo(i){ idx = ((i % cards.length) + cards.length) % cards.length; render(); }
+    if(prevBtn) prevBtn.addEventListener('click', function(){ go(idx - 1); });
+    if(nextBtn) nextBtn.addEventListener('click', function(){ go(idx + 1); });
+    dots.forEach(function(d,i){ d.addEventListener('click', function(){ go(i); }); });
+    stack.setAttribute('tabindex','0');
+    stack.addEventListener('keydown', function(e){
+      if(e.key === 'ArrowRight'){ go(idx + 1); }
+      if(e.key === 'ArrowLeft'){ go(idx - 1); }
+    });
+    var tickerItems = Array.prototype.slice.call(document.querySelectorAll('.dt-item'));
+    tickerItems.forEach(function(t){
+      t.addEventListener('click', function(){
+        var slide = parseInt(t.getAttribute('data-slide'), 10);
+        goTo(slide);
+        stack.scrollIntoView({behavior:'smooth', block:'center'});
+      });
+    });
   })();
 </script>
 </body>
