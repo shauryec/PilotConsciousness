@@ -1,0 +1,537 @@
+<!--
+  Pilot Consciousness — Decentralized Safety Management
+  The LLC's page. Brand = "Pilot Consciousness", voice = company (we/our),
+  founder appears as attribution in §05 only. Footer copyright = the LLC.
+
+  REVISION: sharpened the core claim. The client keeps only what the FAA
+  requires to stay internal — a signatory and the Accountable Executive.
+  Pilot Consciousness builds and runs the operational SMS itself: SRM,
+  Safety Assurance, Safety Promotion, records, reporting, reading across
+  clients. This is a materially bigger claim than "we advise while you run
+  it" — worded generally ("the roles the FAA requires to stay internal")
+  rather than naming a fixed list, since which specific positions are
+  non-delegable varies by a certificate's size and structure. Confirm exact
+  scope with an aviation attorney before this becomes contract language.
+
+  TO EDIT LATER — search for "EDIT:":
+   • Contact email — currently hello@pilotconsciousness.com, confirm real inbox
+   • Formal entity name in the footer once formation is final
+   • Exact non-delegable-roles language, once confirmed by counsel
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pilot Consciousness — Decentralized Safety Management</title>
+<meta name="description" content="Decentralized safety management for Part 135 operators. Keep the signature. Hand us the system. Built for the FAA's May 2027 Part 5 deadline.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#0F1319;
+    --ground-2:#141922;
+    --ink:#E8E3D6;
+    --ink-soft:#9A958A;
+    --ink-faint:#615F59;
+    --brass:#C6A15B;
+    --brass-dim:#8C7643;
+    --steel:#6E93A6;
+    --line:rgba(232,227,214,0.12);
+    --line-soft:rgba(232,227,214,0.06);
+
+    --display:"Fraunces",Georgia,serif;
+    --body:"Spectral",Georgia,serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+    --measure:38rem;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--ground);color:var(--ink);
+    font-family:var(--body);font-weight:400;line-height:1.72;
+    font-size:clamp(1rem,0.96rem + 0.2vw,1.12rem);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(198,161,91,0.22);color:var(--ink)}
+
+  .wrap{width:100%;max-width:var(--measure);margin:0 auto;padding:0 1.5rem}
+
+  .eyebrow{
+    font-family:var(--mono);font-size:0.7rem;font-weight:500;
+    letter-spacing:0.22em;text-transform:uppercase;color:var(--brass);
+  }
+
+  /* ---- top bar ---- */
+  .topbar{padding-top:2rem;padding-bottom:0.4rem}
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:0.9rem 1.4rem;flex-wrap:wrap;
+  }
+  .brand{
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.26em;
+    text-transform:uppercase;color:var(--ink);
+    white-space:nowrap;
+  }
+  .nav-links{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+  .nav-links a{
+    font-family:var(--mono);font-size:0.66rem;letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--ink-soft);text-decoration:none;
+    padding-bottom:3px;border-bottom:1px solid transparent;
+    transition:color .25s ease,border-color .25s ease;
+  }
+  .nav-links a:hover,.nav-links a:focus-visible{color:var(--brass)}
+  .beat{
+    width:7px;height:7px;border-radius:50%;background:var(--brass);
+    box-shadow:0 0 0 0 rgba(198,161,91,0.5);
+    animation:tick 1s steps(1,end) infinite;
+  }
+  @keyframes tick{
+    0%{opacity:1;transform:scale(1);box-shadow:0 0 0 0 rgba(198,161,91,0.45)}
+    40%{opacity:1}
+    50%{opacity:0.28;transform:scale(0.82);box-shadow:0 0 0 5px rgba(198,161,91,0)}
+    100%{opacity:1;transform:scale(1)}
+  }
+
+  /* ---- dial-track divider ---- */
+  .rule{
+    height:9px;margin:4.5rem 0;
+    background-image:repeating-linear-gradient(to right,
+      var(--line) 0,var(--line) 1px,transparent 1px,transparent 11px);
+    background-position:left center;background-repeat:repeat-x;background-size:auto 9px;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);
+            mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);
+  }
+
+  /* ---- hero ---- */
+  .hero{padding-top:3.2rem}
+  .hero .eyebrow{display:block;margin-bottom:1.6rem}
+  .hero h1{
+    font-family:var(--display);font-weight:300;
+    font-size:clamp(2.3rem,1.4rem + 5vw,4.1rem);
+    line-height:1.06;letter-spacing:-0.01em;margin:0 0 1.3rem;color:var(--ink);
+  }
+  .hero h1 em{font-style:italic;font-weight:400;color:var(--brass)}
+  .hero .lede{max-width:34rem;color:var(--ink-soft);font-size:1.08rem;margin:0}
+  .hero .lede + .lede{margin-top:1rem}
+  .hero .lede strong{color:var(--ink);font-weight:500}
+  .hero .lede em{font-style:italic;color:var(--ink)}
+
+  /* ---- deadline strip ---- */
+  .deadline{
+    margin-top:2rem;
+    display:flex;align-items:center;gap:0.7rem;
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--ink-faint);
+  }
+  .deadline .dd-link{
+    color:var(--brass);font-weight:500;text-decoration:none;
+    border-bottom:1px solid var(--brass-dim);
+    transition:color .25s ease,border-color .25s ease;
+  }
+  .deadline .dd-link:hover,.deadline .dd-link:focus-visible{
+    color:var(--ink);border-color:var(--ink-soft);
+  }
+  .deadline::before{
+    content:"";width:5px;height:5px;border-radius:50%;background:var(--steel);flex:none;
+  }
+
+  /* ---- method readout ---- */
+  .method{
+    margin-top:2.4rem;padding:1.15rem 1.25rem;
+    border:1px solid var(--line);border-left:2px solid var(--brass-dim);
+    background:var(--ground-2);
+    font-family:var(--mono);font-size:0.82rem;letter-spacing:0.04em;color:var(--ink);
+    display:flex;flex-wrap:wrap;gap:0.15rem 0.9rem;
+  }
+  .method .step{opacity:0;transform:translateY(3px);
+    transition:opacity .5s ease,transform .5s ease;white-space:nowrap}
+  .method .step.in{opacity:1;transform:none}
+  .method .dot{color:var(--brass);margin-right:0.55rem}
+  .method .op{color:var(--brass);font-weight:500;letter-spacing:0.06em}
+
+  /* ---- section shell ---- */
+  section{padding-top:0.5rem}
+  .sec-head{display:flex;align-items:baseline;gap:0.9rem;margin-bottom:1.8rem}
+  .sec-head .num{
+    font-family:var(--mono);font-size:0.66rem;letter-spacing:0.2em;color:var(--brass-dim);
+  }
+  .sec-head h2{
+    font-family:var(--display);font-weight:400;font-size:1.5rem;
+    letter-spacing:0.01em;margin:0;color:var(--ink);
+  }
+
+  p{margin:0 0 1.15rem;max-width:var(--measure)}
+  p:last-child{margin-bottom:0}
+  p em{font-style:italic;color:var(--ink)}
+  .soft{color:var(--ink-soft)}
+
+  .pull{
+    font-family:var(--display);font-weight:300;font-style:italic;
+    font-size:clamp(1.25rem,1rem + 1.2vw,1.6rem);line-height:1.4;
+    color:var(--ink);margin:1.8rem 0;padding-left:1.2rem;
+    border-left:2px solid var(--brass-dim);max-width:32rem;
+  }
+  .pull em{color:var(--brass);font-style:italic}
+
+  /* ---- the split: what stays, what moves ---- */
+  .split{
+    margin-top:1.6rem;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .split-col{padding:1.6rem 1.6rem 1.6rem 0}
+  .split-col + .split-col{padding-left:1.6rem;padding-right:0;border-left:1px solid var(--line-soft)}
+  .split-col .stag{
+    font-family:var(--mono);font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;
+    margin-bottom:0.7rem;display:block;
+  }
+  .split-col:first-child .stag{color:var(--ink-faint)}
+  .split-col:last-child .stag{color:var(--brass)}
+  .split-col h3{
+    font-family:var(--display);font-weight:400;font-size:1.15rem;
+    margin:0 0 0.6rem;color:var(--ink);
+  }
+  .split-col p{margin:0;color:var(--ink-soft);font-size:0.96rem;max-width:none}
+  .split-col ul{margin:0.7rem 0 0;padding:0 0 0 1.1rem;color:var(--ink-soft);font-size:0.94rem}
+  .split-col ul li{margin-bottom:0.4rem}
+  .split-col:last-child ul li::marker{color:var(--brass)}
+
+  /* ---- how it works: flattened dial ---- */
+  .flow{margin-top:1.6rem;border-top:1px solid var(--line-soft)}
+  .fl{
+    display:grid;grid-template-columns:2.6rem 1fr;gap:0 1.1rem;
+    padding:1.3rem 0;border-bottom:1px solid var(--line-soft);align-items:baseline;
+  }
+  .fl .numeral{
+    font-family:var(--display);font-weight:400;font-size:1.15rem;
+    color:var(--brass);letter-spacing:0.05em;line-height:1.2;
+  }
+  .fl h3{
+    font-family:var(--body);font-weight:500;font-size:1.04rem;
+    letter-spacing:0.02em;margin:0 0 0.32rem;color:var(--ink);
+  }
+  .fl p{margin:0;color:var(--ink-soft);font-size:0.98rem;line-height:1.58}
+  .fl p .lead-in{color:var(--ink)}
+
+  /* ---- the engagements (principles idiom) ---- */
+  .principles{margin-top:1rem;border-top:1px solid var(--line-soft)}
+  .pr{
+    display:grid;grid-template-columns:1.6rem 1fr;gap:0 1.1rem;
+    padding:1.3rem 0;border-bottom:1px solid var(--line-soft);align-items:baseline;
+  }
+  .pr .mark{
+    font-family:var(--mono);font-size:1rem;color:var(--brass);line-height:1.2;
+  }
+  .pr h3{
+    font-family:var(--body);font-weight:500;font-size:1.02rem;
+    letter-spacing:0.02em;margin:0 0 0.3rem;color:var(--ink);
+  }
+  .pr .tag{
+    font-family:var(--mono);font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--brass-dim);margin-left:0.6rem;vertical-align:0.1em;
+  }
+  .pr p{margin:0;color:var(--ink-soft);font-size:0.98rem;line-height:1.55}
+  .pr p .lead-in{color:var(--ink)}
+
+  /* ---- founder attribution (deliberately quiet, not a bio page) ---- */
+  .founder{
+    margin-top:1rem;
+    padding:1.3rem 1.4rem;
+    border:1px solid var(--line);
+    border-left:2px solid var(--brass-dim);
+    background:var(--ground-2);
+  }
+  .founder p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:0.96rem;
+    line-height:1.65;
+    max-width:none;
+  }
+  .founder p strong{color:var(--ink);font-weight:500}
+  .founder a{color:var(--brass);text-decoration:none;border-bottom:1px solid var(--brass-dim)}
+  .founder a:hover,.founder a:focus-visible{color:var(--ink)}
+
+  /* ---- links ---- */
+  .links{display:flex;flex-wrap:wrap;gap:0.8rem;margin-top:1.6rem}
+  .lnk{
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;padding:0.7rem 1.1rem;
+    border:1px solid var(--line);border-radius:2px;
+    transition:border-color .25s ease,color .25s ease,background-color .25s ease;
+  }
+  .lnk:hover,.lnk:focus-visible{border-color:var(--brass);color:var(--brass);background:rgba(198,161,91,0.04)}
+  .lnk .arw{color:var(--ink-faint);margin-left:0.5rem;transition:color .25s ease}
+  .lnk:hover .arw,.lnk:focus-visible .arw{color:var(--brass)}
+  .lnk--solid{border-color:var(--brass-dim)}
+  .lnk--solid:hover,.lnk--solid:focus-visible{background:var(--brass);color:var(--ground);border-color:var(--brass)}
+  .lnk--solid:hover .arw,.lnk--solid:focus-visible .arw{color:var(--ground)}
+
+  /* ---- coda ---- */
+  .coda{margin-top:1rem}
+  .coda .line{
+    font-family:var(--display);font-weight:300;font-style:italic;
+    font-size:clamp(1.3rem,1rem + 1.4vw,1.7rem);line-height:1.4;
+    color:var(--ink);margin:0;padding-left:1.2rem;
+    border-left:2px solid var(--brass-dim);max-width:33rem;
+  }
+  .coda .line em{color:var(--brass);font-style:italic}
+
+  /* ---- footer ---- */
+  footer{
+    margin-top:5rem;padding:2.4rem 0 3rem;border-top:1px solid var(--line-soft);
+  }
+  .footer-meta{
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  }
+  footer .sig,footer .kt{
+    font-family:var(--mono);font-size:0.64rem;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--ink-faint);
+  }
+  footer .kt{display:flex;align-items:center;gap:0.55rem}
+
+  a{color:var(--brass)}
+  :focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:2px}
+
+  @media (max-width:560px){
+    .nav{flex-direction:column;align-items:flex-start;gap:0.7rem}
+    .rule{margin:3.4rem 0}
+    .split{grid-template-columns:1fr}
+    .split-col{padding:1.4rem 0}
+    .split-col + .split-col{padding-left:0;border-left:0;border-top:1px solid var(--line-soft)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .beat{animation:none;opacity:1}
+    .method .step{opacity:1;transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <!-- top bar: company identity only. No link back to the personal site here. -->
+    <div class="topbar">
+      <nav class="nav" aria-label="Primary">
+        <span class="brand">Pilot Consciousness</span>
+        <div class="nav-links">
+          <a href="#engagements">Engagements</a>
+          <a href="#start">Start</a>
+          <span class="beat" aria-hidden="true"></span>
+        </div>
+      </nav>
+    </div>
+
+    <!-- hero -->
+    <header class="hero">
+      <span class="eyebrow">Decentralized Safety Management</span>
+      <h1>Keep the signature. Hand us <em>the system.</em></h1>
+      <p class="lede">The FAA requires a Part 135 operator to keep certain roles internal — a signatory, an Accountable Executive with real authority. Everything else an SMS actually requires — building it, running it, reading it, keeping it alive between audits — does not have to live inside your operation at all.</p>
+      <p class="lede">We build and run your SMS end to end. Your reports come to us. We read the stats, across every operator we work with, side by side rather than merged — because a pattern that looks like noise inside one operation is often the third time we've seen it this quarter, somewhere else. <strong>You sign. We run.</strong></p>
+
+      <div class="deadline"><a class="dd-link" href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-A/part-5" target="_blank" rel="noopener">FAA Part 5</a>&nbsp;— full SMS compliance required by 28 May 2027</div>
+
+      <div class="method" aria-label="The method: decouple, act, observe, fix.">
+        <span class="step"><span class="dot">›</span><b class="op">Decouple.</b></span>
+        <span class="step"><span class="dot">›</span>Act.</span>
+        <span class="step"><span class="dot">›</span>Observe.</span>
+        <span class="step"><span class="dot">›</span>Fix.</span>
+      </div>
+    </header>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- why now -->
+    <section aria-labelledby="why-h">
+      <div class="sec-head">
+        <span class="num">01</span>
+        <h2 id="why-h">Why Now</h2>
+      </div>
+
+      <p>The FAA's Part 5 rule requires every Part 135 charter and commuter operator — not just the large ones — to develop, implement, and declare a compliant Safety Management System. Implementation plans were due in late 2024. The full declaration of compliance is due <strong>28 May 2027</strong>. Operators who wait until the deadline is close are already behind; a functioning SMS has to be demonstrated in operation, not assembled the month before.</p>
+
+      <p>Most operators this size have never had to run one, and don't have the headcount to build a safety department from scratch just to satisfy a filing. They have an operations manual, a chief pilot who is also flying the line, and now a federal requirement to prove — with evidence, not paperwork — that someone is reading the safety record and acting on it.</p>
+
+      <p class="soft">A template manual satisfies the letter of that requirement and misses the point of it entirely. An SMS nobody reads is a dial with nothing behind it — the audit passed, the binder complete, and no one who would notice the beat lengthening. We exist to be the ones who notice — and to carry the operational weight of the system so you don't have to build a department to meet a deadline.</p>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- what stays, what moves -->
+    <section aria-labelledby="split-h">
+      <div class="sec-head">
+        <span class="num">02</span>
+        <h2 id="split-h">What Stays. What Moves.</h2>
+      </div>
+
+      <p>The smallest internal footprint the regulation allows, and nothing smaller than that.</p>
+
+      <div class="split">
+        <div class="split-col">
+          <span class="stag">Stays with you</span>
+          <h3>What the FAA won't let leave</h3>
+          <p>The certificate holder's signatory authority, and an Accountable Executive with real, demonstrable control over the operation. These cannot be delegated to an outside firm under any arrangement, and we don't pretend otherwise.</p>
+        </div>
+        <div class="split-col">
+          <span class="stag">Runs through us</span>
+          <h3>Everything an SMS actually requires</h3>
+          <ul>
+            <li>Safety Risk Management — hazard identification, risk assessment</li>
+            <li>Safety Assurance — audits, internal evaluation, corrective action tracking</li>
+            <li>Safety Promotion — training content, communication, culture work</li>
+            <li>Hazard reporting intake, records, and the Declaration of Compliance package</li>
+            <li>Reading the record — continuously, not once a quarter</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="soft" style="margin-top:1.4rem">Exactly which roles are legally irreducible depends on your certificate's size and structure. We confirm the precise split with you and your counsel before anything is signed — the principle above is the target, not a guess.</p>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- how it works -->
+    <section aria-labelledby="how-h">
+      <div class="sec-head">
+        <span class="num">03</span>
+        <h2 id="how-h">How It Works</h2>
+      </div>
+
+      <p class="pull">Decentralized ownership. <em>Centralized operation.</em></p>
+
+      <div class="flow">
+        <div class="fl">
+          <div class="numeral">I</div>
+          <div>
+            <h3>We build the system</h3>
+            <p><span class="lead-in">Not a template.</span> An SMS structured around your actual operation — your aircraft, your routes, your existing records — because that's what the regulation actually requires and what a boilerplate manual only pretends to satisfy.</p>
+          </div>
+        </div>
+        <div class="fl">
+          <div class="numeral">II</div>
+          <div>
+            <h3>We run it</h3>
+            <p><span class="lead-in">Day to day, not just at audit time.</span> Reports come to us. We administer the hazard register, the risk assessments, the training cadence, the recordkeeping — the operational labor of an SMS, carried by us instead of built out in-house.</p>
+          </div>
+        </div>
+        <div class="fl">
+          <div class="numeral">III</div>
+          <div>
+            <h3>We read across every operator we run</h3>
+            <p><span class="lead-in">The part a single in-house hire cannot do.</span> A pattern that looks like an isolated fluke inside one operation is often the third time we've seen it this quarter, at a different operator, on the same equipment or route structure. That comparison only exists because we're reading more than one operation's record.</p>
+          </div>
+        </div>
+        <div class="fl">
+          <div class="numeral">IV</div>
+          <div>
+            <h3>You sign what's true</h3>
+            <p><span class="lead-in">Your Accountable Executive reviews and signs; we've already done the reading.</span> The declaration of compliance reflects a system that has actually been run, not assembled the week before it was due.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- the engagements -->
+    <section aria-labelledby="eng-h" id="engagements">
+      <div class="sec-head">
+        <span class="num">04</span>
+        <h2 id="eng-h">The Engagements</h2>
+      </div>
+
+      <p>Not a compliance shop. No template manual dressed up as an SMS. Two ways to start, sized to where your operation actually is.</p>
+
+      <div class="principles">
+        <div class="pr">
+          <div class="mark">›</div>
+          <div>
+            <h3>The Build<span class="tag">Entry point</span></h3>
+            <p><span class="lead-in">Gap analysis against Part 5, and an SMS built for your operation from the ground up.</span> We read your existing records, your near-misses, your quiet write-arounds before a page of the manual gets written — so what we build reflects an operation that has actually been read, structured to hand off into ongoing operation rather than sit in a binder.</p>
+          </div>
+        </div>
+        <div class="pr">
+          <div class="mark">›</div>
+          <div>
+            <h3>Managed SMS Operation<span class="tag">Ongoing</span></h3>
+            <p><span class="lead-in">We run your SMS as an outsourced operational function, not an advisory retainer.</span> Reports route to us; we administer risk management, safety assurance, and safety promotion; we carry the cross-operator reading no single in-house hire can replicate — for a fraction of the cost of standing up a safety department to hit one deadline.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- who it's for -->
+    <section aria-labelledby="who-h">
+      <div class="sec-head">
+        <span class="num">05</span>
+        <h2 id="who-h">Who It's For</h2>
+      </div>
+
+      <p>Part 135 charter and commuter operators who don't have — and don't want to build — a full-time safety department, but do have a federal deadline. Multi-aircraft operations where the chief pilot is also the safety manager is also the person flying the trip. Anyone who wants the smallest possible internal footprint and the most rigorously run system on the other side of it.</p>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- founder attribution — quiet, not a bio page -->
+    <section aria-labelledby="found-h">
+      <div class="sec-head">
+        <span class="num">06</span>
+        <h2 id="found-h">Behind It</h2>
+      </div>
+
+      <div class="founder">
+        <p>Pilot Consciousness was founded by <strong>Shaurye Chakravarty</strong> — a commercial pilot (ASEL, AMEL, Instrument; CFI, CFII, MEI) and M.Sc. candidate in Safety Science at Embry-Riddle Aeronautical University, and the author of <em>CONSCIENCE: A Radical View on Safety and Accountability</em>, the argument this practice applies at organizational scale. <a href="https://www.pilotconsciousness.com/">Read the book and the author's other work →</a></p>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- start -->
+    <section aria-labelledby="start-h" id="start">
+      <div class="sec-head">
+        <span class="num">07</span>
+        <h2 id="start-h">Start</h2>
+      </div>
+
+      <p>May 2027 is closer than the paperwork makes it feel. Tell us what your operation looks like, and we'll tell you exactly what stays with you and what we take off your hands.</p>
+
+      <div class="links">
+        <!-- EDIT: confirm this inbox exists / is monitored -->
+        <a class="lnk lnk--solid" href="mailto:hello@pilotconsciousness.com">Start a conversation<span class="arw">↗</span></a>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <!-- coda -->
+    <section class="coda" aria-label="Closing">
+      <p class="line">An operation that reads <em>stable</em> is not the same as an operation that is keeping time. The work is learning to tell the difference — before the report is written, not after.</p>
+    </section>
+
+    <footer>
+      <div class="footer-meta">
+        <span class="sig">© <span id="yr"></span> Pilot Consciousness LLC</span>
+        <span class="kt">Still keeping time <span class="beat" aria-hidden="true"></span></span>
+      </div>
+    </footer>
+
+  </div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var steps = document.querySelectorAll('.method .step');
+    if(reduce){ steps.forEach(function(s){ s.classList.add('in'); }); return; }
+    steps.forEach(function(s,i){ setTimeout(function(){ s.classList.add('in'); }, 260 + i*300); });
+  })();
+</script>
+</body>
+</html>
