@@ -6,7 +6,7 @@ Advanced human-factors flight instruction. One-page marketing site.
 
 ---
 
-## What's here
+## What's here 
 
 - `index.html` — the entire site. Single self-contained file: HTML, CSS, and JS all inline. No build step, no dependencies to install.
 - `CNAME` — tells GitHub Pages to serve this repo at the custom domain `pilotconsciousness.com` instead of the default `github.io` URL. Delete this file if you don't want to use a custom domain yet.
