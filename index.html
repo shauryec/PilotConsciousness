@@ -1,4 +1,6 @@
- 
+<!--
+  Pilot Consciousness — Decentralized Safety Management
+  consultancy.html · self-contained, deploy on GitHub Pages.
 -->
 <html lang="en">
 <head>
@@ -6,6 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pilot Consciousness — Decentralized Safety Management</title>
 <meta name="description" content="Decentralized safety management for Part 135 operators. Keep the signature. Hand us the system. Built for the FAA's May 2027 Part 5 deadline.">
+<link rel="icon" href="assets/pilot-consciousness-logo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -53,9 +56,14 @@
     gap:0.9rem 1.4rem;flex-wrap:wrap;
   }
   .brand{
+    display:flex;align-items:center;gap:0.65rem;
     font-family:var(--mono);font-size:0.72rem;letter-spacing:0.26em;
     text-transform:uppercase;color:var(--ink);
     white-space:nowrap;
+  }
+  .brand-mark{
+    width:28px;height:28px;border-radius:50%;
+    display:block;flex:none;
   }
   .nav-links{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
   .nav-links a{
@@ -276,6 +284,8 @@
     text-transform:uppercase;color:var(--ink-faint);
   }
   footer .kt{display:flex;align-items:center;gap:0.55rem}
+  .footer-brand{display:flex;align-items:center;gap:0.55rem}
+  .footer-mark{width:18px;height:18px;border-radius:50%;display:block}
 
   a{color:var(--brass)}
   :focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:2px}
@@ -403,7 +413,10 @@
     <!-- top bar: company identity only. No link back to the personal site here. -->
     <div class="topbar">
       <nav class="nav" aria-label="Primary">
-        <span class="brand">Pilot Consciousness</span>
+        <span class="brand">
+          <img class="brand-mark" src="assets/pilot-consciousness-logo.png" alt="">
+          Pilot Consciousness
+        </span>
         <div class="nav-links">
           <a href="#engagements">Engagements</a>
           <a href="#start">Start</a>
@@ -755,7 +768,10 @@
 
     <footer>
       <div class="footer-meta">
-        <span class="sig">© <span id="yr"></span> Pilot Consciousness Safety Company</span>
+        <span class="footer-brand sig">
+          <img class="footer-mark" src="assets/pilot-consciousness-logo.png" alt="">
+          © <span id="yr"></span> Pilot Consciousness Safety Company
+        </span>
         <span class="kt">Still keeping time <span class="beat" aria-hidden="true"></span></span>
       </div>
     </footer>
