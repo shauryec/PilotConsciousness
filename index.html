@@ -1,6 +1,13 @@
 <!--
   Pilot Consciousness — Decentralized Safety Management
-  index.html · self-contained, deploy on GitHub Pages. 
+  index.html · self-contained, deploy on GitHub Pages.
+
+  REV: hard/soft capital rebalance. The literary register (italic Fraunces,
+  aphoristic pulls) now carries only the framing. Anything a CFO or
+  Accountable Executive would need to price risk against — credentials,
+  scope, timeline, a sample finding — runs in the new .ledger / .proof
+  components: mono, tabular, no adjectives. The two registers are meant
+  to be visibly different typefaces doing different jobs, not blended.
 -->
 <html lang="en">
 <head>
@@ -95,6 +102,14 @@
             mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);
   }
 
+  /* ---- masthead: the exclusivity / audience marker ---- */
+  .masthead{
+    display:flex;align-items:center;gap:0.6rem;
+    font-family:var(--mono);font-size:0.62rem;font-weight:500;letter-spacing:0.17em;
+    text-transform:uppercase;color:var(--ink-faint);margin-bottom:1.3rem;
+  }
+  .masthead::before{content:"";width:5px;height:5px;flex:none;background:var(--brass)}
+
   /* ---- hero ---- */
   .hero{padding-top:3.2rem}
   .hero .eyebrow{display:block;margin-bottom:1.6rem}
@@ -108,25 +123,6 @@
   .hero .lede + .lede{margin-top:1rem}
   .hero .lede strong{color:var(--ink);font-weight:500}
   .hero .lede em{font-style:italic;color:var(--ink)}
-
-  /* ---- deadline strip ---- */
-  .deadline{
-    margin-top:2rem;
-    display:flex;align-items:center;gap:0.7rem;
-    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;
-    text-transform:uppercase;color:var(--ink-faint);
-  }
-  .deadline .dd-link{
-    color:var(--brass);font-weight:500;text-decoration:none;
-    border-bottom:1px solid var(--brass-dim);
-    transition:color .25s ease,border-color .25s ease;
-  }
-  .deadline .dd-link:hover,.deadline .dd-link:focus-visible{
-    color:var(--ink);border-color:var(--ink-soft);
-  }
-  .deadline::before{
-    content:"";width:5px;height:5px;border-radius:50%;background:var(--steel);flex:none;
-  }
 
   /* ---- method readout ---- */
   .method{
@@ -166,6 +162,73 @@
   }
   .pull em{color:var(--brass);font-style:italic}
 
+  /* =====================================================
+     LEDGER — the hard-capital register. Mono, tabular,
+     no adjectives. Used anywhere a buyer needs to price
+     risk: credentials, scope, timeline, regulatory facts.
+     ===================================================== */
+  .ledger{
+    margin-top:1.5rem;border:1px solid var(--line);border-left:2px solid var(--brass-dim);
+    background:var(--ground-2);
+  }
+  .ledger-title{
+    padding:0.9rem 1.2rem 0.2rem;
+    font-family:var(--mono);font-size:0.6rem;letter-spacing:0.19em;
+    text-transform:uppercase;color:var(--ink-faint);
+  }
+  .ledger-row{
+    display:grid;grid-template-columns:9.5rem 1fr;gap:0.3rem 1.2rem;
+    padding:0.85rem 1.2rem;border-top:1px solid var(--line-soft);
+  }
+  .ledger-title + .ledger-row{border-top:1px solid var(--line-soft);margin-top:0.7rem}
+  .ledger-row dt{
+    font-family:var(--mono);font-size:0.64rem;letter-spacing:0.13em;text-transform:uppercase;
+    color:var(--brass);padding-top:0.2rem;
+  }
+  .ledger-row dd{
+    margin:0;font-family:var(--mono);font-size:0.85rem;letter-spacing:0.005em;color:var(--ink);
+    line-height:1.62;
+  }
+  .ledger-row dd span{color:var(--ink-soft)}
+  .ledger-row dd a{color:var(--brass);text-decoration:none;border-bottom:1px solid var(--brass-dim)}
+  .ledger-row dd a:hover,.ledger-row dd a:focus-visible{color:var(--ink)}
+  .ledger-note{
+    padding:0.8rem 1.2rem 1rem;
+    font-family:var(--body);font-size:0.88rem;font-style:italic;color:var(--ink-faint);
+    border-top:1px solid var(--line-soft);margin-top:0.2rem;
+  }
+
+  /* =====================================================
+     PROOF — a sample finding, styled like a de-identified
+     record rather than a testimonial. The one artifact
+     that shows the methodology producing a legible output.
+     ===================================================== */
+  .proof{
+    margin-top:1.7rem;border:1px solid var(--brass-dim);background:var(--ground-2);
+    position:relative;
+  }
+  .proof-tag{
+    position:absolute;top:-0.6rem;left:1.1rem;background:var(--ground-2);
+    padding:0 0.5rem;font-family:var(--mono);font-size:0.6rem;letter-spacing:0.15em;
+    text-transform:uppercase;color:var(--brass);
+  }
+  .proof-body{padding:1.6rem 1.3rem 1.35rem}
+  .proof-row{
+    display:grid;grid-template-columns:6.5rem 1fr;gap:0.2rem 1rem;
+    font-family:var(--mono);font-size:0.82rem;margin-bottom:0.7rem;
+  }
+  .proof-row:last-of-type{margin-bottom:0}
+  .proof-row .k{
+    color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;
+    font-size:0.6rem;padding-top:0.25rem;
+  }
+  .proof-row .v{margin:0;color:var(--ink);line-height:1.6}
+  .proof-note{
+    margin:1rem 0 0;padding-top:0.9rem;border-top:1px solid var(--line-soft);
+    font-family:var(--body);font-size:0.94rem;color:var(--ink-soft);font-style:italic;
+    max-width:none;
+  }
+
   /* ---- the split: what stays, what moves ---- */
   .split{
     margin-top:1.6rem;
@@ -189,6 +252,11 @@
   .split-col p{margin:0;color:var(--ink-soft);font-size:0.96rem;max-width:none}
   .split-col ul{margin:0.7rem 0 0;padding:0 0 0 1.1rem;color:var(--ink-soft);font-size:0.94rem}
   .split-col ul li{margin-bottom:0.4rem}
+  /* the right column is what a buyer prices — set it in the hard register */
+  .split-col:last-child ul{
+    font-family:var(--mono);font-size:0.82rem;letter-spacing:0.005em;color:var(--ink);
+  }
+  .split-col:last-child ul li{margin-bottom:0.55rem;line-height:1.55}
   .split-col:last-child ul li::marker{color:var(--brass)}
 
   /* ---- how it works: flattened dial ---- */
@@ -211,8 +279,10 @@
   /* ---- the engagements (principles idiom) ---- */
   .principles{margin-top:1rem;border-top:1px solid var(--line-soft)}
   .pr{
-    display:grid;grid-template-columns:1.6rem 1fr;gap:0 1.1rem;
-    padding:1.3rem 0;border-bottom:1px solid var(--line-soft);align-items:baseline;
+    padding:1.3rem 0;border-bottom:1px solid var(--line-soft);
+  }
+  .pr .pr-head{
+    display:grid;grid-template-columns:1.6rem 1fr;gap:0 1.1rem;align-items:baseline;
   }
   .pr .mark{
     font-family:var(--mono);font-size:1rem;color:var(--brass);line-height:1.2;
@@ -227,25 +297,8 @@
   }
   .pr p{margin:0;color:var(--ink-soft);font-size:0.98rem;line-height:1.55}
   .pr p .lead-in{color:var(--ink)}
-
-  /* ---- founder attribution (deliberately quiet, not a bio page) ---- */
-  .founder{
-    margin-top:1rem;
-    padding:1.3rem 1.4rem;
-    border:1px solid var(--line);
-    border-left:2px solid var(--brass-dim);
-    background:var(--ground-2);
-  }
-  .founder p{
-    margin:0;
-    color:var(--ink-soft);
-    font-size:0.96rem;
-    line-height:1.65;
-    max-width:none;
-  }
-  .founder p strong{color:var(--ink);font-weight:500}
-  .founder a{color:var(--brass);text-decoration:none;border-bottom:1px solid var(--brass-dim)}
-  .founder a:hover,.founder a:focus-visible{color:var(--ink)}
+  .pr .ledger{margin-left:2.7rem}
+  @media (max-width:560px){ .pr .ledger{margin-left:0} }
 
   /* ---- links ---- */
   .links{display:flex;flex-wrap:wrap;gap:0.8rem;margin-top:1.6rem}
@@ -261,6 +314,7 @@
   .lnk--solid{border-color:var(--brass-dim)}
   .lnk--solid:hover,.lnk--solid:focus-visible{background:var(--brass);color:var(--ground);border-color:var(--brass)}
   .lnk--solid:hover .arw,.lnk--solid:focus-visible .arw{color:var(--ground)}
+  .lnk--ghost{color:var(--ink-soft)}
 
   /* ---- coda ---- */
   .coda{margin-top:1rem}
@@ -398,6 +452,8 @@
     .split{grid-template-columns:1fr}
     .split-col{padding:1.4rem 0}
     .split-col + .split-col{padding-left:0;border-left:0;border-top:1px solid var(--line-soft)}
+    .ledger-row{grid-template-columns:1fr;gap:0.2rem}
+    .proof-row{grid-template-columns:1fr;gap:0.15rem}
   }
   @media (prefers-reduced-motion:reduce){
     .dt-scroll{animation:none}
@@ -427,12 +483,32 @@
 
     <!-- hero -->
     <header class="hero">
+      <span class="masthead">Prepared for Accountable Executives &amp; Chief Pilots — not a template pitch</span>
       <span class="eyebrow">Fractional Safety Management</span>
       <h1>Keep the signature. Hand us <em>the system.</em></h1>
       <p class="lede">The FAA requires a Part 135 operator to keep certain roles internal — a signatory, an Accountable Executive with real authority. Everything else an SMS actually requires — building it, running it, reading it, keeping it alive between audits — does not have to live inside your operation at all.</p>
       <p class="lede">We build and run your SMS end to end — SRM, safety assurance, safety promotion, records, reporting. Your reports come to us, and we read them alongside every other operator's — separately, never merged — because the risks you're flying through rarely stop at your fleet. <strong>You sign. We run.</strong></p>
+      <p class="lede">After 28 May 2027, the distinction that matters isn't whose manual reads best. It's who can produce the record on request — for an inspector, an underwriter pricing your policy, or a lender's risk desk. That's the line this page is built around.</p>
 
-      <div class="deadline"><a class="dd-link" href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-A/part-5" target="_blank" rel="noopener">FAA Part 5</a>&nbsp;— full SMS compliance required by 28 May 2027</div>
+      <div class="ledger" aria-label="At a glance">
+        <div class="ledger-title">At a Glance</div>
+        <div class="ledger-row">
+          <dt>Deadline</dt>
+          <dd><a href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-A/part-5" target="_blank" rel="noopener">28 May 2027</a> <span>— full SMS compliance, FAA Part 5</span></dd>
+        </div>
+        <div class="ledger-row">
+          <dt>Applies to</dt>
+          <dd>All Part 135 certificate holders <span>— charter, commuter, air taxi</span></dd>
+        </div>
+        <div class="ledger-row">
+          <dt>We run</dt>
+          <dd>SRM · Safety Assurance · Safety Promotion · Records <span>— the full operational load</span></dd>
+        </div>
+        <div class="ledger-row">
+          <dt>Stays with you</dt>
+          <dd>Signatory authority · Accountable Executive <span>— non-delegable by regulation</span></dd>
+        </div>
+      </div>
 
       <div class="method" aria-label="The method: decouple, act, observe, fix.">
         <span class="step"><span class="dot">›</span><b class="op">Decouple.</b></span>
@@ -453,7 +529,7 @@
 
       <p>Every Part 135 charter and commuter operator — not just the large ones — must declare a compliant Safety Management System by <strong>28 May 2027</strong>. A functioning SMS has to be demonstrated in operation, not assembled the month before, and most operators this size have never run one and don't have the headcount to stand up a safety department just to satisfy a filing.</p>
 
-      <p class="soft">A template manual satisfies the letter of that requirement and misses the point of it entirely. An SMS nobody reads is a dial with nothing behind it — the audit passed, the binder complete, and no one who would notice the beat lengthening. We exist to be the ones who notice, and to carry that operational weight so you don't have to build a department to meet a deadline.</p>
+      <p class="soft">A template manual satisfies the letter of that requirement and misses the point of it entirely. An SMS nobody reads is a dial with nothing behind it — the audit passed, the binder complete, and no one who would notice the beat lengthening. The FAA doesn't grade the binder. It grades whether the record it asks for matches the manual — and increasingly, so do the insurers and lenders underwriting the risk behind it.</p>
     </section>
 
     <div class="rule" aria-hidden="true"></div>
@@ -612,6 +688,20 @@
             <p><span class="lead-in">Day to day, not just at audit time.</span> Reports come to us. We administer the hazard register, the risk assessments, the training cadence, the recordkeeping — the operational labor of an SMS, carried by us instead of built out in-house.</p>
           </div>
         </div>
+      </div>
+
+      <div class="proof">
+        <span class="proof-tag">Sample Finding — De-identified</span>
+        <div class="proof-body">
+          <div class="proof-row"><span class="k">Source</span><span class="v">Hazard report, ground operations</span></div>
+          <div class="proof-row"><span class="k">Signal</span><span class="v">Three fuel-quantity discrepancies logged as resolved in six weeks — each closed by the reporting crew member, none cross-referenced against the others.</span></div>
+          <div class="proof-row"><span class="k">Finding</span><span class="v">Not a fueling error. A reporting habit: the same person opening and closing the loop on their own report, with no second reader before the record closed.</span></div>
+          <div class="proof-row"><span class="k">Action</span><span class="v">Second-reader sign-off added before closure. Pattern flagged for the fleet's next 90-day trend review.</span></div>
+          <p class="proof-note">This is what reading the record instead of the dial produces in practice — a pattern caught before it needed a citation to be taken seriously.</p>
+        </div>
+      </div>
+
+      <div class="flow" style="margin-top:0;border-top:0">
         <div class="fl">
           <div class="numeral">III</div>
           <div>
@@ -642,17 +732,32 @@
 
       <div class="principles">
         <div class="pr">
-          <div class="mark">›</div>
-          <div>
-            <h3>The Build<span class="tag">Entry point</span></h3>
-            <p><span class="lead-in">Gap analysis against Part 5, and an SMS built for your operation from the ground up.</span> We read your existing records, your near-misses, your quiet write-arounds before a page of the manual gets written — so what we build reflects an operation that has actually been read, structured to hand off into ongoing operation rather than sit in a binder.</p>
+          <div class="pr-head">
+            <div class="mark">›</div>
+            <div>
+              <h3>The Build<span class="tag">Entry point</span></h3>
+              <p><span class="lead-in">Gap analysis against Part 5, and an SMS built for your operation from the ground up.</span> We read your existing records, your near-misses, your quiet write-arounds before a page of the manual gets written — so what we build reflects an operation that has actually been read, structured to hand off into ongoing operation rather than sit in a binder.</p>
+            </div>
+          </div>
+          <div class="ledger">
+            <div class="ledger-row"><dt>Timeline</dt><dd>Typically 6–10 weeks <span>— scoped to fleet size and existing documentation</span></dd></div>
+            <div class="ledger-row"><dt>Deliverables</dt><dd>SMS manual · hazard register, built and populated · training curriculum · draft Declaration of Compliance</dd></div>
+            <div class="ledger-row"><dt>Fleet range</dt><dd>Single-aircraft operators through multi-aircraft fleets</dd></div>
+            <div class="ledger-note">Exact scope and timeline are confirmed after reviewing your certificate and current records — the range above is illustrative, not a quote.</div>
           </div>
         </div>
         <div class="pr">
-          <div class="mark">›</div>
-          <div>
-            <h3>Managed SMS Operation<span class="tag">Ongoing</span></h3>
-            <p><span class="lead-in">We run your SMS as an outsourced operational function, not an advisory retainer.</span> Reports route to us; we administer risk management, safety assurance, and safety promotion; we carry the cross-operator reading no single in-house hire can replicate — for a fraction of the cost of standing up a safety department to hit one deadline.</p>
+          <div class="pr-head">
+            <div class="mark">›</div>
+            <div>
+              <h3>Managed SMS Operation<span class="tag">Ongoing</span></h3>
+              <p><span class="lead-in">We run your SMS as an outsourced operational function, not an advisory retainer.</span> Reports route to us; we administer risk management, safety assurance, and safety promotion; we carry the cross-operator reading no single in-house hire can replicate — for a fraction of the cost of standing up a safety department to hit one deadline.</p>
+            </div>
+          </div>
+          <div class="ledger">
+            <div class="ledger-row"><dt>Cadence</dt><dd>Continuous intake · monthly reporting cycle · quarterly audit-readiness review</dd></div>
+            <div class="ledger-row"><dt>Point of contact</dt><dd>One person, across every FAA interaction — not a rotating team</dd></div>
+            <div class="ledger-row"><dt>Pricing</dt><dd>Structured to fleet size and complexity <span>— confirmed before signing, not published here</span></dd></div>
           </div>
         </div>
       </div>
@@ -713,7 +818,7 @@
 
       <p><strong>Your data is never pooled with another operator's.</strong> Cross-operator findings we share back with you are de-identified and pattern-level only — never another operator's records, never anything that could expose them competitively or legally. Any boundary beyond that is set by you before an engagement begins, in writing, not discovered afterward.</p>
 
-      <p class="soft">Part 5 already requires a confidential internal reporting channel inside every operator, because safety data only tells the truth when the person filing it isn't afraid of what happens next. That protection has no equivalent for information moving <em>between</em> operators — the layer a cross-operator practice like ours sits in. We think aviation safety data eventually needs its own version of what HIPAA did for medical records, and we're involved in early work on what that could look like. Until it exists, contractual confidentiality is what does that job.</p>
+      <p class="soft">Part 5 already requires a confidential internal reporting channel inside every operator, because safety data only tells the truth when the person filing it isn't afraid of what happens next. That protection has no equivalent for information moving <em>between</em> operators — the layer a cross-operator practice like ours sits in. We think aviation safety data eventually needs its own version of what HIPAA did for medical records, and we're involved in early work on what that could look like — nothing here is settled law yet. Until it exists, contractual confidentiality is what does that job.</p>
     </section>
 
     <div class="rule" aria-hidden="true"></div>
@@ -730,16 +835,20 @@
 
     <div class="rule" aria-hidden="true"></div>
 
-    <!-- founder attribution — quiet, not a bio page -->
+    <!-- founder attribution — credentials in the hard register, one line of context in the soft -->
     <section aria-labelledby="found-h">
       <div class="sec-head">
         <span class="num">08</span>
         <h2 id="found-h">Behind It</h2>
       </div>
 
-      <div class="founder">
-        <p>Pilot Consciousness was founded by <strong>Shaurye Chakravarty</strong> — a commercial pilot (ASEL, AMEL, Instrument; CFI, CFII, MEI) and M.Sc. candidate in Safety Science at Embry-Riddle Aeronautical University, and the author of <em>CONSCIENCE: A Radical View on Safety and Accountability</em>, the argument this practice applies at organizational scale. <a href="https://www.pilotconsciousness.com/conscience.html">Read the book and the author's other work →</a></p>
+      <div class="ledger">
+        <div class="ledger-row"><dt>Founder</dt><dd>Shaurye Chakravarty</dd></div>
+        <div class="ledger-row"><dt>Ratings</dt><dd>Commercial Pilot — ASEL, AMEL, Instrument <span>· CFI / CFII / MEI</span></dd></div>
+        <div class="ledger-row"><dt>Research</dt><dd>M.Sc. candidate, Safety Science <span>— Embry-Riddle Aeronautical University, Prescott</span></dd></div>
+        <div class="ledger-row"><dt>Published</dt><dd><em>CONSCIENCE: A Radical View on Safety and Accountability</em> <span>— the argument this practice applies at organizational scale</span></dd></div>
       </div>
+      <p class="soft" style="margin-top:1.1rem"><a href="https://www.pilotconsciousness.com/conscience.html">Read the book and the author's other work →</a></p>
     </section>
 
     <div class="rule" aria-hidden="true"></div>
@@ -751,11 +860,16 @@
         <h2 id="start-h">Start</h2>
       </div>
 
-      <p>May 2027 is closer than the paperwork makes it feel. Tell us what your operation looks like, and we'll tell you exactly what stays with you and what we take off your hands.</p>
+      <span class="masthead">Not a sales call — a first read of your record</span>
+
+      <p>Send the last three occurrence or hazard reports from your existing system — redact whatever you need to. We'll read them the way we'd read them as your Director of Safety and tell you plainly where the gaps are. No cost, no obligation, and no template pitch afterward.</p>
+
+      <p class="soft">May 2027 is closer than the paperwork makes it feel. If you'd rather just talk first, that's fine too.</p>
 
       <div class="links">
         <!-- EDIT: confirm this inbox exists / is monitored -->
-        <a class="lnk lnk--solid" href="mailto:info@pilotconsciousness.com">Start a conversation<span class="arw">↗</span></a>
+        <a class="lnk lnk--solid" href="mailto:info@pilotconsciousness.com?subject=Reviewing%20our%20last%20three%20reports">Send your last three reports<span class="arw">↗</span></a>
+        <a class="lnk lnk--ghost" href="mailto:info@pilotconsciousness.com?subject=Start%20a%20conversation">Or just start a conversation<span class="arw">↗</span></a>
       </div>
     </section>
 
@@ -763,7 +877,7 @@
 
     <!-- coda -->
     <section class="coda" aria-label="Closing">
-      <p class="line">An operation that reads <em>stable</em> is not the same as an operation that is keeping time. The work is learning to tell the difference — before the report is written, not after.</p>
+      <p class="line">An operation that reads <em>stable</em> is not the same as an operation that is keeping time. The difference is a record you can produce — not one you have to explain.</p>
     </section>
 
     <footer>
