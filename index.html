@@ -300,6 +300,33 @@
   .pr .ledger{margin-left:2.7rem}
   @media (max-width:560px){ .pr .ledger{margin-left:0} }
 
+  /* ---- diagram: the four Part 5 pillars as an instrument dial ---- */
+  .diagram{margin-top:2rem}
+  .diagram svg{display:block;width:100%;height:auto;max-width:30rem;margin:0 auto}
+  .diagram-legend{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:1.2rem 1.6rem;
+    margin-top:1.2rem;
+  }
+  .dl-item{
+    display:flex;align-items:center;gap:0.5rem;
+    font-family:var(--mono);font-size:0.64rem;letter-spacing:0.06em;
+    text-transform:uppercase;color:var(--ink-soft);
+  }
+  .dl-swatch{width:11px;height:11px;border-radius:2px;flex:none}
+  .dl-swatch--brass{background:var(--brass-dim)}
+  .dl-swatch--hatch{
+    background-image:repeating-linear-gradient(45deg,var(--brass-dim) 0 2px,var(--ground-2) 2px 4px);
+  }
+  .dl-swatch--hub{background:var(--ground-2);border:1.5px solid var(--brass-dim)}
+  .diagram-caption{
+    margin-top:1rem;color:var(--ink-soft);font-size:0.92rem;text-align:center;
+    max-width:30rem;margin-left:auto;margin-right:auto;
+  }
+  @media (max-width:560px){
+    .diagram svg{max-width:100%}
+    .diagram-legend{gap:0.8rem 1.1rem}
+  }
+
   /* ---- links ---- */
   .links{display:flex;flex-wrap:wrap;gap:0.8rem;margin-top:1.6rem}
   .lnk{
@@ -502,7 +529,7 @@
         </div>
         <div class="ledger-row">
           <dt>We run</dt>
-          <dd>SRM · Safety Assurance · Safety Promotion · Records <span>— the full operational load</span></dd>
+          <dd>Safety Policy (co-authored) · SRM · Safety Assurance · Safety Promotion <span>— every Part 5 pillar</span></dd>
         </div>
         <div class="ledger-row">
           <dt>Stays with you</dt>
@@ -648,7 +675,7 @@
         </div>
         <div class="split-col">
           <span class="stag">Runs through us</span>
-          <h3>Everything an SMS actually requires</h3>
+          <h3>Every pillar Part 5 requires</h3>
           <ul>
             <li>Safety Risk Management — hazard identification, risk assessment</li>
             <li>Safety Assurance — audits, internal evaluation, corrective action tracking</li>
@@ -657,6 +684,50 @@
             <li>Reading the record — continuously, not once a quarter</li>
           </ul>
         </div>
+      </div>
+
+      <div class="diagram" role="img" aria-label="The four FAA Part 5 SMS pillars arranged as a dial. Safety Risk Management, Safety Assurance, and Safety Promotion run through Pilot Consciousness. Safety Policy is co-authored, with the policy statement signed by the operator's Accountable Executive. Signatory authority sits at the center, held by the operator.">
+        <svg viewBox="0 0 640 620" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hatch" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+              <rect width="8" height="8" fill="var(--ground-2)"></rect>
+              <line x1="0" y1="0" x2="0" y2="8" stroke="var(--brass-dim)" stroke-width="3"></line>
+            </pattern>
+          </defs>
+
+          <circle cx="320" cy="320" r="214" fill="none" stroke="var(--line)" stroke-width="1"></circle>
+
+          <path d="M171.51,171.51 A210,210 0 0,1 468.49,171.51 L411.92,228.08 A130,130 0 0,0 228.08,228.08 Z" fill="url(#hatch)" stroke="var(--ground)" stroke-width="4"></path>
+          <path d="M468.49,171.51 A210,210 0 0,1 468.49,468.49 L411.92,411.92 A130,130 0 0,0 411.92,228.08 Z" fill="var(--brass-dim)" fill-opacity="0.9" stroke="var(--ground)" stroke-width="4"></path>
+          <path d="M468.49,468.49 A210,210 0 0,1 171.51,468.49 L228.08,411.92 A130,130 0 0,0 411.92,411.92 Z" fill="var(--brass-dim)" fill-opacity="0.9" stroke="var(--ground)" stroke-width="4"></path>
+          <path d="M171.51,468.49 A210,210 0 0,1 171.51,171.51 L228.08,228.08 A130,130 0 0,0 228.08,411.92 Z" fill="var(--brass-dim)" fill-opacity="0.9" stroke="var(--ground)" stroke-width="4"></path>
+
+          <circle cx="320" cy="320" r="124" fill="var(--ground-2)" stroke="var(--brass-dim)" stroke-width="1.5"></circle>
+
+          <text x="320" y="90" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="1.2" fill="var(--ink)">SAFETY POLICY</text>
+          <text x="320" y="108" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)" font-style="italic">co-authored — you sign</text>
+
+          <text x="550" y="308" text-anchor="start" font-family="var(--mono)" font-size="12" letter-spacing="1.2" fill="var(--ink)">SAFETY RISK</text>
+          <text x="550" y="324" text-anchor="start" font-family="var(--mono)" font-size="12" letter-spacing="1.2" fill="var(--ink)">MANAGEMENT</text>
+          <text x="550" y="344" text-anchor="start" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)" font-style="italic">runs through us</text>
+
+          <text x="320" y="550" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="1.2" fill="var(--ink)">SAFETY ASSURANCE</text>
+          <text x="320" y="568" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)" font-style="italic">runs through us</text>
+
+          <text x="90" y="308" text-anchor="end" font-family="var(--mono)" font-size="12" letter-spacing="1.2" fill="var(--ink)">SAFETY</text>
+          <text x="90" y="324" text-anchor="end" font-family="var(--mono)" font-size="12" letter-spacing="1.2" fill="var(--ink)">PROMOTION</text>
+          <text x="90" y="344" text-anchor="end" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)" font-style="italic">runs through us</text>
+
+          <text x="320" y="308" text-anchor="middle" font-family="var(--mono)" font-size="11" letter-spacing="1.2" fill="var(--brass)">SIGNATORY</text>
+          <text x="320" y="326" text-anchor="middle" font-family="var(--mono)" font-size="11" letter-spacing="1.2" fill="var(--brass)">AUTHORITY</text>
+          <text x="320" y="346" text-anchor="middle" font-family="var(--body)" font-size="10" fill="var(--ink-soft)" font-style="italic">stays with your certificate</text>
+        </svg>
+        <div class="diagram-legend">
+          <span class="dl-item"><span class="dl-swatch dl-swatch--brass"></span>Runs through Pilot Consciousness</span>
+          <span class="dl-item"><span class="dl-swatch dl-swatch--hatch"></span>Co-authored — Accountable Executive signs</span>
+          <span class="dl-item"><span class="dl-swatch dl-swatch--hub"></span>Stays with your certificate</span>
+        </div>
+        <p class="diagram-caption">The four pillars Part 5 requires. Three run through us day to day. The fourth — your safety policy statement — we draft with you, and your Accountable Executive signs it, because the regulation ties that signature to the person holding the certificate.</p>
       </div>
 
       <p class="soft" style="margin-top:1.4rem">Exactly which roles are legally irreducible depends on your certificate's size and structure. We confirm the precise split with you and your counsel before anything is signed — the principle above is the target, not a guess.</p>
