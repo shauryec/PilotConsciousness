@@ -137,16 +137,44 @@
 
 
   /* GALLERY */
-  .gallery-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;grid-auto-rows:245px;gap:12px;margin-top:40px;}
-  .gallery-item{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--border);background-color:var(--bg-3);background-size:cover;background-position:center;isolation:isolate;}
-  .gallery-item:nth-child(1){grid-row:span 2;background-image:linear-gradient(180deg,transparent 45%,rgba(8,10,18,.87)),url('assets/gallery-01.jpg'),url('assets/hero.jpg');}
-  .gallery-item:nth-child(2){background-image:linear-gradient(180deg,transparent 45%,rgba(8,10,18,.87)),url('assets/gallery-02.jpg'),url('assets/feature2.jpg');}
-  .gallery-item:nth-child(3){background-image:linear-gradient(180deg,transparent 45%,rgba(8,10,18,.87)),url('assets/gallery-03.jpg'),url('assets/feature1.jpg');}
-  .gallery-item:nth-child(4){background-image:linear-gradient(180deg,transparent 45%,rgba(8,10,18,.87)),url('assets/gallery-04.jpg'),url('assets/feature3.jpg');}
-  .gallery-item:nth-child(5){background-image:linear-gradient(180deg,transparent 45%,rgba(8,10,18,.87)),url('assets/gallery-05.jpg'),url('assets/hero.jpg');}
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-auto-rows:210px;
+    gap:12px;
+    margin-top:40px;
+  }
+  .gallery-item{
+    position:relative;
+    margin:0;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    background:var(--bg-3);
+    isolation:isolate;
+  }
+  .gallery-item img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+    transition:transform .35s ease;
+  }
+  .gallery-item:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:1;
+    background:linear-gradient(180deg,transparent 48%,rgba(8,10,18,.88) 100%);
+    pointer-events:none;
+  }
+  .gallery-item:hover img{transform:scale(1.025);}
+  .gallery-feature{grid-column:span 2;grid-row:span 2;}
+  .gallery-wide{grid-column:span 2;}
   .gallery-caption{position:absolute;left:20px;right:20px;bottom:18px;z-index:2;}
   .gallery-caption strong{display:block;font-family:'Big Shoulders Display',sans-serif;text-transform:uppercase;font-size:21px;line-height:1;}
-  .gallery-caption span{display:block;margin-top:5px;color:rgba(245,241,232,.68);font-size:10px;line-height:1.4;}
+  .gallery-caption span{display:block;margin-top:5px;color:rgba(245,241,232,.72);font-size:10px;line-height:1.4;}
+  .gallery-feature .gallery-caption strong{font-size:28px;}
 
   /* BIO */
   .bio-grid{display:grid;grid-template-columns:390px 1fr;gap:54px;align-items:center;}
@@ -229,8 +257,9 @@
     .scenario-grid,.pricing-grid{grid-template-columns:repeat(2,1fr);}
     .process-grid{grid-template-columns:repeat(2,1fr);}
     .testimonials-grid{grid-template-columns:1fr;}
-    .gallery-grid{grid-template-columns:1fr 1fr;grid-auto-rows:260px;}
-    .gallery-item:nth-child(1){grid-row:span 1;grid-column:span 2;}
+    .gallery-grid{grid-template-columns:1fr 1fr;grid-auto-rows:240px;}
+    .gallery-feature{grid-column:span 2;grid-row:span 2;}
+    .gallery-wide{grid-column:span 2;}
   }
 
   @media (max-width:680px){
@@ -254,7 +283,8 @@
     .pricing-head{display:block;}
     .pricing-note{margin-top:18px;}
     .gallery-grid{grid-template-columns:1fr;grid-auto-rows:230px;}
-    .gallery-item:nth-child(1){grid-column:auto;}
+    .gallery-feature,.gallery-wide{grid-column:auto;grid-row:auto;}
+    .gallery-feature{min-height:330px;}
     .bio-badge{left:12px;bottom:12px;}
     .form-panel{padding:22px 18px;}
     form{grid-template-columns:1fr;}
@@ -427,13 +457,58 @@
     <div class="wrap">
       <p class="eyebrow">Training gallery</p>
       <h2 class="display section-title">The office.</h2>
-      <p class="section-intro">Arizona from the cockpit. Replace these tiles with your own flight photos in the <code>assets/</code> folder.</p>
+      <p class="section-intro">Real airplanes, real students, real weather and the terrain that makes Arizona such a demanding place to learn.</p>
+
       <div class="gallery-grid" aria-label="Flight training gallery">
-        <figure class="gallery-item"><figcaption class="gallery-caption"><strong>Arizona Cross-Country</strong><span>Terrain, planning, fuel, heat and changing margins.</span></figcaption></figure>
-        <figure class="gallery-item"><figcaption class="gallery-caption"><strong>Instrument Work</strong><span>Procedures joined to workload and weather judgement.</span></figcaption></figure>
-        <figure class="gallery-item"><figcaption class="gallery-caption"><strong>Cirrus Systems</strong><span>Glass cockpit, automation and capability used deliberately.</span></figcaption></figure>
-        <figure class="gallery-item"><figcaption class="gallery-caption"><strong>Night Operations</strong><span>The airport and terrain look different after sunset.</span></figcaption></figure>
-        <figure class="gallery-item"><figcaption class="gallery-caption"><strong>Instructor Training</strong><span>Teach, observe, intervene and keep command.</span></figcaption></figure>
+        <figure class="gallery-item gallery-feature">
+          <img src="assets/IMG_7758.JPEG" alt="Dramatic sunset viewed from the cockpit in flight">
+          <figcaption class="gallery-caption"><strong>Chasing the last light</strong><span>The view is beautiful. The decisions still matter.</span></figcaption>
+        </figure>
+
+        <figure class="gallery-item gallery-wide">
+          <img src="assets/IMG_7773.JPEG" alt="Flight student flying while banked over Arizona terrain" loading="lazy">
+          <figcaption class="gallery-caption"><strong>Learning in the airplane</strong><span>Aircraft control, awareness and judgement happen at the same time.</span></figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <img src="assets/4337512772970329842.jpg" alt="Aircraft flying among building clouds over terrain" loading="lazy">
+          <figcaption class="gallery-caption"><strong>Cloud work</strong><span>Weather is an operating environment, not a chapter in a book.</span></figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <img src="assets/IMG_0495.JPEG" alt="Dark weather ahead over the ocean from the cockpit" loading="lazy">
+          <figcaption class="gallery-caption"><strong>Changing weather</strong><span>Read what is developing before the margins disappear.</span></figcaption>
+        </figure>
+
+        <figure class="gallery-item gallery-wide">
+          <img src="assets/IMG_7476.JPEG" alt="Rugged Arizona terrain seen through the wing strut" loading="lazy">
+          <figcaption class="gallery-caption"><strong>Arizona terrain</strong><span>Terrain, performance and escape options belong in every plan.</span></figcaption>
+        </figure>
+
+        <figure class="gallery-item gallery-wide">
+          <img src="assets/IMG_0032.JPEG" alt="City lights at night seen from a light aircraft" loading="lazy">
+          <figcaption class="gallery-caption"><strong>Night operations</strong><span>Different cues, different illusions, different margins.</span></figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <img src="assets/14C334E9-3EC4-4CB5-B162-6AAE5694E169.jpg" alt="Flight instructor standing beside a training aircraft" loading="lazy">
+          <figcaption class="gallery-caption"><strong>Your instructor</strong><span>Same instructor, start to finish.</span></figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <img src="assets/IMG_1139.jpeg" alt="Aviation students gathered around an advanced flight simulator" loading="lazy">
+          <figcaption class="gallery-caption"><strong>Systems + simulation</strong><span>Use the simulator to think farther ahead than the airplane lets you.</span></figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <img src="assets/IMG_8422.JPEG" alt="Twin-engine training aircraft viewed from the front" loading="lazy">
+          <figcaption class="gallery-caption"><strong>Multi-engine</strong><span>Control first. Diagnose second. Preserve options.</span></figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <img src="assets/IMG_0571.JPEG" alt="Flight instructor and student together in an aircraft at night" loading="lazy">
+          <figcaption class="gallery-caption"><strong>The people in the cockpit</strong><span>Good instruction is technical, demanding and human.</span></figcaption>
+        </figure>
       </div>
     </div>
   </section>
