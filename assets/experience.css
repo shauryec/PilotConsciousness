@@ -120,6 +120,24 @@ nav a:hover, nav a:focus-visible { color: white; }
 .voucher-panel h3 { margin: 0; font-family: Iowan Old Style, Baskerville, serif; font-size: 2rem; font-weight: 400; letter-spacing: -.02em; }
 .voucher-panel p:last-child { max-width: 670px; margin: 10px 0 0; color: #667077; line-height: 1.65; }
 
+.media-section { color: white; background: #07131d; }
+.media-intro { display: grid; grid-template-columns: 1fr .72fr; gap: 90px; align-items: end; }
+.media-intro h2 { margin: 0; font-family: Iowan Old Style, Baskerville, serif; font-size: clamp(3rem, 5.7vw, 5.6rem); font-weight: 400; line-height: .98; letter-spacing: -.045em; text-wrap: balance; }
+.media-intro > p { margin: 0 0 5px; color: rgba(255,255,255,.66); font-size: 1.04rem; line-height: 1.75; }
+.film-frame { position: relative; aspect-ratio: 16 / 9; min-height: 420px; margin-top: 64px; overflow: hidden; background: #101e28; }
+.film-frame > img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.film-scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(3,10,16,.88), rgba(3,10,16,.04) 58%); }
+.film-caption { position: absolute; inset: auto 48px 44px; }
+.film-caption span { color: #e3a66f; font-size: .74rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+.film-caption h3 { max-width: 680px; margin: 12px 0 0; font-family: Iowan Old Style, Baskerville, serif; font-size: clamp(2.2rem, 4.5vw, 4.6rem); font-weight: 400; line-height: 1; letter-spacing: -.04em; }
+.flight-photo-grid { display: grid; grid-template-columns: 1.1fr .9fr 1fr; gap: 16px; margin-top: 16px; }
+.flight-photo-grid figure { margin: 0; overflow: hidden; background: #10202b; }
+.flight-photo-grid img { width: 100%; aspect-ratio: 4 / 3; display: block; object-fit: cover; transition: transform .5s ease; }
+.flight-photo-grid figure:nth-child(2) img { object-position: center 62%; }
+.flight-photo-grid figure:hover img { transform: scale(1.02); }
+.flight-photo-grid figcaption { min-height: 70px; display: flex; align-items: center; gap: 16px; padding: 18px 20px; color: rgba(255,255,255,.68); font-size: .82rem; letter-spacing: .02em; }
+.flight-photo-grid figcaption span { color: #d99a62; font-family: Iowan Old Style, Baskerville, serif; }
+
 .quote-section { padding-block: 120px; color: white; background: #142433; }
 .quote-layout { display: grid; grid-template-columns: 180px 1fr; gap: 40px; }
 .quote-layout blockquote { margin: 0; max-width: 820px; font-family: Iowan Old Style, Baskerville, serif; font-size: clamp(2.3rem, 5vw, 4.6rem); font-weight: 400; line-height: 1.08; letter-spacing: -.04em; }
@@ -245,6 +263,11 @@ nav a:hover, nav a:focus-visible { color: white; }
   .experience-card { min-height: 570px; padding: 30px; }
   .voucher-panel { grid-template-columns: 62px 1fr; padding: 28px; }
   .voucher-panel .button { grid-column: 1 / -1; }
+  .media-intro { grid-template-columns: 1fr; gap: 28px; }
+  .film-frame { min-height: 0; margin-top: 44px; }
+  .film-caption { inset: auto 28px 26px; }
+  .flight-photo-grid { grid-template-columns: 1fr 1fr; }
+  .flight-photo-grid figure:first-child { grid-column: 1 / -1; }
   .quote-layout { grid-template-columns: 1fr; gap: 24px; }
   .quote-note { grid-column: 1; }
   .gateway-intro, .gateway-grid { grid-template-columns: 1fr; }
@@ -280,6 +303,10 @@ nav a:hover, nav a:focus-visible { color: white; }
   .experience-card { min-height: 620px; }
   .voucher-panel { grid-template-columns: 1fr; }
   .voucher-panel .button { grid-column: 1; }
+  .film-frame { aspect-ratio: 4 / 5; }
+  .film-frame > img { object-position: 62% center; }
+  .flight-photo-grid { grid-template-columns: 1fr; }
+  .flight-photo-grid figure:first-child { grid-column: 1; }
   .gateway-block { min-height: 620px; padding: 28px; }
   .training-hero { min-height: 760px; }
   .training-hero-content { padding-block: 50px; }
