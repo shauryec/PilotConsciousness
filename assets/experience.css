@@ -125,7 +125,7 @@ nav a:hover, nav a:focus-visible { color: white; }
 .media-intro h2 { margin: 0; font-family: Iowan Old Style, Baskerville, serif; font-size: clamp(3rem, 5.7vw, 5.6rem); font-weight: 400; line-height: .98; letter-spacing: -.045em; text-wrap: balance; }
 .media-intro > p { margin: 0 0 5px; color: rgba(255,255,255,.66); font-size: 1.04rem; line-height: 1.75; }
 .film-frame { position: relative; aspect-ratio: 16 / 9; min-height: 420px; margin-top: 64px; overflow: hidden; background: #101e28; }
-.film-frame > img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.film-frame > :is(img, video) { width: 100%; height: 100%; display: block; object-fit: cover; }
 .film-scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(3,10,16,.88), rgba(3,10,16,.04) 58%); }
 .film-caption { position: absolute; inset: auto 48px 44px; }
 .film-caption span { color: #e3a66f; font-size: .74rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
@@ -304,7 +304,7 @@ nav a:hover, nav a:focus-visible { color: white; }
   .voucher-panel { grid-template-columns: 1fr; }
   .voucher-panel .button { grid-column: 1; }
   .film-frame { aspect-ratio: 4 / 5; }
-  .film-frame > img { object-position: 62% center; }
+  .film-frame > :is(img, video) { object-position: 62% center; }
   .flight-photo-grid { grid-template-columns: 1fr; }
   .flight-photo-grid figure:first-child { grid-column: 1; }
   .gateway-block { min-height: 620px; padding: 28px; }

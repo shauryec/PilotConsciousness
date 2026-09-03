@@ -108,8 +108,9 @@
         </div>
 
         <div class="film-frame">
-          <!-- This poster occupies the final supercut frame until the video file is supplied. -->
-          <img src="/assets/night-city.webp" alt="Phoenix illuminated at night, seen from an aircraft" loading="lazy" decoding="async">
+          <video class="flight-film" autoplay muted loop playsinline preload="metadata" poster="/assets/night-city.webp" aria-label="Scenes from a Phoenix flight experience">
+            <source src="/assets/phoenix-flight-film.webm" type="video/webm">
+          </video>
           <div class="film-scrim"></div>
           <div class="film-caption">
             <span>Flight film · Phoenix</span>
