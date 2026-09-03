@@ -126,10 +126,6 @@ nav a:hover, nav a:focus-visible { color: white; }
 .media-intro > p { margin: 0 0 5px; color: rgba(255,255,255,.66); font-size: 1.04rem; line-height: 1.75; }
 .film-frame { position: relative; aspect-ratio: 16 / 9; min-height: 420px; margin-top: 64px; overflow: hidden; background: #101e28; }
 .film-frame > :is(img, video) { width: 100%; height: 100%; display: block; object-fit: cover; }
-.film-scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(3,10,16,.88), rgba(3,10,16,.04) 58%); }
-.film-caption { position: absolute; inset: auto 48px 44px; }
-.film-caption span { color: #e3a66f; font-size: .74rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
-.film-caption h3 { max-width: 680px; margin: 12px 0 0; font-family: Iowan Old Style, Baskerville, serif; font-size: clamp(2.2rem, 4.5vw, 4.6rem); font-weight: 400; line-height: 1; letter-spacing: -.04em; }
 .flight-photo-grid { display: grid; grid-template-columns: 1.1fr .9fr 1fr; gap: 16px; margin-top: 16px; }
 .flight-photo-grid figure { margin: 0; overflow: hidden; background: #10202b; }
 .flight-photo-grid img { width: 100%; aspect-ratio: 4 / 3; display: block; object-fit: cover; transition: transform .5s ease; }
@@ -265,7 +261,6 @@ nav a:hover, nav a:focus-visible { color: white; }
   .voucher-panel .button { grid-column: 1 / -1; }
   .media-intro { grid-template-columns: 1fr; gap: 28px; }
   .film-frame { min-height: 0; margin-top: 44px; }
-  .film-caption { inset: auto 28px 26px; }
   .flight-photo-grid { grid-template-columns: 1fr 1fr; }
   .flight-photo-grid figure:first-child { grid-column: 1 / -1; }
   .quote-layout { grid-template-columns: 1fr; gap: 24px; }
