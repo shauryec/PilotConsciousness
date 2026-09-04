@@ -1032,7 +1032,7 @@
             <div class="hour-fields">
               <div class="hour-field"><label for="sr20Hours"><span>Cirrus SR20 · $180 dry</span><output class="slider-value" id="sr20HoursOutput" for="sr20Hours">40 hr</output></label><input class="range-control" id="sr20Hours" type="range" min="0" max="250" step="1" value="40"></div>
               <div class="hour-field"><label for="senecaHours"><span>Seneca · $350 dry</span><output class="slider-value" id="senecaHoursOutput" for="senecaHours">0 hr</output></label><input class="range-control" id="senecaHours" type="range" min="0" max="50" step="1" value="0"></div>
-              <div class="hour-field"><label for="instructionHours"><span>Instruction · $75 / hr</span><output class="slider-value" id="instructionHoursOutput" for="instructionHours">20 hr</output></label><input class="range-control" id="instructionHours" type="range" min="0" max="100" step="1" value="20"></div>
+              <div class="hour-field"><label for="instructionHours"><span>Instruction · $75 / hr</span><output class="slider-value" id="instructionHoursOutput" for="instructionHours">20 hr</output></label><input class="range-control" id="instructionHours" type="range" min="0" max="350" step="1" value="20"></div>
               <div class="hour-field"><label for="simHours"><span>Simulator · $50 / hr</span><output class="slider-value" id="simHoursOutput" for="simHours">0 hr</output></label><input class="range-control" id="simHours" type="range" min="0" max="50" step="1" value="0"></div>
             </div>
           </div>
@@ -1373,9 +1373,8 @@
   function enforceInstructionMinimum(){
     var required=safeHours(estimateInputs.sr20)+safeHours(estimateInputs.seneca)+safeHours(estimateInputs.sim);
     var current=safeHours(estimateInputs.instruction);
-    estimateInputs.instruction.min=String(required);
-    estimateInputs.instruction.max=String(Math.max(100,required+100,current));
     if(current<required)estimateInputs.instruction.value=String(required);
+    estimateInputs.instruction.setAttribute('aria-valuetext',safeHours(estimateInputs.instruction)+' hours; minimum '+required+' hours based on aircraft and simulator time');
   }
   function updateSenecaVisibility(key){
     var showSeneca=key==='multi'||key==='mei';
