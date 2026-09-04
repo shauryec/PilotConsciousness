@@ -76,7 +76,7 @@
   .menu-btn svg{width:20px;height:20px;stroke:currentColor;}
 
   /* HERO */
-  .hero{position:relative;min-height:760px;height:92vh;max-height:940px;display:flex;align-items:flex-end;overflow:hidden;background-color:#090b14;background-image:url('assets/hero.jpg');background-size:cover;background-position:center 58%;}
+  .hero{position:relative;min-height:760px;height:92vh;max-height:940px;display:flex;align-items:flex-end;overflow:hidden;background-color:#090b14;background-image:url('/assets/hero.jpg');background-size:cover;background-position:center 58%;}
   .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,10,18,.92) 0%,rgba(8,10,18,.62) 46%,rgba(8,10,18,.18) 78%),linear-gradient(180deg,rgba(8,10,18,.30) 0%,rgba(8,10,18,.10) 42%,rgba(8,10,18,.94) 100%);}
   .hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(180deg,transparent,var(--bg));}
   .hero-grid{position:relative;z-index:2;width:100%;display:grid;grid-template-columns:1.2fr .8fr;gap:56px;align-items:end;padding:150px 48px 112px;}
@@ -602,7 +602,7 @@
     align-items:stretch;
     color:#fff;
     background-color:#0b1520;
-    background-image:url('assets/hero.jpg');
+    background-image:url('/assets/hero.jpg');
     background-position:54% center;
   }
   .hero:before{
@@ -1067,52 +1067,52 @@
 
       <div class="gallery-grid" aria-label="Flight training gallery">
         <figure class="gallery-item gallery-feature">
-          <img src="assets/sunset-flight.webp" alt="Dramatic sunset viewed from the cockpit in flight">
+          <img src="/assets/sunset-flight.webp" alt="Dramatic sunset viewed from the cockpit in flight">
           <figcaption class="gallery-caption"><strong>Chasing the last light</strong><span>The view is beautiful. The decisions still matter.</span></figcaption>
         </figure>
 
         <figure class="gallery-item gallery-wide">
-          <img src="assets/student-flying.webp" alt="Flight student flying while banked over Arizona terrain" loading="lazy">
+          <img src="/assets/student-flying.webp" alt="Flight student flying while banked over Arizona terrain" loading="lazy">
           <figcaption class="gallery-caption"><strong>Learning in the airplane</strong><span>Aircraft control, awareness and judgement happen at the same time.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="assets/cloud-flying.webp" alt="Aircraft flying among building clouds over terrain" loading="lazy">
+          <img src="/assets/cloud-flying.webp" alt="Aircraft flying among building clouds over terrain" loading="lazy">
           <figcaption class="gallery-caption"><strong>Cloud work</strong><span>Weather is an operating environment, not a chapter in a book.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="assets/coastal-weather.webp" alt="Dark weather ahead over the ocean from the cockpit" loading="lazy">
+          <img src="/assets/coastal-weather.webp" alt="Dark weather ahead over the ocean from the cockpit" loading="lazy">
           <figcaption class="gallery-caption"><strong>Changing weather</strong><span>Read what is developing before the margins disappear.</span></figcaption>
         </figure>
 
         <figure class="gallery-item gallery-wide">
-          <img src="assets/arizona-terrain.webp" alt="Rugged Arizona terrain seen through the wing strut" loading="lazy">
+          <img src="/assets/arizona-terrain.webp" alt="Rugged Arizona terrain seen through the wing strut" loading="lazy">
           <figcaption class="gallery-caption"><strong>Arizona terrain</strong><span>Terrain, performance and escape options belong in every plan.</span></figcaption>
         </figure>
 
         <figure class="gallery-item gallery-wide">
-          <img src="assets/night-city.webp" alt="City lights at night seen from a light aircraft" loading="lazy">
+          <img src="/assets/night-city.webp" alt="City lights at night seen from a light aircraft" loading="lazy">
           <figcaption class="gallery-caption"><strong>Night operations</strong><span>Different cues, different illusions, different margins.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="assets/instructor-cessna.webp" alt="Flight instructor standing beside a training aircraft" loading="lazy">
+          <img src="/assets/instructor-cessna.webp" alt="Flight instructor standing beside a training aircraft" loading="lazy">
           <figcaption class="gallery-caption"><strong>Your instructor</strong><span>Same instructor, start to finish.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="assets/simulator-instruction.webp" alt="Aviation students gathered around an advanced flight simulator" loading="lazy">
+          <img src="/assets/simulator-instruction.webp" alt="Aviation students gathered around an advanced flight simulator" loading="lazy">
           <figcaption class="gallery-caption"><strong>Systems + simulation</strong><span>Use the simulator to think farther ahead than the airplane lets you.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="assets/twin-comanche.webp" alt="Twin-engine training aircraft viewed from the front" loading="lazy">
+          <img src="/assets/twin-comanche.webp" alt="Twin-engine training aircraft viewed from the front" loading="lazy">
           <figcaption class="gallery-caption"><strong>Multi-engine</strong><span>Control first. Diagnose second. Preserve options.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="assets/night-flight-student.webp" alt="Flight instructor and student together in an aircraft at night" loading="lazy">
+          <img src="/assets/night-flight-student.webp" alt="Flight instructor and student together in an aircraft at night" loading="lazy">
           <figcaption class="gallery-caption"><strong>The people in the cockpit</strong><span>Good instruction is technical, demanding and human.</span></figcaption>
         </figure>
       </div>
@@ -1124,7 +1124,7 @@
   <section class="section" id="instructor">
     <div class="wrap bio-grid">
       <div class="bio-photo-wrap">
-        <img class="bio-photo" src="assets/instructor.jpg?v=2" alt="Shaurye, flight instructor, in the cockpit">
+        <img class="bio-photo" src="/assets/instructor.jpg?v=2" alt="Shaurye, flight instructor, in the cockpit">
         <div class="bio-badge"><strong>CFI / CFII / MEI</strong><span>Phoenix, Arizona</span></div>
       </div>
       <div class="bio-copy">
@@ -1315,14 +1315,14 @@
       description:'Right-seat command, instructional skill, error recognition and practical-test preparation.',
       minimum:'15 hours PIC ASEL eligibility · No prescribed training-hour minimum',
       basis:'The FAA requires applicable flight and ground training plus proficiency, but does not prescribe a fixed CFI training total. Add the hours you want to model.',
-      sr20:0,seneca:0,instruction:0,sim:0,noMinimum:true
+      sr20:15,seneca:0,instruction:15,sim:0,noMinimum:true
     },
     cfii:{
       contact:'CFII',title:'CFII',rule:'14 CFR §§ 61.183, 61.187',
       description:'Learn to teach instrument flying while managing the airplane, automation, clearance, weather and student workload.',
       minimum:'Applicable training and proficiency · No prescribed training-hour minimum',
       basis:'The FAA defines knowledge, training and proficiency requirements for CFII, not a fixed number of training hours. Add the hours you want to model.',
-      sr20:0,seneca:0,instruction:0,sim:0,noMinimum:true
+      sr20:10,seneca:0,instruction:15,sim:5,noMinimum:true
     },
     mei:{
       contact:'MEI',title:'MEI',rule:'14 CFR §§ 61.183(j), 61.187',
@@ -1359,6 +1359,7 @@
     sr20:document.getElementById('sr20HoursOutput'),seneca:document.getElementById('senecaHoursOutput'),
     instruction:document.getElementById('instructionHoursOutput'),sim:document.getElementById('simHoursOutput')
   };
+  var sr20Field=estimateInputs.sr20.closest('.hour-field');
   var senecaField=estimateInputs.seneca.closest('.hour-field');
   var money=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
   function safeHours(input){var value=parseFloat(input.value);return Number.isFinite(value)&&value>0?value:0;}
@@ -1376,8 +1377,11 @@
     if(current<required)estimateInputs.instruction.value=String(required);
     estimateInputs.instruction.setAttribute('aria-valuetext',safeHours(estimateInputs.instruction)+' hours; minimum '+required+' hours based on aircraft and simulator time');
   }
-  function updateSenecaVisibility(key){
-    var showSeneca=key==='multi'||key==='mei';
+  function updateAircraftVisibility(key){
+    var useSeneca=key==='multi'||key==='mei';
+    sr20Field.hidden=useSeneca;
+    if(useSeneca)estimateInputs.sr20.value='0';
+    var showSeneca=useSeneca;
     senecaField.hidden=!showSeneca;
     if(!showSeneca)estimateInputs.seneca.value='0';
   }
@@ -1420,7 +1424,7 @@
     estimateInputs.seneca.value=item.seneca;
     estimateInputs.instruction.value=item.instruction;
     estimateInputs.sim.value=item.sim;
-    updateSenecaVisibility(key);
+    updateAircraftVisibility(key);
     logbookRow.classList.toggle('visible',Boolean(item.logbook));
     if(item.logbook){
       logbookHours.max=item.logbook==='total'?300:30;
@@ -1438,7 +1442,7 @@
   });
   Object.keys(estimateInputs).forEach(function(key){estimateInputs[key].addEventListener('input',updateEstimate);});
   logbookHours.addEventListener('input',updateLogbookCalculation);
-  updateSenecaVisibility(activeEstimate);
+  updateAircraftVisibility(activeEstimate);
   updateEstimate();
   updateRange(logbookHours,logbookHoursOutput);
   var estimateCta=document.getElementById('estimateCta');
