@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b1520">
   <title>Pilot Consciousness | Phoenix Flight Experiences</title>
   <meta name="description" content="Introductory flight lessons and private Phoenix aerial experiences, conducted by a professional flight instructor from Falcon Field and Deer Valley.">
-  <link rel="stylesheet" href="/assets/experience.css">
+  <link rel="stylesheet" href="/assets/experience.css?v=20260904-3">
 </head>
 <body>
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
@@ -197,76 +197,87 @@
   </main>
 
   <dialog class="booking-dialog" id="booking-dialog" aria-labelledby="booking-title">
-    <div class="dialog-head">
-      <div>
-        <p class="eyebrow dark">Flight request</p>
-        <h2 id="booking-title">Request a departure.</h2>
-        <p>Choose a preferred date and time window. We’ll confirm the aircraft, airport, and final departure directly.</p>
+    <button class="dialog-close" type="button" aria-label="Close booking form">×</button>
+    <div class="booking-dialog-layout">
+      <div class="booking-dialog-visual">
+        <div class="booking-dialog-brand"><span class="brand-mark">P</span><span>Pilot Consciousness</span></div>
+        <div>
+          <p class="eyebrow">Private departure request</p>
+          <h2 id="booking-title">Your flight,<br>personally coordinated.</h2>
+          <p>Tell us when you would like to fly. We’ll confirm the aircraft, airport, and departure directly.</p>
+        </div>
+        <p class="dialog-route">Phoenix · KFFZ / KDVT</p>
       </div>
-      <button class="dialog-close" type="button" aria-label="Close booking form">×</button>
+
+      <div class="booking-dialog-form">
+        <div class="booking-form-head">
+          <span>Flight request</span>
+          <strong>No payment to request</strong>
+        </div>
+
+        <form id="flightRequestForm">
+          <input type="hidden" name="access_key" value="ceab2eb4-7886-4a5a-bb11-8d9fbe5c3f1d">
+          <input type="hidden" name="subject" value="Flight Request — Pilot Consciousness">
+          <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off">
+
+          <div class="booking-field full">
+            <label for="flightType">Experience</label>
+            <select id="flightType" name="experience" required>
+              <option value="">Select a flight</option>
+              <option>Introductory Flight Lesson</option>
+              <option>Phoenix Aerial Experience</option>
+              <option>Groupon Voucher Flight</option>
+              <option>Pilot Service / Proficiency Flight</option>
+            </select>
+          </div>
+          <div class="booking-field">
+            <label for="bookingName">Name</label>
+            <input id="bookingName" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="booking-field">
+            <label for="bookingPhone">Phone</label>
+            <input id="bookingPhone" name="phone" type="tel" autocomplete="tel" required>
+          </div>
+          <div class="booking-field full">
+            <label for="bookingEmail">Email <span>optional</span></label>
+            <input id="bookingEmail" name="email" type="email" autocomplete="email">
+          </div>
+          <div class="booking-field">
+            <label for="preferredDate">Preferred date</label>
+            <input id="preferredDate" name="preferred_date" type="date" required>
+          </div>
+          <div class="booking-field">
+            <label for="timeWindow">Departure window</label>
+            <select id="timeWindow" name="time_window" required>
+              <option value="">Select</option>
+              <option>Morning</option>
+              <option>Midday</option>
+              <option>Afternoon</option>
+              <option>Sunset / evening</option>
+              <option>Flexible</option>
+            </select>
+          </div>
+          <div class="booking-field">
+            <label for="partySize">Guests</label>
+            <select id="partySize" name="party_size" required>
+              <option value="">Select</option>
+              <option>1</option>
+              <option>2</option>
+            </select>
+          </div>
+          <div class="booking-field">
+            <label for="voucherNumber">Voucher <span>if applicable</span></label>
+            <input id="voucherNumber" name="voucher_number" type="text">
+          </div>
+          <div class="booking-field full">
+            <label for="bookingNotes">Alternate dates or notes <span>optional</span></label>
+            <textarea id="bookingNotes" name="notes" rows="3"></textarea>
+          </div>
+          <button class="button button-copper full" type="submit" id="flightSubmit">Request this departure <svg><use href="#i-arrow-right"/></svg></button>
+          <p class="booking-status full" id="flightStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
     </div>
-
-    <form id="flightRequestForm">
-      <input type="hidden" name="access_key" value="ceab2eb4-7886-4a5a-bb11-8d9fbe5c3f1d">
-      <input type="hidden" name="subject" value="Flight Request — Pilot Consciousness">
-      <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off">
-
-      <div class="booking-field full">
-        <label for="flightType">Experience</label>
-        <select id="flightType" name="experience" required>
-          <option value="">Select a flight</option>
-          <option>Introductory Flight Lesson</option>
-          <option>Phoenix Aerial Experience</option>
-          <option>Groupon Voucher Flight</option>
-          <option>Pilot Service / Proficiency Flight</option>
-        </select>
-      </div>
-      <div class="booking-field">
-        <label for="bookingName">Name</label>
-        <input id="bookingName" name="name" type="text" autocomplete="name" required>
-      </div>
-      <div class="booking-field">
-        <label for="bookingPhone">Phone</label>
-        <input id="bookingPhone" name="phone" type="tel" autocomplete="tel" required>
-      </div>
-      <div class="booking-field full">
-        <label for="bookingEmail">Email <span>optional</span></label>
-        <input id="bookingEmail" name="email" type="email" autocomplete="email">
-      </div>
-      <div class="booking-field">
-        <label for="preferredDate">Preferred date</label>
-        <input id="preferredDate" name="preferred_date" type="date" required>
-      </div>
-      <div class="booking-field">
-        <label for="timeWindow">Preferred time</label>
-        <select id="timeWindow" name="time_window" required>
-          <option value="">Choose a window</option>
-          <option>Morning</option>
-          <option>Midday</option>
-          <option>Afternoon</option>
-          <option>Sunset / evening</option>
-          <option>Flexible</option>
-        </select>
-      </div>
-      <div class="booking-field">
-        <label for="partySize">People flying</label>
-        <select id="partySize" name="party_size" required>
-          <option value="">Select</option>
-          <option>1</option>
-          <option>2</option>
-        </select>
-      </div>
-      <div class="booking-field">
-        <label for="voucherNumber">Voucher <span>if applicable</span></label>
-        <input id="voucherNumber" name="voucher_number" type="text">
-      </div>
-      <div class="booking-field full">
-        <label for="bookingNotes">Alternate dates or notes <span>optional</span></label>
-        <textarea id="bookingNotes" name="notes" rows="3"></textarea>
-      </div>
-      <button class="button button-copper full" type="submit" id="flightSubmit"><svg><use href="#i-plane"/></svg> Send flight request</button>
-      <p class="booking-status full" id="flightStatus" role="status" aria-live="polite"></p>
-    </form>
   </dialog>
 
   <script>
