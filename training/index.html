@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0d0f1a">
+<meta name="theme-color" content="#0b1520">
 <title>Pilot Consciousness | Real-World Flight Training in Phoenix, AZ</title>
 <meta name="description" content="Private, instrument, commercial and flight-instructor training in Phoenix with an emphasis on judgement, command, real-world weather, terrain, automation and aircraft control.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0d0f1a;
-    --bg-2:#171a2b;
-    --bg-3:#1f2338;
-    --bg-4:#252a43;
-    --accent:#e08a3c;
-    --accent-2:#f0a55f;
-    --accent-ink:#241505;
-    --text:#f5f1e8;
-    --text-muted:#9aa1b9;
-    --text-soft:#c7cad5;
-    --border:rgba(245,241,232,.09);
-    --border-strong:rgba(245,241,232,.16);
-    --shadow:0 20px 60px rgba(0,0,0,.28);
-    --radius:14px;
-    --max:1160px;
+    --bg:#071018;
+    --bg-2:#0d1821;
+    --bg-3:#12212c;
+    --bg-4:#172a37;
+    --accent:#c7a66a;
+    --accent-2:#e0c48f;
+    --accent-ink:#10100d;
+    --text:#f8f4eb;
+    --text-muted:#afb8bd;
+    --text-soft:#d8dddf;
+    --border:rgba(224,196,143,.18);
+    --border-strong:rgba(224,196,143,.34);
+    --shadow:0 32px 80px rgba(0,0,0,.26);
+    --radius:2px;
+    --max:1180px;
   }
 
   *{box-sizing:border-box;}
@@ -34,7 +34,7 @@
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:'Public Sans',system-ui,-apple-system,sans-serif;
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
     min-height:100vh;
     overflow-x:hidden;
   }
@@ -76,7 +76,7 @@
   .menu-btn svg{width:20px;height:20px;stroke:currentColor;}
 
   /* HERO */
-  .hero{position:relative;min-height:760px;height:92vh;max-height:940px;display:flex;align-items:flex-end;overflow:hidden;background-color:#090b14;background-image:url('../assets/hero.jpg');background-size:cover;background-position:center 58%;}
+  .hero{position:relative;min-height:760px;height:92vh;max-height:940px;display:flex;align-items:flex-end;overflow:hidden;background-color:#090b14;background-image:url('assets/hero.jpg');background-size:cover;background-position:center 58%;}
   .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,10,18,.92) 0%,rgba(8,10,18,.62) 46%,rgba(8,10,18,.18) 78%),linear-gradient(180deg,rgba(8,10,18,.30) 0%,rgba(8,10,18,.10) 42%,rgba(8,10,18,.94) 100%);}
   .hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(180deg,transparent,var(--bg));}
   .hero-grid{position:relative;z-index:2;width:100%;display:grid;grid-template-columns:1.2fr .8fr;gap:56px;align-items:end;padding:150px 48px 112px;}
@@ -114,26 +114,76 @@
   .scenario p{margin:0;color:var(--text-muted);font-size:13px;line-height:1.62;}
   .scenario svg{position:absolute;top:22px;right:22px;width:28px;height:28px;stroke:rgba(245,241,232,.28);}
 
-  /* PRICING */
-  .pricing-head{display:flex;justify-content:space-between;gap:40px;align-items:end;}
-  .pricing-note{max-width:370px;font-size:12px;line-height:1.6;color:var(--text-muted);}
-  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px;}
-  .price-card{display:flex;flex-direction:column;min-height:440px;padding:25px;border:1px solid var(--border-strong);border-radius:12px;background:var(--bg-2);position:relative;overflow:hidden;}
-  .price-card.featured{border-color:rgba(224,138,60,.55);box-shadow:inset 0 0 0 1px rgba(224,138,60,.12);}
-  .price-card.featured:before{content:"Most Popular";position:absolute;top:15px;right:-31px;width:122px;padding:5px 0;background:var(--accent);color:var(--accent-ink);text-align:center;transform:rotate(35deg);font:700 8px/1 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.09em;}
-  .cert{font:600 10px/1.2 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);}
-  .price-card h3{font-family:'Big Shoulders Display',sans-serif;font-size:30px;text-transform:uppercase;line-height:1;margin:12px 0 8px;}
-  .price-card .desc{min-height:60px;margin:0;color:var(--text-muted);font-size:12.5px;line-height:1.55;}
-  .package-price{margin:22px 0 2px;font-family:'Big Shoulders Display',sans-serif;font-size:44px;font-weight:900;line-height:1;}
-  .package-sub{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;}
-  .price-card ul{list-style:none;padding:17px 0 0;margin:18px 0 24px;border-top:1px solid var(--border);display:grid;gap:9px;}
-  .price-card li{font-size:12px;color:var(--text-soft);line-height:1.5;padding-left:17px;position:relative;}
-  .price-card li:before{content:"+";position:absolute;left:0;color:var(--accent);font-family:'IBM Plex Mono',monospace;}
-  .price-card .button{margin-top:auto;width:100%;}
-  .pricing-disclaimer{margin:18px 0 0;padding:16px 18px;border-left:2px solid var(--accent);background:rgba(224,138,60,.06);color:var(--text-muted);font-size:11px;line-height:1.65;}
-
-  .training-outcome{margin:2px 0 18px;padding:13px 14px;border-left:2px solid var(--accent);background:rgba(224,138,60,.055);color:var(--text-soft);font-size:11.5px;line-height:1.6;}
-  .training-outcome b{display:block;margin-bottom:4px;font:600 8.5px/1.2 'IBM Plex Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);}
+  /* TRAINING RATES + ESTIMATOR */
+  .alliance-pricing{background:linear-gradient(135deg,#10202b,#071018 68%);color:#f8f4eb;border-top:1px solid rgba(224,196,143,.18);position:relative;overflow:hidden;font-family:'Manrope',sans-serif;}
+  .alliance-pricing:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 88% 13%,rgba(199,166,106,.10),transparent 30%);pointer-events:none;}
+  .alliance-pricing .wrap{position:relative;z-index:1;}
+  .network-bar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:15px 0;border-top:1px solid rgba(224,196,143,.5);border-bottom:1px solid rgba(224,196,143,.18);font:600 10px/1.2 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#afb8bd;}
+  .network-code{color:#e0c48f;}
+  .network-dots{display:flex;align-items:center;gap:5px;}
+  .network-dots i{display:block;width:7px;height:7px;border-radius:50%;background:#c7a66a;}
+  .pricing-head{display:grid;grid-template-columns:1.25fr .75fr;gap:54px;align-items:end;padding:42px 0 34px;}
+  .alliance-pricing .eyebrow{color:#e0c48f;font-family:'Manrope',sans-serif;letter-spacing:.2em;}
+  .alliance-pricing .display{color:#f8f4eb;font-family:'Cormorant Garamond',serif;font-weight:600;text-transform:none;letter-spacing:-.025em;line-height:.96;}
+  .pricing-note{margin:0;color:#afb8bd;font-size:14px;line-height:1.75;}
+  .rate-board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .rate-cell{display:flex;flex-direction:column;min-height:220px;padding:25px 23px 22px;border:1px solid rgba(224,196,143,.22);border-radius:2px;background:#0d1821;color:#f8f4eb;box-shadow:0 22px 50px rgba(0,0,0,.2);overflow:hidden;position:relative;}
+  .rate-cell:nth-child(2){background:#12212c;border-color:rgba(224,196,143,.3);}
+  .rate-cell:nth-child(3){background:#09141d;}
+  .rate-cell:nth-child(4){background:#12212c;}
+  .rate-cell:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,#c7a66a,rgba(199,166,106,.12));}
+  .rate-code{display:flex;justify-content:space-between;gap:12px;font:700 10px/1.2 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#e0c48f;}
+  .rate-code strong{color:inherit;font-weight:700;}
+  .rate-price{display:flex;align-items:flex-start;gap:3px;margin-top:auto;font-family:'Cormorant Garamond',serif;font-size:78px;font-weight:600;letter-spacing:-.04em;line-height:.78;color:#f8f4eb;white-space:nowrap;}
+  .rate-price .currency{font-size:29px;line-height:1;margin-top:6px;color:#e0c48f;}
+  .rate-price .rate-unit{align-self:flex-end;margin:0 0 4px 5px;font:600 10px/1.2 'Manrope',sans-serif;color:#afb8bd;letter-spacing:.13em;}
+  .rate-caption{margin-top:16px;font-size:12px;font-weight:600;color:#afb8bd;letter-spacing:.05em;}
+  .estimator-shell{margin-top:38px;border:1px solid rgba(224,196,143,.22);border-radius:2px;background:#0d1821;box-shadow:0 32px 80px rgba(0,0,0,.26);overflow:hidden;}
+  .estimator-top{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 19px;background:#050d13;color:#f8f4eb;font:600 10px/1.2 'Manrope',sans-serif;letter-spacing:.17em;text-transform:uppercase;}
+  .estimator-top span:last-child{color:#e0c48f;}
+  .program-selector{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid rgba(224,196,143,.2);}
+  .program-tab{appearance:none;border:0;border-right:1px solid rgba(224,196,143,.16);background:#0a1720;color:#afb8bd;padding:16px 8px;cursor:pointer;font:600 10px/1.25 'Manrope',sans-serif;letter-spacing:.08em;text-transform:uppercase;transition:background .15s ease,color .15s ease;}
+  .program-tab:last-child{border-right:0;}
+  .program-tab:hover{background:#12212c;color:#f8f4eb;}
+  .program-tab.active{background:#12212c;color:#f8f4eb;box-shadow:inset 0 -3px 0 #c7a66a;}
+  .program-tab small{display:block;margin-top:5px;font-size:8px;letter-spacing:.12em;color:#c7a66a;}
+  .estimator-grid{display:grid;grid-template-columns:1.12fr .88fr;}
+  .estimator-inputs{padding:34px;border-right:1px solid rgba(224,196,143,.18);}
+  .route-heading{display:flex;justify-content:space-between;gap:24px;align-items:start;padding-bottom:25px;border-bottom:1px solid rgba(224,196,143,.18);}
+  .route-heading h3{margin:0;font-family:'Cormorant Garamond',serif;font-size:45px;font-weight:600;line-height:1;color:#f8f4eb;}
+  .route-heading p{margin:10px 0 0;max-width:540px;color:#afb8bd;font-size:13px;line-height:1.7;}
+  .reg-badge{flex:none;padding:8px 10px;border:1px solid rgba(224,196,143,.32);background:rgba(199,166,106,.06);font:600 9px/1.2 'Manrope',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#e0c48f;}
+  .minimum-row{padding:19px 0;border-bottom:1px solid rgba(224,196,143,.16);}
+  .minimum-label{display:block;margin-bottom:8px;font:600 9px/1.2 'Manrope',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#e0c48f;}
+  .minimum-value{font-size:14px;line-height:1.6;color:#d8dddf;}
+  .logbook-row{display:none;grid-template-columns:1fr;gap:15px;align-items:center;padding:19px 0;border-bottom:1px solid rgba(224,196,143,.16);}
+  .logbook-row.visible{display:grid;}
+  .logbook-copy strong{display:block;font-size:13px;color:#f8f4eb;}
+  .logbook-copy span{display:block;margin-top:5px;font-size:11px;line-height:1.55;color:#afb8bd;}
+  .hour-fields{display:grid;gap:22px;margin-top:25px;}
+  .hour-field label,.logbook-slider-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:11px;font:600 10px/1.2 'Manrope',sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#d8dddf;}
+  .hour-field label span{color:#d8dddf;}
+  .slider-value{min-width:76px;padding:7px 9px;border:1px solid rgba(224,196,143,.3);background:#071018;color:#e0c48f;text-align:center;font:700 11px/1 'Manrope',sans-serif;letter-spacing:.03em;}
+  .range-control{width:100%;height:28px;margin:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;}
+  .range-control::-webkit-slider-runnable-track{height:7px;background:linear-gradient(90deg,#c7a66a var(--range-progress,0%),#263844 var(--range-progress,0%));border-radius:99px;}
+  .range-control::-moz-range-track{height:7px;background:#263844;border-radius:99px;}
+  .range-control::-moz-range-progress{height:7px;background:#c7a66a;border-radius:99px;}
+  .range-control::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:25px;height:25px;margin-top:-9px;border:4px solid #071018;border-radius:50%;background:#e0c48f;box-shadow:0 0 0 1px rgba(224,196,143,.72),0 5px 13px rgba(0,0,0,.35);}
+  .range-control::-moz-range-thumb{width:17px;height:17px;border:4px solid #071018;border-radius:50%;background:#e0c48f;box-shadow:0 0 0 1px rgba(224,196,143,.72),0 5px 13px rgba(0,0,0,.35);}
+  .range-control:focus-visible{outline:2px solid #c7a66a;outline-offset:5px;}
+  .estimator-summary{display:flex;flex-direction:column;padding:34px;background:#12212c;}
+  .summary-label{font:600 9px/1.2 'Manrope',sans-serif;letter-spacing:.17em;text-transform:uppercase;color:#e0c48f;}
+  .summary-total{margin:13px 0 9px;font-family:'Cormorant Garamond',serif;font-size:68px;font-weight:600;letter-spacing:-.035em;line-height:.9;color:#f8f4eb;}
+  .summary-basis{margin:0;color:#afb8bd;font-size:12px;line-height:1.65;}
+  .cost-lines{margin:29px 0 0;border-top:1px solid rgba(224,196,143,.2);}
+  .cost-line{display:flex;justify-content:space-between;gap:18px;padding:12px 0;border-bottom:1px solid rgba(224,196,143,.14);color:#afb8bd;font-size:12px;}
+  .cost-line strong{color:#f8f4eb;font:600 12px/1.2 'Manrope',sans-serif;}
+  .zero-minimum{display:none;margin:21px 0 0;padding:14px;border:1px solid rgba(224,196,143,.22);background:rgba(7,16,24,.56);color:#afb8bd;font-size:11px;line-height:1.65;}
+  .zero-minimum.visible{display:block;}
+  .estimator-summary .button{margin-top:auto;border:1px solid #c7a66a;border-radius:2px;background:#c7a66a;color:#10100d;padding:15px 18px;font-family:'Manrope',sans-serif;}
+  .estimator-summary .button:hover{background:#e0c48f;}
+  .pricing-disclaimer{margin:18px 0 0;padding:17px 18px;border-left:2px solid #c7a66a;background:rgba(7,16,24,.5);color:#929ca2;font-size:11px;line-height:1.75;}
+  .pricing-disclaimer strong{color:#d8dddf;}
 
 
   /* GALLERY */
@@ -243,8 +293,136 @@
   .modal-title{font-family:'Big Shoulders Display',sans-serif;font-size:28px;text-transform:uppercase;margin:0 42px 10px 0;}
   .modal-body{margin:0;color:var(--text-muted);font-size:13px;line-height:1.7;}
 
+  /* SHARED EXPERIENCE DESIGN SYSTEM */
+  .section{padding:92px 0;border-top:1px solid var(--border);}
+  .eyebrow{margin:0 0 16px;color:var(--accent-2);font:600 11px/1.3 'Manrope',sans-serif;letter-spacing:.2em;text-transform:uppercase;}
+  .display{margin:0;color:var(--text);font-family:'Cormorant Garamond',serif;font-weight:600;text-transform:none;letter-spacing:-.025em;line-height:.96;text-wrap:balance;}
+  .section-title{font-size:clamp(46px,6vw,76px);}
+  .section-intro{max-width:720px;margin:22px 0 0;color:var(--text-muted);font-size:16px;line-height:1.75;}
+  .mono{font-family:'Manrope',sans-serif;}
+
+  .site-nav{background:rgba(7,16,24,.78);border-bottom:1px solid var(--border);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);}
+  .nav-inner{height:70px;}
+  .brand-mark{width:35px;height:35px;border:1px solid rgba(224,196,143,.42);border-radius:50%;background:rgba(255,255,255,.02);}
+  .brand-mark svg{width:20px;height:20px;stroke:var(--text);}
+  .brand-copy{gap:2px;}
+  .brand-name{font:600 18px/1 'Cormorant Garamond',serif;letter-spacing:.05em;text-transform:uppercase;}
+  .brand-sub{font:500 9px/1.2 'Manrope',sans-serif;letter-spacing:.14em;color:var(--text-muted);text-transform:uppercase;}
+  .nav-links{gap:25px;}
+  .nav-links a{font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:#d8dddf;}
+  .nav-links a:hover{color:var(--accent-2);}
+  .nav-cta,.button{min-height:50px;padding:0 22px;border:1px solid var(--accent);border-radius:2px;background:var(--accent);color:var(--accent-ink);font-family:'Manrope',sans-serif;font-weight:700;font-size:11px;letter-spacing:.13em;text-transform:uppercase;}
+  .nav-cta{min-height:39px;padding:0 14px;font-size:11px;}
+  .nav-cta:hover,.button:hover{background:var(--accent-2);}
+  .button.secondary{background:rgba(7,16,24,.42);border-color:rgba(224,196,143,.42);color:var(--text);}
+  .button.secondary:hover{background:rgba(248,244,235,.08);border-color:rgba(248,244,235,.5);}
+  .menu-btn{width:42px;height:42px;border:1px solid var(--border);border-radius:2px;background:transparent;color:var(--text);}
+
+  .hero{min-height:720px;height:100svh;max-height:980px;background-color:var(--bg);background-position:center 58%;}
+  .hero:before{background:linear-gradient(90deg,rgba(5,13,20,.94) 0%,rgba(5,13,20,.68) 44%,rgba(5,13,20,.14) 78%),linear-gradient(180deg,rgba(5,13,20,.18),rgba(5,13,20,.03) 46%,rgba(5,13,20,.9));}
+  .hero:after{height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.6;}
+  .hero-grid{grid-template-columns:1.25fr .75fr;gap:66px;padding:150px 0 74px;}
+  .hero-kicker{gap:12px;margin-bottom:24px;color:#eee8dc;font:500 11px/1.3 'Manrope',sans-serif;letter-spacing:.18em;}
+  .hero-kicker:before{width:36px;background:var(--accent);}
+  h1{max-width:920px;font-size:clamp(64px,8.2vw,108px);}
+  .hero-lede{max-width:700px;margin:27px 0 0;color:#d8dddf;font-size:clamp(17px,2vw,20px);line-height:1.75;}
+  .hero-actions{gap:12px;margin-top:31px;}
+  .hero-proof{gap:9px 26px;margin-top:29px;}
+  .hero-proof li{display:flex;align-items:center;gap:8px;padding:0;border:0;border-radius:0;background:transparent;color:#c7cfd1;font:500 10px/1.4 'Manrope',sans-serif;letter-spacing:.12em;}
+  .hero-proof li:before{content:"";position:static;width:5px;height:5px;border:0;border-radius:50%;background:var(--accent);transform:none;}
+  .hero-card{width:min(100%,370px);padding:29px;border:1px solid rgba(224,196,143,.34);border-radius:2px;background:rgba(13,24,33,.82);box-shadow:0 32px 80px rgba(0,0,0,.3);backdrop-filter:blur(14px);}
+  .hero-card .price{margin:7px 0 8px;color:var(--text);font:600 48px/.92 'Cormorant Garamond',serif;letter-spacing:-.02em;}
+  .hero-card .price-label{color:var(--text-muted);font-size:13px;line-height:1.65;}
+  .hero-card ul{margin-top:22px;padding-top:20px;border-top:1px solid var(--border);gap:12px;}
+  .hero-card li{padding-left:17px;color:var(--text-soft);font-size:12px;line-height:1.55;}
+  .hero-card li:before{top:.54em;width:5px;height:5px;border:0;border-radius:50%;background:var(--accent);transform:none;}
+
+  #approach{background:var(--bg-2);}
+  #training{background:var(--bg);}
+  #gallery{background:var(--bg-2);}
+  #instructor{background:var(--bg);}
+  #testimonials{background:var(--bg-2);}
+  #faq{background:var(--bg);}
+  .philosophy-grid{grid-template-columns:.9fr 1.1fr;gap:78px;}
+  .big-statement{margin:0;color:var(--text);font:600 clamp(46px,6vw,76px)/.96 'Cormorant Garamond',serif;letter-spacing:-.025em;text-transform:none;}
+  .big-statement span{color:var(--accent-2);}
+  .principles{border-color:var(--border);background:rgba(7,16,24,.3);}
+  .principle{min-height:215px;padding:31px;border-color:var(--border);}
+  .principle-num{margin-bottom:28px;color:var(--accent-2);font:600 10px/1.3 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;}
+  .principle h3{margin:0 0 11px;color:var(--text);font:600 29px/1.05 'Cormorant Garamond',serif;text-transform:none;letter-spacing:-.01em;}
+  .principle p{color:var(--text-muted);font-size:14px;line-height:1.75;}
+
+  .real-world:before{background:radial-gradient(circle at 85% 25%,rgba(199,166,106,.08),transparent 34%);}
+  .scenario-grid{gap:14px;margin-top:48px;}
+  .scenario{min-height:330px;padding:34px;border:1px solid var(--border);border-radius:2px;background:var(--bg-2);}
+  .scenario .tag{color:var(--accent-2);font:600 10px/1.3 'Manrope',sans-serif;letter-spacing:.18em;}
+  .scenario h3{margin:68px 0 13px;color:var(--text);font:600 35px/1.03 'Cormorant Garamond',serif;text-transform:none;letter-spacing:-.015em;}
+  .scenario p{color:var(--text-muted);font-size:14px;line-height:1.8;}
+  .scenario svg{top:30px;right:30px;stroke:rgba(224,196,143,.5);}
+
+  .gallery-item{border:1px solid var(--border);border-radius:2px;background:var(--bg-3);}
+  .gallery-item:after{background:linear-gradient(180deg,transparent 42%,rgba(7,16,24,.92) 100%);}
+  .gallery-caption{left:22px;right:22px;bottom:20px;}
+  .gallery-caption strong{color:var(--text);font:600 25px/1 'Cormorant Garamond',serif;text-transform:none;letter-spacing:-.01em;}
+  .gallery-caption span{margin-top:7px;color:#c7cfd1;font-size:11px;line-height:1.5;}
+  .gallery-feature .gallery-caption strong{font-size:34px;}
+
+  .bio-grid{grid-template-columns:410px 1fr;gap:70px;}
+  .bio-photo{border:1px solid var(--border-strong);border-radius:2px;background:var(--bg-3);}
+  .bio-badge{left:-18px;bottom:26px;width:180px;padding:17px;background:var(--accent);color:var(--accent-ink);border-radius:2px;box-shadow:var(--shadow);}
+  .bio-badge strong{font:600 30px/1 'Cormorant Garamond',serif;text-transform:none;}
+  .bio-badge span{font:700 8px/1.3 'Manrope',sans-serif;letter-spacing:.13em;text-transform:uppercase;}
+  .bio-copy p{margin-top:22px;color:var(--text-muted);font-size:15px;line-height:1.8;}
+  .credentials{gap:9px;margin-top:27px;}
+  .credentials span{padding:9px 11px;border:1px solid var(--border);border-radius:1px;color:var(--text-soft);font:600 9px/1.2 'Manrope',sans-serif;letter-spacing:.11em;text-transform:uppercase;}
+
+  .testimonials-grid{gap:14px;margin-top:38px;}
+  .quote-card{padding:32px;border:1px solid var(--border);border-radius:2px;background:rgba(7,16,24,.45);}
+  .quote-mark{color:var(--accent-2);font-family:'Cormorant Garamond',serif;font-size:58px;}
+  .quote-card blockquote{margin:18px 0 25px;color:var(--text-soft);font-size:15px;line-height:1.8;}
+  .quote-meta{padding-top:18px;border-top:1px solid var(--border);color:var(--text-muted);font:600 9px/1.6 'Manrope',sans-serif;letter-spacing:.14em;text-transform:uppercase;}
+
+  .faq{margin-top:44px;border-color:var(--border);}
+  details{border-color:var(--border);}
+  summary{padding:25px 48px 25px 0;color:var(--text);font:600 29px/1.12 'Cormorant Garamond',serif;text-transform:none;letter-spacing:-.01em;}
+  summary:after{color:var(--accent-2);font-family:'Manrope',sans-serif;}
+  details p{margin:-3px 0 27px;color:var(--text-muted);font-size:14px;line-height:1.8;}
+
+  .contact-section{padding:108px 0;background:linear-gradient(135deg,#10202b,#071018 68%);}
+  .contact-grid{grid-template-columns:.8fr 1.2fr;gap:80px;}
+  .contact-cards{gap:10px;margin-top:33px;}
+  .contact-card{padding:17px 18px;border:1px solid var(--border);border-radius:2px;background:rgba(7,16,24,.42);}
+  .contact-card svg{stroke:var(--accent);}
+  .contact-card strong{color:var(--text);font-size:10px;letter-spacing:.13em;}
+  .contact-card span{color:var(--text-muted);font-size:13px;line-height:1.5;}
+  .form-panel{padding:40px;background:rgba(18,33,44,.9);border:1px solid var(--border);border-radius:2px;box-shadow:var(--shadow);}
+  .form-title{margin:0 0 8px;color:var(--text);font:600 38px/1 'Cormorant Garamond',serif;text-transform:none;letter-spacing:-.015em;}
+  .form-sub{margin:0 0 27px;color:var(--text-muted);font-size:14px;line-height:1.6;}
+  form{gap:18px;}
+  .field label{margin:0 0 8px;color:#e2e4df;font:600 10px/1.2 'Manrope',sans-serif;letter-spacing:.13em;text-transform:uppercase;}
+  .field input,.field select,.field textarea{min-height:50px;padding:12px 14px;border:1px solid rgba(224,196,143,.2);border-radius:1px;background:#0a1720;color:var(--text);}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(199,166,106,.1);}
+  .field select option{background:#0a1720;}
+  .form-panel .button{margin-top:4px;}
+  .form-status{color:var(--text-muted);font-size:13px;}
+
+  footer{padding:36px 0 42px;border-top:1px solid var(--border);background:#050d13;}
+  .footer-copy{color:#9199a0;font-size:12px;line-height:1.7;}
+  .footer-title{margin-bottom:14px;color:var(--accent-2);font:600 9px/1 'Manrope',sans-serif;letter-spacing:.15em;text-transform:uppercase;}
+  .footer-links{gap:9px;}
+  .footer-links a{color:#9199a0;font-size:12px;}
+  .footer-links a:hover{color:var(--accent-2);}
+  .copyright{border-top:1px solid var(--border);color:#747e84;font-size:10px;}
+  .footer-legal{color:#9199a0;}
+
+  .modal-overlay{background:rgba(4,8,12,.84);backdrop-filter:blur(8px);}
+  .modal-box{padding:42px;border:1px solid var(--border);border-radius:2px;background:var(--bg-3);box-shadow:0 30px 90px rgba(0,0,0,.5);}
+  .modal-close{border:0;border-radius:0;background:none;color:var(--text);font-size:25px;}
+  .modal-title{color:var(--text);font:600 40px/1 'Cormorant Garamond',serif;text-transform:none;letter-spacing:-.015em;}
+  .modal-body{color:var(--text-muted);font-size:15px;line-height:1.7;}
+
   @media (max-width:1000px){
-    .nav-links{display:none;position:fixed;top:68px;left:0;right:0;bottom:0;background:rgba(13,15,26,.98);padding:34px 24px;flex-direction:column;align-items:flex-start;gap:0;}
+    .nav-links{display:none;position:fixed;top:70px;left:0;right:0;bottom:0;background:rgba(7,16,24,.98);padding:34px 24px;flex-direction:column;align-items:flex-start;gap:0;}
     .nav-links.open{display:flex;}
     .nav-links a{width:100%;padding:17px 0;border-bottom:1px solid var(--border);font-size:16px;}
     .nav-links .nav-cta{margin-top:22px;width:100%;justify-content:center;border-bottom:0;padding:15px;}
@@ -254,7 +432,12 @@
     .philosophy-grid,.bio-grid,.contact-grid{grid-template-columns:1fr;}
     .bio-grid{gap:34px;}
     .bio-photo-wrap{max-width:430px;}
-    .scenario-grid,.pricing-grid{grid-template-columns:repeat(2,1fr);}
+    .scenario-grid{grid-template-columns:repeat(2,1fr);}
+    .rate-board{grid-template-columns:repeat(2,1fr);}
+    .program-selector{grid-template-columns:repeat(4,1fr);}
+    .program-tab{border-bottom:1px solid rgba(224,196,143,.16);}
+    .estimator-grid{grid-template-columns:1fr;}
+    .estimator-inputs{border-right:0;border-bottom:1px solid rgba(224,196,143,.18);}
     .process-grid{grid-template-columns:repeat(2,1fr);}
     .testimonials-grid{grid-template-columns:1fr;}
     .gallery-grid{grid-template-columns:1fr 1fr;grid-auto-rows:240px;}
@@ -264,29 +447,42 @@
 
   @media (max-width:680px){
     .wrap{width:min(100% - 30px,var(--max));}
-    .section{padding:66px 0;}
-    .nav-inner{height:62px;}
-    .nav-links{top:62px;}
+    .section{padding:68px 0;}
+    .nav-inner{height:70px;}
+    .nav-links{top:70px;}
     .brand-sub{display:none;}
-    .hero{min-height:780px;height:auto;background-position:35% 55%;}
-    .hero:before{background:linear-gradient(180deg,rgba(8,10,18,.56),rgba(8,10,18,.82) 48%,rgba(8,10,18,.96) 100%);}
-    .hero-grid{padding:130px 0 90px;align-items:start;}
-    h1{font-size:clamp(54px,17vw,82px);}
-    .hero-lede{font-size:15px;}
+    .hero{min-height:690px;height:auto;background-position:61% center;}
+    .hero:before{background:linear-gradient(90deg,rgba(5,13,20,.94),rgba(5,13,20,.54) 75%),linear-gradient(180deg,rgba(5,13,20,.15),rgba(5,13,20,.93));}
+    .hero-grid{padding:130px 0 55px;align-items:start;}
+    h1{font-size:clamp(56px,19vw,82px);}
+    .hero-lede{font-size:16px;}
     .hero-actions{display:grid;grid-template-columns:1fr;}
     .hero-actions .button{width:100%;}
     .hero-proof{display:grid;grid-template-columns:1fr 1fr;width:100%;}
     .hero-card{width:100%;}
     .philosophy-grid{gap:36px;}
     .principles{grid-template-columns:1fr;}
-    .scenario-grid,.pricing-grid,.process-grid{grid-template-columns:1fr;}
-    .pricing-head{display:block;}
+    .scenario-grid,.process-grid{grid-template-columns:1fr;}
+    .pricing-head{display:block;padding-top:34px;}
     .pricing-note{margin-top:18px;}
+    .network-bar{align-items:flex-start;}
+    .rate-board{grid-template-columns:1fr 1fr;}
+    .rate-cell{min-height:170px;padding:18px 16px;}
+    .rate-price{font-size:48px;}
+    .rate-price .currency{font-size:21px;}
+    .rate-price .rate-unit{font-size:9px;}
+    .program-selector{grid-template-columns:repeat(2,1fr);}
+    .program-tab:nth-child(2n){border-right:0;}
+    .estimator-inputs,.estimator-summary{padding:22px 17px;}
+    .route-heading{display:block;}
+    .reg-badge{display:inline-block;margin-top:14px;}
+    .logbook-row{grid-template-columns:1fr;}
+    .summary-total{font-size:54px;}
     .gallery-grid{grid-template-columns:1fr;grid-auto-rows:230px;}
     .gallery-feature,.gallery-wide{grid-column:auto;grid-row:auto;}
     .gallery-feature{min-height:330px;}
     .bio-badge{left:12px;bottom:12px;}
-    .form-panel{padding:22px 18px;}
+    .form-panel{padding:24px 19px;}
     form{grid-template-columns:1fr;}
     .field.full,.form-panel .button,.form-status{grid-column:1;}
     .footer-grid{grid-template-columns:1fr;gap:28px;}
@@ -298,6 +494,395 @@
   .footer-legal{margin-top:14px;font-size:.78rem;color:var(--muted)}
   .footer-legal a{color:inherit;text-decoration:none}
   .footer-legal a:hover{text-decoration:underline}
+</style>
+<style>
+  /* EXPERIENCE-PAGE DESIGN SYSTEM — full training-page alignment */
+  :root{
+    --bg:#f4f2ed;
+    --bg-2:#ece8df;
+    --bg-3:#ffffff;
+    --bg-4:#e8e3d9;
+    --accent:#b87843;
+    --accent-2:#9c5f31;
+    --accent-ink:#ffffff;
+    --text:#14202a;
+    --text-muted:#5f686e;
+    --text-soft:#34434d;
+    --border:#d0cbc2;
+    --border-strong:#bdb5a8;
+    --shadow:0 28px 70px rgba(20,32,42,.14);
+    --radius:.35rem;
+    --max:1180px;
+  }
+
+  html{scroll-padding-top:24px;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif;
+    font-size:16px;
+  }
+  ::selection{background:var(--accent);color:#fff;}
+  .wrap{width:min(var(--max),calc(100% - 48px));}
+  .section{padding:120px 0;border-top:0;}
+  .eyebrow{
+    margin:0 0 18px;
+    color:var(--accent-2);
+    font:700 .75rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+  }
+  .display{
+    margin:0;
+    color:var(--text);
+    font-family:Iowan Old Style,Baskerville,"Times New Roman",serif;
+    font-weight:400;
+    line-height:1;
+    letter-spacing:-.04em;
+    text-transform:none;
+    text-wrap:balance;
+  }
+  .section-title{font-size:clamp(2.8rem,5vw,5rem);}
+  .section-intro{max-width:720px;margin:28px 0 0;color:var(--text-muted);font-size:1.08rem;line-height:1.75;}
+  .muted{color:var(--text-muted);}
+  .mono{font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif;}
+
+  /* Header — identical visual language to the Experience page */
+  .site-nav{
+    position:absolute;
+    inset:0 0 auto;
+    z-index:40;
+    color:#fff;
+    background:transparent;
+    border:0;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .nav-inner{height:auto;padding:28px 0;border-bottom:1px solid rgba(255,255,255,.18);}
+  .brand{gap:12px;}
+  .brand-mark{
+    width:40px;
+    height:40px;
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:50%;
+    background:transparent;
+  }
+  .brand-mark svg{width:20px;height:20px;stroke:#fff;}
+  .brand-copy{gap:2px;}
+  .brand-name{
+    color:#fff;
+    font:700 .85rem/1.15 "Avenir Next",Avenir,"Segoe UI",sans-serif;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .brand-sub{color:rgba(255,255,255,.65);font:400 .72rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.07em;text-transform:none;}
+  .nav-links{gap:32px;}
+  .nav-links a{color:rgba(255,255,255,.8);font-size:.84rem;font-weight:400;}
+  .nav-links a:hover,.nav-links a:focus-visible{color:#fff;}
+  .nav-links .nav-cta{
+    min-height:auto;
+    padding:12px 17px;
+    color:#fff;
+    background:transparent;
+    border:1px solid rgba(255,255,255,.5);
+    border-radius:0;
+    font-size:.84rem;
+    font-weight:400;
+    letter-spacing:0;
+    text-transform:none;
+  }
+  .nav-links .nav-cta:hover{color:#10202d;background:#fff;transform:none;}
+  .menu-btn{width:40px;height:40px;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.5);border-radius:0;}
+
+  /* Hero */
+  .hero{
+    min-height:900px;
+    height:100svh;
+    max-height:none;
+    align-items:stretch;
+    color:#fff;
+    background-color:#0b1520;
+    background-image:url('assets/hero.jpg');
+    background-position:54% center;
+  }
+  .hero:before{
+    background:linear-gradient(90deg,rgba(6,15,25,.93) 0%,rgba(6,15,25,.70) 35%,rgba(6,15,25,.12) 70%),linear-gradient(0deg,rgba(4,10,18,.77),transparent 36%);
+  }
+  .hero:after{display:none;}
+  .hero-grid{
+    width:min(var(--max),calc(100% - 48px));
+    margin:0 auto;
+    padding:150px 0 72px;
+    grid-template-columns:1.25fr .75fr;
+    gap:72px;
+    align-items:center;
+  }
+  .hero-kicker{margin-bottom:18px;color:#d99a62;font:700 .75rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.22em;}
+  .hero-kicker:before{display:none;}
+  .hero h1{max-width:790px;color:#fff;font-size:clamp(4.2rem,7.5vw,7.25rem);font-weight:400;line-height:.9;letter-spacing:-.055em;}
+  .hero-lede{max-width:660px;margin:34px 0 0;color:rgba(255,255,255,.8);font-size:clamp(1.05rem,1.8vw,1.24rem);line-height:1.72;}
+  .hero-actions{gap:24px;margin-top:42px;}
+  .button,.nav-cta{
+    min-height:52px;
+    padding:14px 20px;
+    border:0;
+    border-radius:0;
+    color:#fff;
+    background:#142433;
+    font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif;
+    font-size:.85rem;
+    font-weight:700;
+    letter-spacing:.03em;
+    text-transform:none;
+  }
+  .button:hover,.nav-cta:hover{background:#1c3042;transform:translateY(-2px);}
+  .hero .button{color:#10202d;background:#fff;}
+  .hero .button:hover{background:#f0ede7;}
+  .hero .button.secondary{color:#fff;background:transparent;border:1px solid rgba(255,255,255,.45);}
+  .hero .button.secondary:hover{background:rgba(255,255,255,.1);border-color:#fff;}
+  .hero-proof{margin:42px 0 0;border-top:1px solid rgba(255,255,255,.22);border-left:1px solid rgba(255,255,255,.18);display:grid;grid-template-columns:1fr 1fr;gap:0;}
+  .hero-proof li{min-height:62px;display:flex;align-items:center;padding:14px 16px;color:rgba(255,255,255,.68);background:rgba(6,15,25,.2);border:0;border-right:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.18);border-radius:0;font:500 .72rem/1.4 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.04em;text-transform:none;}
+  .hero-proof li:before{display:none;}
+  .hero-card{justify-self:end;width:min(100%,370px);padding:38px;color:#fff;background:rgba(10,24,34,.72);border:1px solid rgba(255,255,255,.22);border-radius:0;box-shadow:none;backdrop-filter:blur(12px);}
+  .hero-card .eyebrow{color:#d99a62;}
+  .hero-card .price{margin:8px 0 12px;color:#fff;font:400 3.3rem/.95 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.04em;}
+  .hero-card .price-label{color:rgba(255,255,255,.68);font-size:.9rem;line-height:1.7;}
+  .hero-card ul{margin:28px 0 0;padding:24px 0 0;border-top:1px solid rgba(255,255,255,.2);gap:13px;}
+  .hero-card li{padding-left:0;color:rgba(255,255,255,.82);font-size:.84rem;line-height:1.5;}
+  .hero-card li:before{display:none;}
+
+  /* Approach */
+  #approach{background:var(--bg);}
+  .philosophy-grid{grid-template-columns:1.05fr .95fr;gap:100px;}
+  .big-statement{margin:0;color:var(--text);font:400 clamp(3rem,5vw,5.2rem)/.98 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.045em;text-transform:none;}
+  .big-statement span{color:var(--accent-2);}
+  .principles{grid-template-columns:1fr 1fr;background:transparent;border-color:#c9c3b8;}
+  .principle{min-height:235px;padding:30px;border-color:#c9c3b8;}
+  .principle-num{margin-bottom:52px;color:var(--accent-2);font:700 .72rem/1.3 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.12em;}
+  .principle h3{margin:0 0 12px;color:var(--text);font:400 1.55rem/1.08 Iowan Old Style,Baskerville,"Times New Roman",serif;text-transform:none;}
+  .principle p{color:#667077;font-size:.92rem;line-height:1.7;}
+
+  /* Real-world scenarios */
+  #training{background:#e8e3d9;}
+  .real-world:before{display:none;}
+  .scenario-grid{grid-template-columns:repeat(3,1fr);gap:0;margin-top:70px;border-top:1px solid #c9c3b8;border-left:1px solid #c9c3b8;}
+  .scenario{min-height:360px;padding:32px;color:var(--text);background:transparent;border:0;border-right:1px solid #c9c3b8;border-bottom:1px solid #c9c3b8;border-radius:0;}
+  .scenario .tag{color:var(--accent-2);font:700 .72rem/1.3 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.15em;}
+  .scenario svg{top:30px;right:30px;width:24px;height:24px;stroke:var(--accent-2);}
+  .scenario h3{margin:112px 0 14px;color:var(--text);font:400 1.9rem/1.04 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.03em;text-transform:none;}
+  .scenario p{color:#667077;font-size:.9rem;line-height:1.72;}
+
+  /* Rates and estimator — home-page navy/copper service-panel language */
+  .alliance-pricing{padding:120px 0;color:#fff;background:#0d1a24;border:0;font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .alliance-pricing:before{display:none;}
+  .network-bar{padding:0 0 20px;color:rgba(255,255,255,.58);border-top:0;border-bottom:1px solid rgba(255,255,255,.22);font:700 .72rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.18em;}
+  .network-code{color:#e3a66f;}
+  .network-dots i{width:6px;height:6px;background:#e3a66f;}
+  .pricing-head{grid-template-columns:1.1fr .72fr;gap:90px;padding:70px 0;}
+  .alliance-pricing .eyebrow{color:#e3a66f;font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .alliance-pricing .display{color:#fff;font-family:Iowan Old Style,Baskerville,"Times New Roman",serif;font-weight:400;line-height:.98;letter-spacing:-.045em;}
+  .pricing-note{color:rgba(255,255,255,.67);font-size:1.05rem;line-height:1.75;}
+  .rate-board{grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,.2);border-left:1px solid rgba(255,255,255,.2);}
+  .rate-cell{min-height:280px;padding:32px;color:#fff;background:linear-gradient(150deg,rgba(36,58,75,.96),rgba(17,32,43,.72));border:0;border-right:1px solid rgba(255,255,255,.2);border-bottom:1px solid rgba(255,255,255,.2);border-radius:0;box-shadow:none;}
+  .rate-cell:nth-child(2){background:linear-gradient(150deg,rgba(116,66,39,.9),rgba(45,31,26,.76));border-color:rgba(255,255,255,.2);}
+  .rate-cell:nth-child(3){background:linear-gradient(150deg,rgba(29,50,65,.96),rgba(12,27,37,.8));}
+  .rate-cell:nth-child(4){background:linear-gradient(150deg,rgba(98,58,37,.9),rgba(40,29,25,.78));}
+  .rate-cell:before{display:none;}
+  .rate-code{color:#e3a66f;font:700 .72rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.17em;}
+  .rate-price{font:400 4.4rem/.82 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.05em;color:#fff;}
+  .rate-price .currency{color:#e3a66f;font-size:1.65rem;}
+  .rate-price .rate-unit{margin-bottom:5px;color:rgba(255,255,255,.58);font:700 .68rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .rate-caption{margin-top:20px;color:rgba(255,255,255,.68);font-size:.82rem;font-weight:400;letter-spacing:.02em;}
+  .estimator-shell{margin-top:40px;color:var(--text);background:var(--bg);border:0;border-radius:0;box-shadow:none;}
+  .estimator-top{padding:18px 22px;color:#fff;background:#07131d;font:700 .72rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.17em;}
+  .estimator-top span:last-child{color:#e3a66f;}
+  .program-selector{background:#ece8df;border-bottom:1px solid #c9c3b8;}
+  .program-tab{padding:18px 8px;color:#667077;background:#ece8df;border-right:1px solid #c9c3b8;font:700 .7rem/1.25 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.08em;}
+  .program-tab:hover{color:var(--text);background:#f4f2ed;}
+  .program-tab.active{color:var(--text);background:#f4f2ed;box-shadow:inset 0 -3px 0 var(--accent);}
+  .program-tab small{color:var(--accent-2);}
+  .estimator-inputs{padding:42px;border-right:1px solid #c9c3b8;background:#f4f2ed;}
+  .route-heading{padding-bottom:28px;border-bottom:1px solid #c9c3b8;}
+  .route-heading h3{color:var(--text);font:400 3rem/1 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.035em;}
+  .route-heading p{color:#667077;font-size:.9rem;line-height:1.72;}
+  .reg-badge{color:var(--accent-2);background:transparent;border:1px solid #c8b8a7;font:700 .68rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .minimum-row,.logbook-row{border-bottom:1px solid #c9c3b8;}
+  .minimum-label{color:var(--accent-2);font:700 .68rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .minimum-value{color:#34434d;}
+  .logbook-copy strong{color:var(--text);}
+  .logbook-copy span{color:#667077;}
+  .hour-field label,.logbook-slider-head{color:#34434d;font:700 .72rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .hour-field label span{color:#34434d;}
+  .slider-value{color:var(--accent-2);background:#fff;border:1px solid #c9c3b8;font:700 .72rem/1 "Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .range-control::-webkit-slider-runnable-track{background:linear-gradient(90deg,var(--accent) var(--range-progress,0%),#d9d4ca var(--range-progress,0%));}
+  .range-control::-moz-range-track{background:#d9d4ca;}
+  .range-control::-moz-range-progress{background:var(--accent);}
+  .range-control::-webkit-slider-thumb{border-color:#f4f2ed;background:#b87843;box-shadow:0 0 0 1px #9c5f31,0 5px 13px rgba(20,32,42,.2);}
+  .range-control::-moz-range-thumb{border-color:#f4f2ed;background:#b87843;box-shadow:0 0 0 1px #9c5f31,0 5px 13px rgba(20,32,42,.2);}
+  .range-control:focus-visible{outline-color:var(--accent);}
+  .estimator-summary{padding:42px;color:#fff;background:#142433;}
+  .summary-label{color:#e3a66f;font:700 .68rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .summary-total{color:#fff;font:400 4.5rem/.9 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.045em;}
+  .summary-basis{color:rgba(255,255,255,.65);font-size:.82rem;line-height:1.7;}
+  .cost-lines{border-top:1px solid rgba(255,255,255,.2);}
+  .cost-line{color:rgba(255,255,255,.62);border-bottom:1px solid rgba(255,255,255,.16);font-size:.82rem;}
+  .cost-line strong{color:#fff;font:700 .82rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .zero-minimum{color:rgba(255,255,255,.65);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);}
+  .estimator-summary .button{color:#fff;background:#bb7542;border:0;border-radius:0;}
+  .estimator-summary .button:hover{background:#ca8550;}
+  .pricing-disclaimer{margin-top:22px;padding:18px 20px;color:rgba(255,255,255,.56);background:rgba(255,255,255,.035);border-left:2px solid #bb7542;font-size:.75rem;line-height:1.75;}
+  .pricing-disclaimer strong{color:rgba(255,255,255,.86);}
+
+  /* Gallery — same dark visual-media field as the Experience film */
+  #gallery{color:#fff;background:#07131d;}
+  #gallery .eyebrow{color:#d99a62;}
+  #gallery .display{color:#fff;}
+  #gallery .section-intro{color:rgba(255,255,255,.67);}
+  .gallery-grid{gap:16px;margin-top:64px;grid-auto-rows:230px;}
+  .gallery-item{background:#10202b;border:0;border-radius:0;}
+  .gallery-item:after{background:linear-gradient(180deg,transparent 40%,rgba(7,19,29,.9) 100%);}
+  .gallery-caption{left:22px;right:22px;bottom:20px;}
+  .gallery-caption strong{color:#fff;font:400 1.45rem/1 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.02em;text-transform:none;}
+  .gallery-caption span{margin-top:7px;color:rgba(255,255,255,.65);font-size:.75rem;line-height:1.5;}
+  .gallery-feature .gallery-caption strong{font-size:2rem;}
+
+  /* Instructor */
+  #instructor{background:var(--bg);}
+  .bio-grid{grid-template-columns:410px 1fr;gap:100px;}
+  .bio-photo{border:0;border-radius:0;background:#e8e3d9;}
+  .bio-badge{left:-18px;bottom:26px;width:190px;padding:18px;color:#fff;background:#bb7542;border-radius:0;box-shadow:none;}
+  .bio-badge strong{font:400 1.75rem/1 Iowan Old Style,Baskerville,"Times New Roman",serif;text-transform:none;}
+  .bio-badge span{font:700 .67rem/1.3 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.13em;}
+  .bio-copy p{margin-top:24px;color:#566169;font-size:1.02rem;line-height:1.8;}
+  .credentials{gap:0;margin-top:36px;border-top:1px solid #c9c3b8;border-left:1px solid #c9c3b8;}
+  .credentials span{min-height:54px;display:flex;align-items:center;padding:12px 14px;color:#34434d;background:transparent;border:0;border-right:1px solid #c9c3b8;border-bottom:1px solid #c9c3b8;border-radius:0;font:700 .68rem/1.35 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.08em;}
+
+  /* Testimonials */
+  #testimonials{background:#e8e3d9;}
+  .testimonials-grid{gap:0;margin-top:64px;border-top:1px solid #c9c3b8;border-left:1px solid #c9c3b8;}
+  .quote-card{min-height:360px;padding:38px;color:var(--text);background:transparent;border:0;border-right:1px solid #c9c3b8;border-bottom:1px solid #c9c3b8;border-radius:0;}
+  .quote-mark{color:var(--accent-2);font-family:Iowan Old Style,Baskerville,"Times New Roman",serif;font-size:4.2rem;}
+  .quote-card blockquote{margin:26px 0 30px;color:#34434d;font-family:Iowan Old Style,Baskerville,"Times New Roman",serif;font-size:1.22rem;line-height:1.55;}
+  .quote-meta{padding-top:20px;color:#667077;border-top:1px solid #c9c3b8;font:700 .68rem/1.6 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.1em;}
+
+  /* FAQ */
+  #faq{background:var(--bg);}
+  .faq{margin-top:56px;border-color:#c9c3b8;}
+  details{border-color:#c9c3b8;}
+  summary{padding:28px 52px 28px 0;color:var(--text);font:400 1.55rem/1.2 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.02em;text-transform:none;}
+  summary:after{right:8px;color:var(--accent-2);font:400 1.35rem/1 "Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  details p{margin:-2px 0 30px;color:#667077;font-size:1rem;line-height:1.75;}
+
+  /* Contact */
+  .contact-section{padding:110px 0;color:#fff;background:#0c1822;}
+  .contact-section .eyebrow{color:#d99a62;}
+  .contact-section .display{color:#fff;}
+  .contact-section .section-intro{color:rgba(255,255,255,.65);}
+  .contact-grid{grid-template-columns:1fr .9fr;gap:80px;align-items:start;}
+  .contact-cards{gap:0;margin-top:42px;border-top:1px solid rgba(255,255,255,.2);}
+  .contact-card{gap:16px;padding:20px 0;color:#fff;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.2);border-radius:0;}
+  .contact-card svg{width:18px;height:18px;stroke:#d99a62;}
+  .contact-card strong{color:#fff;font-size:.72rem;letter-spacing:.1em;}
+  .contact-card span{color:rgba(255,255,255,.62);font-size:.84rem;line-height:1.55;}
+  .form-panel{padding:38px;color:#fff;background:#142433;border:1px solid rgba(255,255,255,.18);border-radius:0;box-shadow:none;}
+  .form-title{margin:0 0 8px;color:#fff;font:400 2.25rem/1 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.03em;text-transform:none;}
+  .form-sub{margin:0 0 28px;color:rgba(255,255,255,.62);font-size:.88rem;line-height:1.65;}
+  form{gap:18px;}
+  .field label{margin-bottom:8px;color:rgba(255,255,255,.7);font:700 .68rem/1.2 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.12em;}
+  .field input,.field select,.field textarea{min-height:52px;padding:13px 14px;color:#fff;background:#0c1b26;border:1px solid rgba(255,255,255,.2);border-radius:0;}
+  .field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.36);}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:#d99a62;box-shadow:0 0 0 2px rgba(217,154,98,.14);}
+  .field select option{background:#0c1b26;}
+  .form-panel .button{color:#fff;background:#bb7542;}
+  .form-panel .button:hover{background:#ca8550;}
+  .form-status{color:rgba(255,255,255,.62);font-size:.8rem;}
+
+  /* Footer */
+  footer{padding:30px 0 36px;color:rgba(255,255,255,.48);background:#071017;border:0;}
+  footer .brand-mark{width:34px;height:34px;}
+  footer .brand-name{font-size:.76rem;}
+  footer .brand-sub{color:rgba(255,255,255,.48);}
+  .footer-grid{grid-template-columns:1.1fr .9fr .9fr;gap:44px;}
+  .footer-copy{color:rgba(255,255,255,.48);font-size:.75rem;line-height:1.7;}
+  .footer-title{margin-bottom:14px;color:#d99a62;font:700 .68rem/1 "Avenir Next",Avenir,"Segoe UI",sans-serif;letter-spacing:.15em;}
+  .footer-links{gap:10px;}
+  .footer-links a{color:rgba(255,255,255,.52);font-size:.75rem;}
+  .footer-links a:hover{color:#fff;}
+  .copyright{margin-top:30px;padding-top:22px;color:rgba(255,255,255,.38);border-color:rgba(255,255,255,.14);font-size:.68rem;}
+  .footer-legal{margin-top:16px;color:rgba(255,255,255,.48);font-size:.72rem;text-align:center;}
+
+  /* Modal */
+  .modal-overlay{background:rgba(4,10,16,.84);backdrop-filter:blur(8px);}
+  .modal-box{padding:40px;color:var(--text);background:#f4f2ed;border:1px solid #c9c3b8;border-radius:0;box-shadow:var(--shadow);}
+  .modal-close{color:var(--text);background:transparent;border:0;border-radius:0;font-size:1.5rem;}
+  .modal-title{color:var(--text);font:400 2.5rem/1 Iowan Old Style,Baskerville,"Times New Roman",serif;letter-spacing:-.03em;text-transform:none;}
+  .modal-body{color:#667077;font-size:1rem;line-height:1.7;}
+
+  @media (max-width:1000px){
+    .nav-links{display:none;position:fixed;top:0;left:0;right:0;bottom:0;padding:96px 24px 34px;flex-direction:column;align-items:flex-start;gap:0;background:rgba(7,16,23,.98);}
+    .nav-links.open{display:flex;}
+    .nav-links a{width:100%;padding:17px 0;color:#fff;border-bottom:1px solid rgba(255,255,255,.16);font-size:1rem;}
+    .nav-links .nav-cta{width:100%;margin-top:22px;padding:15px;justify-content:center;border:1px solid rgba(255,255,255,.5);}
+    .menu-btn{display:grid;place-items:center;z-index:2;}
+    .hero{height:auto;min-height:920px;}
+    .hero-grid{grid-template-columns:1fr;gap:36px;padding-top:150px;align-items:end;}
+    .hero-card{justify-self:start;width:min(100%,560px);}
+    .philosophy-grid,.bio-grid,.contact-grid{grid-template-columns:1fr;gap:60px;}
+    .bio-photo-wrap{max-width:470px;}
+    .scenario-grid{grid-template-columns:repeat(2,1fr);}
+    .rate-board{grid-template-columns:repeat(2,1fr);}
+    .pricing-head{grid-template-columns:1fr;gap:30px;}
+    .program-selector{grid-template-columns:repeat(4,1fr);}
+    .program-tab{border-bottom:1px solid #c9c3b8;}
+    .estimator-grid{grid-template-columns:1fr;}
+    .estimator-inputs{border-right:0;border-bottom:1px solid #c9c3b8;}
+    .testimonials-grid{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:1fr 1fr;grid-auto-rows:240px;}
+    .gallery-feature{grid-column:span 2;grid-row:span 2;}
+    .gallery-wide{grid-column:span 2;}
+  }
+
+  @media (max-width:680px){
+    .wrap,.hero-grid{width:min(100% - 30px,var(--max));}
+    .section,.alliance-pricing{padding:82px 0;}
+    .nav-inner{padding:20px 0;}
+    .brand-sub{display:none;}
+    .brand-mark{width:34px;height:34px;}
+    .hero{min-height:900px;background-position:64% center;}
+    .hero:before{background:linear-gradient(90deg,rgba(5,14,23,.92),rgba(5,14,23,.38)),linear-gradient(0deg,rgba(4,10,18,.82),transparent 48%);}
+    .hero-grid{padding:130px 0 52px;}
+    .hero h1{font-size:clamp(3.55rem,16vw,5.6rem);}
+    .hero-actions{align-items:stretch;display:grid;grid-template-columns:1fr;gap:12px;}
+    .hero-actions .button{width:100%;}
+    .hero-proof{grid-template-columns:1fr;}
+    .hero-card{padding:28px;}
+    .philosophy-grid{gap:48px;}
+    .principles,.scenario-grid{grid-template-columns:1fr;}
+    .principle{min-height:210px;}
+    .scenario{min-height:330px;}
+    .network-bar{align-items:flex-start;}
+    .network-bar > span:nth-child(2){display:none;}
+    .rate-board{grid-template-columns:1fr 1fr;}
+    .rate-cell{min-height:220px;padding:22px 18px;}
+    .rate-code span{display:none;}
+    .rate-price{font-size:3.1rem;}
+    .rate-price .currency{font-size:1.25rem;}
+    .program-selector{grid-template-columns:repeat(2,1fr);}
+    .program-tab:nth-child(2n){border-right:0;}
+    .estimator-inputs,.estimator-summary{padding:28px 20px;}
+    .route-heading{display:block;}
+    .reg-badge{display:inline-block;margin-top:18px;}
+    .summary-total{font-size:3.55rem;}
+    .gallery-grid{grid-template-columns:1fr;grid-auto-rows:240px;}
+    .gallery-feature,.gallery-wide{grid-column:auto;grid-row:auto;}
+    .gallery-feature{min-height:360px;}
+    .bio-badge{left:12px;bottom:12px;}
+    .form-panel{padding:28px 20px;}
+    form{grid-template-columns:1fr;}
+    .field.full,.form-panel .button,.form-status{grid-column:1;}
+    .footer-grid{grid-template-columns:1fr;gap:30px;}
+    .copyright{flex-direction:column;}
+  }
 </style>
 </head>
 <body>
@@ -311,7 +896,7 @@
       <span class="brand-copy"><span class="brand-name">Pilot Consciousness</span><span class="brand-sub">Phoenix, Arizona · CFI / CFII / MEI</span></span>
     </a>
 
-    <nav class="nav-links" id="navLinks">\n      <a href="/">Experiences</a>
+    <nav class="nav-links" id="navLinks">
       <a href="#approach">Approach</a>
       <a href="#training">Training</a>
       <a href="#pricing">Pricing</a>
@@ -335,7 +920,7 @@
         <h1 class="display" id="hero-title">Train For The Flight After The Checkride.</h1>
         <p class="hero-lede">Private, instrument, commercial and instructor training built around aircraft control, judgement, weather, terrain, automation and command — not just memorizing the sequence that gets you through a practical test.</p>
         <div class="hero-actions">
-          <a class="button" href="#pricing">View Training Packages</a>
+          <a class="button" href="#pricing">Estimate Training Cost</a>
           <a class="button secondary" href="#contact">Talk With Your Instructor</a>
         </div>
         <ul class="hero-proof" aria-label="Training highlights">
@@ -346,15 +931,15 @@
         </ul>
       </div>
 
-      <aside class="hero-card" aria-label="Private pilot package">
-        <p class="eyebrow">Private Pilot Package</p>
-        <div class="price">$16,995</div>
-        <div class="price-label">A structured path from first lesson to practical-test readiness, built around capable modern aircraft and deliberate decision-making.</div>
+      <aside class="hero-card" aria-label="Training rates and estimator">
+        <p class="eyebrow">Training Network · Phoenix</p>
+        <div class="price">Build your route.</div>
+        <div class="price-label">Choose a certificate or rating, begin with the FAA minimum, then adjust the hours to fit your logbook and proficiency.</div>
         <ul>
-          <li>One-on-one flight and ground instruction</li>
-          <li>Cross-country, night and controlled-airspace experience</li>
-          <li>Risk, weather and go/no-go judgement integrated from day one</li>
-          <li>Checkride preparation without turning the course into checkride theater</li>
+          <li>Cirrus SR20 · $180/hour dry</li>
+          <li>Seneca · $350/hour dry</li>
+          <li>Instruction · $75/hour</li>
+          <li>Simulator · $50/hour</li>
         </ul>
       </aside>
     </div>
@@ -398,60 +983,77 @@
     </div>
   </section>
 
-  <!-- IMPORTANT: Only the Private Pilot $16,995 figure existed in the source page.
-       Replace the additional package figures below with your actual published rates before launch. -->
-  <section class="section" id="pricing">
+  <section class="section alliance-pricing" id="pricing">
     <div class="wrap">
+      <div class="network-bar">
+        <span class="network-code">Training Network / PHX</span>
+        <span>Part 61 · KFFZ / KDVT</span>
+        <span class="network-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+
       <div class="pricing-head">
-        <div><p class="eyebrow">Certificate packages</p><h2 class="display section-title">What it costs, stated plainly.</h2></div>
-        <p class="pricing-note">The package is a planning tool, not a promise that every pilot needs the same number of hours. Final scope is confirmed after an experience and logbook review.</p>
+        <div><p class="eyebrow">Published hourly rates</p><h2 class="display section-title">State-of-the-art flying. Priced by the hour.</h2></div>
+        <p class="pricing-note">The aircraft and instruction are the headline. Choose a rating below, then drag the sliders from the regulatory starting point to the training plan that fits your logbook.</p>
       </div>
 
-      <div class="pricing-grid">
-        <article class="price-card featured">
-          <span class="cert">Private Pilot · ASEL</span><h3>Private Pilot</h3><p class="desc">From first lesson through practical-test readiness, with real cross-country and command habits built from the beginning.</p><div class="package-price">$16,995</div><div class="package-sub">Complete training package</div>
-          <ul><li>Flight + ground instruction plan</li><li>Night and cross-country training</li><li>Controlled-airspace and diversion experience</li><li>Oral + practical-test preparation</li></ul>
-          <p class="training-outcome"><b>What you actually get</b>Night work, a hot-day performance block, real cross-countries and at least one plan change before you are signed off to make those decisions alone.</p>
-          <button class="button package-btn" data-program="Private Pilot">Ask About Private</button>
-        </article>
-
-        <article class="price-card">
-          <span class="cert">Instrument Rating · Airplane</span><h3>Instrument</h3><p class="desc">IFR training that connects procedures with weather, workload, automation and an actual decision-making framework.</p><div class="package-price">$11,995</div><div class="package-sub">Planning package</div>
-          <ul><li>Scan, control and instrument procedures</li><li>Garmin + autopilot mode awareness</li><li>Approaches, holds, departures and missed approaches</li><li>IFR weather and alternate judgement</li></ul>
-          <p class="training-outcome"><b>What you actually get</b>Approaches hand-flown and coupled, automation management, workload under pressure and a stated missed-approach trigger before the approach gets busy.</p>
-          <button class="button package-btn" data-program="Instrument Rating">Ask About Instrument</button>
-        </article>
-
-        <article class="price-card">
-          <span class="cert">Commercial Pilot · ASEL</span><h3>Commercial</h3><p class="desc">Precision and consistency without reducing commercial training to a collection of maneuvers.</p><div class="package-price">$8,995</div><div class="package-sub">Finish-up planning package</div>
-          <ul><li>Commercial maneuver proficiency</li><li>Energy-management refinement</li><li>Commercial decision-making + standards</li><li>Checkride finish-up plan</li></ul>
-          <p class="training-outcome"><b>What you actually get</b>Commercial precision tied to energy management, passenger-quality operation and the judgement expected of a pilot being paid to make decisions.</p>
-          <button class="button package-btn" data-program="Commercial Pilot">Ask About Commercial</button>
-        </article>
-
-        <article class="price-card">
-          <span class="cert">Flight Instructor · CFI</span><h3>CFI Initial</h3><p class="desc">Learn to teach from the right seat while maintaining command, instructional awareness and disciplined risk management.</p><div class="package-price">$6,995</div><div class="package-sub">Planning package</div>
-          <ul><li>FOI + technical teaching structure</li><li>Right-seat command proficiency</li><li>Error recognition and intervention</li><li>Scenario teaching + practical-test prep</li></ul>
-          <p class="training-outcome"><b>What you actually get</b>You teach from the right seat until observation, explanation, intervention and command can happen at the same time — not just until the lesson plan sounds polished.</p>
-          <button class="button package-btn" data-program="CFI Initial">Ask About CFI</button>
-        </article>
-
-        <article class="price-card">
-          <span class="cert">Instrument Instructor · CFII</span><h3>CFII</h3><p class="desc">Teach instrument flying as workload management, system awareness and judgement — not rote procedure recitation.</p><div class="package-price">$4,495</div><div class="package-sub">Planning package</div>
-          <ul><li>Instrument teaching from the right seat</li><li>Approach and automation instruction</li><li>Student-error recognition</li><li>CFII practical-test preparation</li></ul>
-          <p class="training-outcome"><b>What you actually get</b>You learn to teach an instrument student who is task-saturated, while still managing the airplane, automation, clearance, weather and the student’s next error.</p>
-          <button class="button package-btn" data-program="CFII">Ask About CFII</button>
-        </article>
-
-        <article class="price-card">
-          <span class="cert">Multi-Engine Instructor · MEI</span><h3>MEI</h3><p class="desc">Multi-engine instruction centered on asymmetric control, systems, priorities and calm decision-making.</p><div class="package-price">$5,995</div><div class="package-sub">Planning package</div>
-          <ul><li>OEI aerodynamics and control</li><li>Systems and performance teaching</li><li>Vmc recognition + prevention concepts</li><li>MEI practical-test preparation</li></ul>
-          <p class="training-outcome"><b>What you actually get</b>Asymmetric control and systems are taught through priorities: keep control, identify what changed, protect options, then teach the student how to do the same.</p>
-          <button class="button package-btn" data-program="MEI">Ask About MEI</button>
-        </article>
+      <div class="rate-board" aria-label="Published hourly training rates">
+        <article class="rate-cell"><div class="rate-code"><strong>SR20</strong><span>Single engine</span></div><div class="rate-price"><span class="currency">$</span>180 <span class="rate-unit">/ HR</span></div><div class="rate-caption">Cirrus SR20 · dry</div></article>
+        <article class="rate-cell"><div class="rate-code"><strong>PA-34</strong><span>Multi engine</span></div><div class="rate-price"><span class="currency">$</span>350 <span class="rate-unit">/ HR</span></div><div class="rate-caption">Piper Seneca · dry</div></article>
+        <article class="rate-cell"><div class="rate-code"><strong>CFI</strong><span>Instruction</span></div><div class="rate-price"><span class="currency">$</span>75 <span class="rate-unit">/ HR</span></div><div class="rate-caption">Flight or ground instruction</div></article>
+        <article class="rate-cell"><div class="rate-code"><strong>SIM</strong><span>Training device</span></div><div class="rate-price"><span class="currency">$</span>50 <span class="rate-unit">/ HR</span></div><div class="rate-caption">Simulator · device only</div></article>
       </div>
 
-      <div class="pricing-disclaimer"><strong>Package note:</strong> Final pricing and included hours are confirmed in the written training agreement after an experience and logbook review. Examiner fees, knowledge-test fees, medical certification, renter/non-owned insurance, books/apps and other third-party charges are separate unless specifically included. Training time varies by proficiency and FAA eligibility requirements.</div>
+      <div class="estimator-shell" id="trainingEstimator">
+        <div class="estimator-top"><span>Training Cost Estimator</span><span>Estimate 001 · Dry subtotal</span></div>
+        <div class="program-selector" role="tablist" aria-label="Select a certificate or rating">
+          <button class="program-tab active" type="button" role="tab" aria-selected="true" data-estimate-program="private">Private<small>PVT</small></button>
+          <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="instrument">Instrument<small>IRA</small></button>
+          <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="commercial">Commercial<small>CPL</small></button>
+          <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="multi">Multi<small>AMEL</small></button>
+          <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="cfi">CFI<small>ASEL</small></button>
+          <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="cfii">CFII<small>INSTR</small></button>
+          <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="mei">MEI<small>AMEL</small></button>
+        </div>
+
+        <div class="estimator-grid">
+          <div class="estimator-inputs">
+            <div class="route-heading">
+              <div><h3 id="estimateTitle">Private Pilot</h3><p id="estimateDescription">A first certificate in a technically advanced Cirrus, beginning at the Part 61 aeronautical-experience floor.</p></div>
+              <span class="reg-badge" id="estimateRule">14 CFR § 61.109(a)</span>
+            </div>
+            <div class="minimum-row">
+              <span class="minimum-label">Regulatory starting point</span>
+              <div class="minimum-value" id="estimateMinimum">40 hours total · 20 hours flight training · 10 hours solo</div>
+            </div>
+            <div class="logbook-row" id="logbookRow">
+              <div class="logbook-copy"><strong id="logbookLabel">Current total flight time</strong><span id="logbookHelp">The estimator calculates the remaining time to the applicable floor.</span></div>
+              <div><div class="logbook-slider-head"><span>Logged hours</span><output class="slider-value" id="logbookHoursOutput" for="logbookHours">40 hr</output></div><input class="range-control" id="logbookHours" type="range" min="0" max="300" step="1" value="40" aria-label="Current logged hours"></div>
+            </div>
+            <div class="hour-fields">
+              <div class="hour-field"><label for="sr20Hours"><span>Cirrus SR20 · $180 dry</span><output class="slider-value" id="sr20HoursOutput" for="sr20Hours">40 hr</output></label><input class="range-control" id="sr20Hours" type="range" min="0" max="250" step="1" value="40"></div>
+              <div class="hour-field"><label for="senecaHours"><span>Seneca · $350 dry</span><output class="slider-value" id="senecaHoursOutput" for="senecaHours">0 hr</output></label><input class="range-control" id="senecaHours" type="range" min="0" max="50" step="1" value="0"></div>
+              <div class="hour-field"><label for="instructionHours"><span>Instruction · $75 / hr</span><output class="slider-value" id="instructionHoursOutput" for="instructionHours">20 hr</output></label><input class="range-control" id="instructionHours" type="range" min="0" max="100" step="1" value="20"></div>
+              <div class="hour-field"><label for="simHours"><span>Simulator · $50 / hr</span><output class="slider-value" id="simHoursOutput" for="simHours">0 hr</output></label><input class="range-control" id="simHours" type="range" min="0" max="50" step="1" value="0"></div>
+            </div>
+          </div>
+
+          <aside class="estimator-summary" aria-live="polite">
+            <span class="summary-label">Estimated training subtotal</span>
+            <div class="summary-total" id="estimateTotal">$8,700</div>
+            <p class="summary-basis" id="estimateBasis">Dry aircraft, instruction and simulator time shown below. Adjust any field to model a different plan.</p>
+            <div class="cost-lines">
+              <div class="cost-line"><span>Cirrus SR20</span><strong id="sr20Cost">$7,200</strong></div>
+              <div class="cost-line"><span>Seneca</span><strong id="senecaCost">$0</strong></div>
+              <div class="cost-line"><span>Instruction</span><strong id="instructionCost">$1,500</strong></div>
+              <div class="cost-line"><span>Simulator</span><strong id="simCost">$0</strong></div>
+            </div>
+            <div class="zero-minimum" id="zeroMinimum">The FAA does not prescribe a fixed number of training hours for this route. Add the hours you want to model after a proficiency and logbook review.</div>
+            <a class="button" id="estimateCta" href="#contact">Discuss this training plan</a>
+          </aside>
+        </div>
+      </div>
+
+      <div class="pricing-disclaimer"><strong>Estimator limits:</strong> This is a planning tool, not a quote or guarantee of completion at the regulatory minimum. Dry aircraft rates exclude fuel. Examiner and knowledge-test fees, medical certification, renter/non-owned insurance, books, apps and other third-party charges are not included. Simulator credit depends on the device’s FAA approval and authorization. Eligibility, creditable time and the final training scope are confirmed through a logbook and proficiency review.</div>
     </div>
   </section>
 
@@ -465,52 +1067,52 @@
 
       <div class="gallery-grid" aria-label="Flight training gallery">
         <figure class="gallery-item gallery-feature">
-          <img src="../assets/sunset-flight.webp" alt="Dramatic sunset viewed from the cockpit in flight">
+          <img src="assets/sunset-flight.webp" alt="Dramatic sunset viewed from the cockpit in flight">
           <figcaption class="gallery-caption"><strong>Chasing the last light</strong><span>The view is beautiful. The decisions still matter.</span></figcaption>
         </figure>
 
         <figure class="gallery-item gallery-wide">
-          <img src="../assets/student-flying.webp" alt="Flight student flying while banked over Arizona terrain" loading="lazy">
+          <img src="assets/student-flying.webp" alt="Flight student flying while banked over Arizona terrain" loading="lazy">
           <figcaption class="gallery-caption"><strong>Learning in the airplane</strong><span>Aircraft control, awareness and judgement happen at the same time.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="../assets/cloud-flying.webp" alt="Aircraft flying among building clouds over terrain" loading="lazy">
+          <img src="assets/cloud-flying.webp" alt="Aircraft flying among building clouds over terrain" loading="lazy">
           <figcaption class="gallery-caption"><strong>Cloud work</strong><span>Weather is an operating environment, not a chapter in a book.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="../assets/coastal-weather.webp" alt="Dark weather ahead over the ocean from the cockpit" loading="lazy">
+          <img src="assets/coastal-weather.webp" alt="Dark weather ahead over the ocean from the cockpit" loading="lazy">
           <figcaption class="gallery-caption"><strong>Changing weather</strong><span>Read what is developing before the margins disappear.</span></figcaption>
         </figure>
 
         <figure class="gallery-item gallery-wide">
-          <img src="../assets/arizona-terrain.webp" alt="Rugged Arizona terrain seen through the wing strut" loading="lazy">
+          <img src="assets/arizona-terrain.webp" alt="Rugged Arizona terrain seen through the wing strut" loading="lazy">
           <figcaption class="gallery-caption"><strong>Arizona terrain</strong><span>Terrain, performance and escape options belong in every plan.</span></figcaption>
         </figure>
 
         <figure class="gallery-item gallery-wide">
-          <img src="../assets/night-city.webp" alt="City lights at night seen from a light aircraft" loading="lazy">
+          <img src="assets/night-city.webp" alt="City lights at night seen from a light aircraft" loading="lazy">
           <figcaption class="gallery-caption"><strong>Night operations</strong><span>Different cues, different illusions, different margins.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="../assets/instructor-cessna.webp" alt="Flight instructor standing beside a training aircraft" loading="lazy">
+          <img src="assets/instructor-cessna.webp" alt="Flight instructor standing beside a training aircraft" loading="lazy">
           <figcaption class="gallery-caption"><strong>Your instructor</strong><span>Same instructor, start to finish.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="../assets/simulator-instruction.webp" alt="Aviation students gathered around an advanced flight simulator" loading="lazy">
+          <img src="assets/simulator-instruction.webp" alt="Aviation students gathered around an advanced flight simulator" loading="lazy">
           <figcaption class="gallery-caption"><strong>Systems + simulation</strong><span>Use the simulator to think farther ahead than the airplane lets you.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="../assets/twin-comanche.webp" alt="Twin-engine training aircraft viewed from the front" loading="lazy">
+          <img src="assets/twin-comanche.webp" alt="Twin-engine training aircraft viewed from the front" loading="lazy">
           <figcaption class="gallery-caption"><strong>Multi-engine</strong><span>Control first. Diagnose second. Preserve options.</span></figcaption>
         </figure>
 
         <figure class="gallery-item">
-          <img src="../assets/night-flight-student.webp" alt="Flight instructor and student together in an aircraft at night" loading="lazy">
+          <img src="assets/night-flight-student.webp" alt="Flight instructor and student together in an aircraft at night" loading="lazy">
           <figcaption class="gallery-caption"><strong>The people in the cockpit</strong><span>Good instruction is technical, demanding and human.</span></figcaption>
         </figure>
       </div>
@@ -522,7 +1124,7 @@
   <section class="section" id="instructor">
     <div class="wrap bio-grid">
       <div class="bio-photo-wrap">
-        <img class="bio-photo" src="../assets/instructor.jpg?v=2" alt="Shaurye, flight instructor, in the cockpit">
+        <img class="bio-photo" src="assets/instructor.jpg?v=2" alt="Shaurye, flight instructor, in the cockpit">
         <div class="bio-badge"><strong>CFI / CFII / MEI</strong><span>Phoenix, Arizona</span></div>
       </div>
       <div class="bio-copy">
@@ -590,7 +1192,7 @@
         <details><summary>Do I need prior experience in a Cirrus?</summary><p>No. Cirrus systems, avionics, automation and CAPS concepts can be taught as part of the training. The objective is to use capability intelligently without letting equipment replace fundamental aircraft control.</p></details>
         <details><summary>Can you help if I already started training somewhere else?</summary><p>Yes. Finish-up training starts with a logbook and proficiency review. The point is to identify the actual weak links and build the shortest responsible plan to independent, repeatable performance.</p></details>
         
-        <details><summary>What is included in a package?</summary><p>The exact included hours and aircraft economics should be confirmed in the written training agreement for the package you choose. The prices on this page are presented as planning packages; third-party fees should be identified separately before you begin.</p></details>
+        <details><summary>What does the estimator include?</summary><p>It multiplies the aircraft, instruction and simulator hours you select by the published hourly rates. Aircraft prices are dry, so fuel is separate. Examiner and test fees, insurance, medical certification, books, apps and other third-party costs are also outside the estimate.</p></details>
         
       </div>
     </div>
@@ -603,7 +1205,7 @@
         <h2 class="display section-title">Schedule a call.</h2>
         <p class="section-intro">Tell me where you are starting and what you want to accomplish. I’ll reply with the clearest next step.</p>
         <div class="contact-cards">
-          <a class="contact-card" href="mailto:info@pilotconsciousness.com"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 5h18v14H3z"/><path d="M3 6l9 7 9-7"/></svg><span><strong>Email</strong><span>info@pilotconsciousness.com</span></span></a>
+          <a class="contact-card" href="/cdn-cgi/l/email-protection#60090e060f2010090c0f14030f0e1303090f15130e0513134e030f0d"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 5h18v14H3z"/><path d="M3 6l9 7 9-7"/></svg><span><strong>Email</strong><span><span class="__cf_email__" data-cfemail="bed7d0d8d1feced7d2d1caddd1d0cdddd7d1cbcdd0dbcdcd90ddd1d3">[email&#160;protected]</span></span></span></a>
           <a class="contact-card" href="tel:+16024924042"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M6.6 3.5l3 4.4-2.1 2.2c1.3 2.7 3.5 4.9 6.2 6.2l2.2-2.1 4.4 3c.4.3.6.8.4 1.3-.7 1.8-2.4 3-4.3 3C9 21.5 2.5 15 2.5 7.1c0-1.9 1.2-3.6 3-4.3.4-.2.9 0 1.1.7z"/></svg><span><strong>Phone</strong><span>(602) 492-4042</span></span></a>
           <div class="contact-card"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span><strong>Training Area</strong><span>Phoenix, Arizona · KFFZ and KDVT · other locations on request</span></span></div>
         </div>
@@ -613,13 +1215,16 @@
         <h3 class="form-title">Schedule a call</h3>
         <p class="form-sub">Choose your preferred call time and tell me what you want to accomplish.</p>
         <form id="inquiryForm">
-<input type="hidden" name="subject" value="Call Request — Pilot Consciousness">
-<div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
+          <input type="hidden" name="access_key" value="ceab2eb4-7886-4a5a-bb11-8d9fbe5c3f1d">
+          <input type="hidden" name="subject" value="Call Request — Pilot Consciousness">
+          <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off">
+
+          <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
           <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
           <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" required></div>
           <div class="field"><label for="callDate">Preferred Call Date</label><input id="callDate" name="call_date" type="date" required></div>
           <div class="field"><label for="callTime">Preferred Call Time</label><input id="callTime" name="call_time" type="time" required></div>
-          <div class="field"><label for="program">Training Goal</label><select id="program" name="program" required><option value="">Choose one</option><option>Private Pilot</option><option>Instrument Rating</option><option>Commercial Pilot</option><option>CFI Initial</option><option>CFII</option><option>MEI</option><option>Finish-Up / Proficiency</option><option>Other</option></select></div>
+          <div class="field"><label for="program">Training Goal</label><select id="program" name="program" required><option value="">Choose one</option><option>Private Pilot</option><option>Instrument Rating</option><option>Commercial Pilot</option><option>Multi-Engine Add-On</option><option>CFI Initial</option><option>CFII</option><option>MEI</option><option>Finish-Up / Proficiency</option><option>Other</option></select></div>
           <div class="field full"><label for="experience">Current Experience</label><input id="experience" name="experience" type="text" placeholder="Example: zero time, 35 hours / soloed, 250-hour commercial pilot, etc."></div>
           <div class="field full"><label for="message">What do you want from the training?</label><textarea id="message" name="message" placeholder="Certificate goal, timeline, aircraft access, what has been difficult so far, or the kind of flying you want to be capable of."></textarea></div>
           <button class="button" type="submit" id="submitBtn">Request Call</button>
@@ -634,13 +1239,13 @@
   <div class="wrap">
     <div class="footer-grid">
       <div><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="9.2"/><path d="M12 4.2v3.4M12 16.4v3.4M4.2 12h3.4M16.4 12h3.4"/><path d="M12 8l2.6 4-2.6 4-2.6-4z"/></svg></span><span class="brand-copy"><span class="brand-name">Pilot Consciousness</span><span class="brand-sub">Real-world flight instruction</span></span></a><p class="footer-copy">Private through instructor training in Phoenix, Arizona.</p></div>
-      <div><div class="footer-title">Training</div><div class="footer-links"><a href="#pricing">Private Pilot</a><a href="#pricing">Instrument Rating</a><a href="#pricing">Commercial Pilot</a><a href="#pricing">CFI / CFII / MEI</a></div></div>
-      <div><div class="footer-title">Contact</div><div class="footer-links"><a href="mailto:info@pilotconsciousness.com">info@pilotconsciousness.com</a><a href="tel:+16024924042">(602) 492-4042</a><a href="#contact">Phoenix, Arizona · KFFZ / KDVT</a><a href="#faq">Frequently Asked Questions</a></div></div>
+      <div><div class="footer-title">Training</div><div class="footer-links"><a href="#pricing">Private Pilot</a><a href="#pricing">Instrument Rating</a><a href="#pricing">Commercial / Multi</a><a href="#pricing">CFI / CFII / MEI</a></div></div>
+      <div><div class="footer-title">Contact</div><div class="footer-links"><a href="/cdn-cgi/l/email-protection#82ebece4edc2f2ebeeedf6e1edecf1e1ebedf7f1ece7f1f1ace1edef"><span class="__cf_email__" data-cfemail="d3babdb5bc93a3babfbca7b0bcbda0b0babca6a0bdb6a0a0fdb0bcbe">[email&#160;protected]</span></a><a href="tel:+16024924042">(602) 492-4042</a><a href="#contact">Phoenix, Arizona · KFFZ / KDVT</a><a href="#faq">Frequently Asked Questions</a></div></div>
     </div>
-    <div class="copyright"><span>© <span id="year"></span> Pilot Consciousness. All rights reserved.</span><span>Training availability, aircraft, package assumptions and pricing subject to written agreement.</span></div>
+    <div class="copyright"><span>© <span id="year"></span> Pilot Consciousness. All rights reserved.</span><span>Training availability, aircraft, estimator assumptions and pricing subject to written agreement.</span></div>
   </div>
 
-  <div class="footer-legal"><a href="../terms.html" class="footer-link">Terms of Use</a></div>
+  <div class="footer-legal"><a href="terms.html" class="footer-link">Terms of Use</a></div>
 </footer>
 
 <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
@@ -651,7 +1256,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function(){
   var menuBtn=document.getElementById('menuBtn');
   var navLinks=document.getElementById('navLinks');
@@ -674,17 +1279,175 @@
   }
 
   var program=document.getElementById('program');
+
+  var trainingPrograms={
+    private:{
+      contact:'Private Pilot',title:'Private Pilot',rule:'14 CFR § 61.109(a)',
+      description:'A first certificate in a technically advanced Cirrus, beginning at the Part 61 aeronautical-experience floor.',
+      minimum:'40 hours total · 20 hours flight training · 10 hours solo',
+      basis:'The FAA minimum is the starting point. Most pilots require additional time to reach practical-test proficiency.',
+      sr20:40,seneca:0,instruction:20,sim:0
+    },
+    instrument:{
+      contact:'Instrument Rating',title:'Instrument Rating',rule:'14 CFR § 61.65(d), (i)',
+      description:'IFR training that combines aircraft control, procedures, weather decisions and deliberate automation use.',
+      minimum:'50 hours XC PIC · 40 hours instrument · 15 hours with a CFII',
+      basis:'Preset models 30 aircraft hours plus 10 hours in an eligible FAA-approved aviation training device. Any cross-country PIC shortfall is separate.',
+      sr20:30,seneca:0,instruction:15,sim:10
+    },
+    commercial:{
+      contact:'Commercial Pilot',title:'Commercial Pilot',rule:'14 CFR § 61.129(a)',
+      description:'A logbook-aware route to commercial ASEL eligibility, precision and passenger-quality aircraft operation.',
+      minimum:'250 hours total · 100 hours PIC · 20 hours training',
+      basis:'Aircraft time is calculated from current total time to the 250-hour floor. Other category, PIC and cross-country requirements still require logbook review.',
+      sr20:210,seneca:0,instruction:20,sim:0,logbook:'total',logbookValue:40,
+      logbookLabel:'Current total flight time',logbookHelp:'Remaining SR20 time is calculated to the 250-hour Part 61 floor.'
+    },
+    multi:{
+      contact:'Multi-Engine Add-On',title:'Multi-Engine Add-On',rule:'14 CFR § 61.63(c)',
+      description:'Add airplane multiengine land privileges through focused Seneca training and practical-test proficiency.',
+      minimum:'No prescribed flight-hour minimum · Training and proficiency required',
+      basis:'Part 61 does not impose a fixed training-time minimum for an additional class rating. Enter the Seneca and instruction hours you want to model.',
+      sr20:0,seneca:0,instruction:0,sim:0,noMinimum:true
+    },
+    cfi:{
+      contact:'CFI Initial',title:'CFI Initial',rule:'14 CFR §§ 61.183, 61.187',
+      description:'Right-seat command, instructional skill, error recognition and practical-test preparation.',
+      minimum:'15 hours PIC ASEL eligibility · No prescribed training-hour minimum',
+      basis:'The FAA requires applicable flight and ground training plus proficiency, but does not prescribe a fixed CFI training total. Add the hours you want to model.',
+      sr20:0,seneca:0,instruction:0,sim:0,noMinimum:true
+    },
+    cfii:{
+      contact:'CFII',title:'CFII',rule:'14 CFR §§ 61.183, 61.187',
+      description:'Learn to teach instrument flying while managing the airplane, automation, clearance, weather and student workload.',
+      minimum:'Applicable training and proficiency · No prescribed training-hour minimum',
+      basis:'The FAA defines knowledge, training and proficiency requirements for CFII, not a fixed number of training hours. Add the hours you want to model.',
+      sr20:0,seneca:0,instruction:0,sim:0,noMinimum:true
+    },
+    mei:{
+      contact:'MEI',title:'MEI',rule:'14 CFR §§ 61.183(j), 61.187',
+      description:'Multiengine instruction centered on asymmetric control, systems, priorities and calm decision-making.',
+      minimum:'15 hours PIC AMEL eligibility · Training and proficiency required',
+      basis:'Seneca time is calculated from current multiengine PIC time to the 15-hour eligibility floor. Required instructional preparation has no fixed hour minimum.',
+      sr20:0,seneca:15,instruction:0,sim:0,logbook:'multiPic',logbookValue:0,
+      logbookLabel:'Current multiengine PIC time',logbookHelp:'Remaining Seneca time is calculated to the 15-hour PIC eligibility floor.'
+    }
+  };
+  var rates={sr20:180,seneca:350,instruction:75,sim:50};
+  var activeEstimate='private';
+  var estimateTitle=document.getElementById('estimateTitle');
+  var estimateRule=document.getElementById('estimateRule');
+  var estimateDescription=document.getElementById('estimateDescription');
+  var estimateMinimum=document.getElementById('estimateMinimum');
+  var estimateBasis=document.getElementById('estimateBasis');
+  var estimateTotal=document.getElementById('estimateTotal');
+  var zeroMinimum=document.getElementById('zeroMinimum');
+  var logbookRow=document.getElementById('logbookRow');
+  var logbookHours=document.getElementById('logbookHours');
+  var logbookHoursOutput=document.getElementById('logbookHoursOutput');
+  var logbookLabel=document.getElementById('logbookLabel');
+  var logbookHelp=document.getElementById('logbookHelp');
+  var estimateInputs={
+    sr20:document.getElementById('sr20Hours'),seneca:document.getElementById('senecaHours'),
+    instruction:document.getElementById('instructionHours'),sim:document.getElementById('simHours')
+  };
+  var estimateCosts={
+    sr20:document.getElementById('sr20Cost'),seneca:document.getElementById('senecaCost'),
+    instruction:document.getElementById('instructionCost'),sim:document.getElementById('simCost')
+  };
+  var estimateOutputs={
+    sr20:document.getElementById('sr20HoursOutput'),seneca:document.getElementById('senecaHoursOutput'),
+    instruction:document.getElementById('instructionHoursOutput'),sim:document.getElementById('simHoursOutput')
+  };
+  var senecaField=estimateInputs.seneca.closest('.hour-field');
+  var money=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+  function safeHours(input){var value=parseFloat(input.value);return Number.isFinite(value)&&value>0?value:0;}
+  function updateRange(input,output){
+    var value=safeHours(input);
+    var min=parseFloat(input.min)||0;
+    var max=parseFloat(input.max)||100;
+    var progress=max>min?((value-min)/(max-min))*100:0;
+    input.style.setProperty('--range-progress',progress+'%');
+    if(output)output.textContent=value+' hr';
+  }
+  function enforceInstructionMinimum(){
+    var required=safeHours(estimateInputs.sr20)+safeHours(estimateInputs.seneca)+safeHours(estimateInputs.sim);
+    var current=safeHours(estimateInputs.instruction);
+    estimateInputs.instruction.min=String(required);
+    estimateInputs.instruction.max=String(Math.max(100,required+100,current));
+    if(current<required)estimateInputs.instruction.value=String(required);
+  }
+  function updateSenecaVisibility(key){
+    var showSeneca=key==='multi'||key==='mei';
+    senecaField.hidden=!showSeneca;
+    if(!showSeneca)estimateInputs.seneca.value='0';
+  }
+  function updateEstimate(){
+    var item=trainingPrograms[activeEstimate];
+    var total=0;
+    enforceInstructionMinimum();
+    Object.keys(estimateInputs).forEach(function(key){
+      updateRange(estimateInputs[key],estimateOutputs[key]);
+      var cost=safeHours(estimateInputs[key])*rates[key];
+      estimateCosts[key].textContent=money.format(cost);
+      total+=cost;
+    });
+    estimateTotal.textContent=item.noMinimum&&total===0?'Add hours':money.format(total);
+  }
+  function updateLogbookCalculation(){
+    var item=trainingPrograms[activeEstimate];
+    if(!item.logbook)return;
+    var logged=safeHours(logbookHours);
+    updateRange(logbookHours,logbookHoursOutput);
+    if(item.logbook==='total') estimateInputs.sr20.value=Math.max(0,250-logged).toFixed(1).replace('.0','');
+    if(item.logbook==='multiPic') estimateInputs.seneca.value=Math.max(0,15-logged).toFixed(1).replace('.0','');
+    updateEstimate();
+  }
+  function selectEstimate(key){
+    var item=trainingPrograms[key];
+    if(!item)return;
+    activeEstimate=key;
+    document.querySelectorAll('[data-estimate-program]').forEach(function(tab){
+      var selected=tab.getAttribute('data-estimate-program')===key;
+      tab.classList.toggle('active',selected);
+      tab.setAttribute('aria-selected',String(selected));
+    });
+    estimateTitle.textContent=item.title;
+    estimateRule.textContent=item.rule;
+    estimateDescription.textContent=item.description;
+    estimateMinimum.textContent=item.minimum;
+    estimateBasis.textContent=item.basis;
+    estimateInputs.sr20.value=item.sr20;
+    estimateInputs.seneca.value=item.seneca;
+    estimateInputs.instruction.value=item.instruction;
+    estimateInputs.sim.value=item.sim;
+    updateSenecaVisibility(key);
+    logbookRow.classList.toggle('visible',Boolean(item.logbook));
+    if(item.logbook){
+      logbookHours.max=item.logbook==='total'?300:30;
+      logbookHours.value=item.logbookValue;
+      logbookLabel.textContent=item.logbookLabel;
+      logbookHelp.textContent=item.logbookHelp;
+      updateRange(logbookHours,logbookHoursOutput);
+    }
+    zeroMinimum.classList.toggle('visible',Boolean(item.noMinimum));
+    if(program)program.value=item.contact;
+    updateEstimate();
+  }
+  document.querySelectorAll('[data-estimate-program]').forEach(function(tab){
+    tab.addEventListener('click',function(){selectEstimate(tab.getAttribute('data-estimate-program'));});
+  });
+  Object.keys(estimateInputs).forEach(function(key){estimateInputs[key].addEventListener('input',updateEstimate);});
+  logbookHours.addEventListener('input',updateLogbookCalculation);
+  updateSenecaVisibility(activeEstimate);
+  updateEstimate();
+  updateRange(logbookHours,logbookHoursOutput);
+  var estimateCta=document.getElementById('estimateCta');
+  estimateCta.addEventListener('click',function(){if(program)program.value=trainingPrograms[activeEstimate].contact;});
+
   document.querySelectorAll('[data-program-link]').forEach(function(link){
     link.addEventListener('click',function(){
       if(program) program.value=link.getAttribute('data-program-link') || '';
-    });
-  });
-
-  document.querySelectorAll('.package-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      program.value=btn.getAttribute('data-program') || '';
-      document.getElementById('contact').scrollIntoView({behavior:'smooth'});
-      setTimeout(function(){document.getElementById('name').focus();},450);
     });
   });
 
@@ -705,21 +1468,26 @@
 
   form.addEventListener('submit',function(e){
     e.preventDefault();
-    var data=new FormData(form);
-    var body=[
-      'Name: '+(data.get('name')||''),
-      'Email: '+(data.get('email')||''),
-      'Phone: '+(data.get('phone')||''),
-      'Preferred call date: '+(data.get('call_date')||''),
-      'Preferred call time: '+(data.get('call_time')||''),
-      'Training goal: '+(data.get('program')||''),
-      'Current experience: '+(data.get('experience')||''),
-      '',
-      'Training objective:',
-      data.get('message')||''
-    ].join('\\n');
-    status.textContent='Opening your email app…';
-    window.location.href='mailto:info@pilotconsciousness.com?subject='+encodeURIComponent('Call Request — Pilot Consciousness')+'&body='+encodeURIComponent(body);
+    submitBtn.disabled=true;
+    submitBtn.textContent='Sending…';
+    status.textContent='Sending your call request…';
+
+    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Accept':'application/json'},body:new FormData(form)})
+      .then(function(res){return res.json();})
+      .then(function(json){
+        if(json&&json.success){
+          status.textContent='Call request sent.';
+          showModal('Call Requested','Thanks — your preferred date and time have been sent. I’ll confirm the call using the contact information you provided.');
+          form.reset();
+        }else{
+          throw new Error('Submission failed');
+        }
+      })
+      .catch(function(){
+        status.textContent='The form could not send. Please email info@pilotconsciousness.com directly.';
+        showModal('Could Not Send','The form could not submit right now. Please email info@pilotconsciousness.com directly.');
+      })
+      .finally(function(){submitBtn.disabled=false;submitBtn.textContent=originalLabel;});
   });
 })();
 </script>
