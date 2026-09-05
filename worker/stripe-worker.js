@@ -10,6 +10,7 @@ const PRODUCTS = {
 };
 
 const STRIPE_VERSION = '2025-03-31.basil';
+const BUILD_ID = 'stripe-worker-diagnostics-2026-09-05-1';
 
 function cors(origin) {
   const allowed = ALLOWED_ORIGINS.has(origin) ? origin : 'https://pilotconsciousness.com';
@@ -57,7 +58,13 @@ async function createCheckoutSession(request, env, origin) {
   try { product = validateBooking(body); }
   catch (error) { return json({ error: error.message }, 400, origin); }
 
-  if (!env.STRIPE_SECRET_KEY) return json({ error: 'Stripe secret key is not configured on the Worker.' }, 500, origin);
+  if (!env.STRIPE_SECRET_KEY) {
+    return json({
+      error: 'Stripe secret key is not configured on the Worker.',
+      build: BUILD_ID,
+      hasStripeSecret: false
+    }, 500, origin);
+  }
 
   const p = new URLSearchParams();
   p.set('mode', 'payment');
@@ -96,13 +103,14 @@ async function createCheckoutSession(request, env, origin) {
     body: p
   });
   const data = await stripe.json();
-  if (!stripe.ok) return json({ error: data?.error?.message || 'Stripe could not create the checkout.' }, 502, origin);
-  return json({ client_secret: data.client_secret, session_id: data.id }, 200, origin);
+  if (!stripe.ok) return json({ error: data?.error?.message || 'Stripe could not create the checkout.', build: BUILD_ID }, 502, origin);
+  return json({ client_secret: data.client_secret, session_id: data.id, build: BUILD_ID }, 200, origin);
 }
 
 async function retrieveSession(url, env, origin) {
   const id = new URL(url).searchParams.get('session_id');
   if (!id || !/^cs_/.test(id)) return json({ error: 'Invalid session.' }, 400, origin);
+  if (!env.STRIPE_SECRET_KEY) return json({ error: 'Stripe secret key is not configured on the Worker.', build: BUILD_ID, hasStripeSecret: false }, 500, origin);
   const r = await fetch(`https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(id)}`, {
     headers: {
       'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
@@ -116,7 +124,8 @@ async function retrieveSession(url, env, origin) {
     payment_status: data.payment_status,
     status: data.status,
     amount_total: data.amount_total,
-    metadata: data.metadata || {}
+    metadata: data.metadata || {},
+    build: BUILD_ID
   }, 200, origin);
 }
 
@@ -127,7 +136,15 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
 
     if (url.pathname === '/config' && request.method === 'GET') {
-      return json({ publishableKey: env.STRIPE_PUBLISHABLE_KEY }, 200, origin);
+      return json({ publishableKey: env.STRIPE_PUBLISHABLE_KEY, build: BUILD_ID }, 200, origin);
+    }
+    if (url.pathname === '/health' && request.method === 'GET') {
+      return json({
+        ok: true,
+        build: BUILD_ID,
+        hasStripePublishableKey: Boolean(env.STRIPE_PUBLISHABLE_KEY),
+        hasStripeSecret: Boolean(env.STRIPE_SECRET_KEY)
+      }, 200, origin);
     }
     if (url.pathname === '/create-checkout-session' && request.method === 'POST') {
       return createCheckoutSession(request, env, origin);
@@ -135,6 +152,6 @@ export default {
     if (url.pathname === '/session' && request.method === 'GET') {
       return retrieveSession(request.url, env, origin);
     }
-    return json({ error: 'Not found.' }, 404, origin);
+    return json({ error: 'Not found.', build: BUILD_ID }, 404, origin);
   }
 };
