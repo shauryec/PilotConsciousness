@@ -57,13 +57,14 @@ async function createCheckoutSession(request, env, origin) {
   try { product = validateBooking(body); }
   catch (error) { return json({ error: error.message }, 400, origin); }
 
+  if (!env.STRIPE_SECRET_KEY) return json({ error: 'Stripe secret key is not configured on the Worker.' }, 500, origin);
+
   const p = new URLSearchParams();
   p.set('mode', 'payment');
-  p.set('ui_mode', 'custom');
+  p.set('ui_mode', 'elements');
   p.set('return_url', 'https://pilotconsciousness.com/booking.html?session_id={CHECKOUT_SESSION_ID}');
   p.set('customer_email', body.contact.email);
   p.set('billing_address_collection', 'required');
-  p.set('payment_method_data[allow_redisplay]', 'limited');
   p.set('line_items[0][quantity]', '1');
   p.set('line_items[0][price_data][currency]', 'usd');
   p.set('line_items[0][price_data][unit_amount]', String(product.amount));
