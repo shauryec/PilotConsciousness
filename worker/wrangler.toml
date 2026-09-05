@@ -2,14 +2,13 @@ name = "pilotconsciousness"
 main = "stripe-worker.js"
 compatibility_date = "2026-09-05"
 
-# Public Stripe key. Safe to expose to the browser.
+# Preserve variables and secrets configured in the Cloudflare dashboard
+# when Git/Workers Builds runs `wrangler deploy`.
+keep_vars = true
+
 [vars]
 STRIPE_PUBLISHABLE_KEY = "pk_test_51UCCEsRKpdDPxcg0cCgvfdTE73Szq1FQ8r6wTdCfCdomDv8Lh9OdlH1UqbeXrhCGlkJJhyv1wWcEOfdBAwKS7YvR00URhW9N8P"
 
-# Dedicated booking API hostname.
 [[routes]]
 pattern = "bookings-api.pilotconsciousness.com"
 custom_domain = true
-
-# Private Stripe key must be configured in Cloudflare as a Secret named:
-# STRIPE_SECRET_KEY
