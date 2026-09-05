@@ -2,9 +2,19 @@ name = "pilot-consciousness-bookings"
 main = "stripe-worker.js"
 compatibility_date = "2026-09-05"
 
-# Set these as Worker secrets / variables before deployment:
-# wrangler secret put STRIPE_SECRET_KEY
-# wrangler secret put STRIPE_PUBLISHABLE_KEY
+# Publishable Stripe keys are safe to expose to the browser.
+[vars]
+STRIPE_PUBLISHABLE_KEY = "pk_test_51UCCEsRKpdDPxcg0cCgvfdTE73Szq1FQ8r6wTdCfCdomDv8Lh9OdlH1UqbeXrhCGlkJJhyv1wWcEOfdBAwKS7YvR00URhW9N8P"
 
-# Recommended custom domain after deploy:
-# bookings-api.pilotconsciousness.com
+# Keep the booking API on a dedicated Cloudflare-managed hostname.
+# booking.html already points here.
+[[routes]]
+pattern = "bookings-api.pilotconsciousness.com"
+custom_domain = true
+
+# Required private secret before deployment:
+#   wrangler secret put STRIPE_SECRET_KEY
+# Paste the Stripe sk_test_... value only into the Cloudflare secret prompt.
+
+# Deploy from this directory with:
+#   wrangler deploy
