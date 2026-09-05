@@ -14,7 +14,36 @@
     .fare-price strong{font-size:clamp(3rem,4.5vw,4.35rem);line-height:.82;letter-spacing:-.055em;font-weight:650;font-variant-numeric:tabular-nums;color:inherit}
     .fare-detail{margin:0 0 .12rem;max-width:15rem;font-size:.78rem;line-height:1.45;letter-spacing:.07em;text-transform:uppercase;font-weight:650;opacity:.76}
     .fare-detail b{display:block;margin-top:.18rem;font-weight:800;opacity:1}
-    @media (max-width:640px){.experience-fare{grid-template-columns:1fr;gap:.75rem}.fare-price strong{font-size:3.7rem}}
+
+    /* Booking is the only boxed action on the page. */
+    .booking-cta{position:relative;overflow:hidden;isolation:isolate;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+    .booking-cta:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 0 35%,rgba(255,255,255,.16) 48%,transparent 61%);transform:translateX(-130%);transition:transform .65s ease;pointer-events:none;z-index:-1}
+    .booking-cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.18)}
+    .booking-cta:hover:after{transform:translateX(130%)}
+    .booking-cta svg{transition:transform .18s ease}.booking-cta:hover svg{transform:translateX(4px)}
+    .hero-booking{min-width:220px;justify-content:space-between;padding-inline:1.35rem}
+    .hero-actions .text-link.internal-link{opacity:.82}
+
+    /* Route strip remains the airline-style fare selector, but every panel now starts checkout. */
+    .route-strip a{transition:background .18s ease,transform .18s ease}
+    .route-strip a:hover{transform:translateY(-2px)}
+    .route-strip a strong:after{content:" · Book";font-weight:700;opacity:.58}
+
+    /* Internal/exploratory links are intentionally unboxed. */
+    .plain-link{display:inline-flex;align-items:center;gap:.55rem;margin-top:1.35rem;color:inherit;text-decoration:none;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;font-weight:750;border:0!important;background:transparent!important;padding:0!important;box-shadow:none!important}
+    .plain-link svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;transition:transform .18s ease}
+    .plain-link:hover svg{transform:translateX(4px)}
+
+    /* Make the actual purchase decision on each experience card feel deliberate and premium. */
+    .experience-card>a.booking-cta{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:58px;padding:0 1.25rem!important;margin-top:.2rem!important;font-size:.76rem!important;letter-spacing:.11em!important;text-transform:uppercase;font-weight:850!important}
+    .lesson-card>a.booking-cta{box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+    .tour-card>a.booking-cta{box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+
+    .booking-band{display:flex;align-items:center;justify-content:space-between;gap:28px;margin:44px 0 8px;padding:26px 28px;background:#0b1520;color:white}
+    .booking-band p{margin:0;color:rgba(255,255,255,.64);font-size:.78rem;line-height:1.5;letter-spacing:.04em}.booking-band strong{display:block;margin-bottom:.28rem;font-family:Georgia,"Times New Roman",serif;font-size:1.65rem;font-weight:400;letter-spacing:-.025em;color:white}
+    .booking-band .button{flex:none;min-width:210px}
+
+    @media (max-width:760px){.booking-band{align-items:stretch;flex-direction:column}.booking-band .button{width:100%;min-width:0}.hero-booking{min-width:0}.experience-fare{grid-template-columns:1fr;gap:.75rem}.fare-price strong{font-size:3.7rem}}
   </style>
 </head>
 <body>
@@ -47,7 +76,7 @@
           <a href="/training/">Flight training</a>
           <a href="#pilot-services">Pilot services</a>
           <a href="#standard">The standard</a>
-          <a class="nav-cta" href="#contact">Book a flight</a>
+          <a class="nav-cta booking-cta" href="/booking.html">Book a flight</a>
         </nav>
       </header>
 
@@ -56,15 +85,16 @@
         <h1 id="hero-title">From the cabin to command.</h1>
         <p class="hero-copy">A first encounter with the aircraft as pilots know it: disciplined, precise, and alive. Fly with a professional instructor—or see Phoenix from a flight deck built for two.</p>
         <div class="hero-actions">
-          <a class="button button-light" href="#experiences">Choose your route <svg><use href="#i-arrow-down"/></svg></a>
+          <a class="button button-light booking-cta hero-booking" href="/booking.html">Reserve your flight <svg><use href="#i-arrow-right"/></svg></a>
+          <a class="text-link internal-link" href="#experiences">View experiences <svg><use href="#i-arrow-down"/></svg></a>
           <a class="text-link" href="tel:+16024924042">Call 602 492 4042 <svg><use href="#i-arrow-right"/></svg></a>
         </div>
       </div>
 
-      <div class="route-strip shell" aria-label="Choose your route">
-        <a href="#intro-flight"><span>01</span><strong>Take the controls</strong><small>Introductory flight lesson</small><svg><use href="#i-arrow-right"/></svg></a>
-        <a href="#air-tour"><span>02</span><strong>See Phoenix</strong><small>Private aerial experience</small><svg><use href="#i-arrow-right"/></svg></a>
-        <a href="#voucher"><span>03</span><strong>Already booked</strong><small>Schedule a voucher flight</small><svg><use href="#i-arrow-right"/></svg></a>
+      <div class="route-strip shell" aria-label="Book your flight">
+        <a class="booking-cta" href="/booking.html?experience=intro"><span>01</span><strong>Take the controls</strong><small>Introductory flight · $299</small><svg><use href="#i-arrow-right"/></svg></a>
+        <a class="booking-cta" href="/booking.html?experience=tour"><span>02</span><strong>See Phoenix</strong><small>Private aerial experience · $399</small><svg><use href="#i-arrow-right"/></svg></a>
+        <a class="booking-cta" href="/booking.html"><span>03</span><strong>Choose your departure</strong><small>Start a secure reservation</small><svg><use href="#i-arrow-right"/></svg></a>
       </div>
     </section>
 
@@ -92,7 +122,7 @@
             <li><svg><use href="#i-shield"/></svg> Hands-on flight from the pilot seat</li>
             <li><svg><use href="#i-clock"/></svg> Briefing, aircraft, and flight as one mission</li>
           </ul>
-          <a href="#booking-dialog" data-booking-choice="Introductory Flight Lesson">Begin your flight <svg><use href="#i-arrow-right"/></svg></a>
+          <a class="booking-cta" href="/booking.html?experience=intro">Book the introductory flight <svg><use href="#i-arrow-right"/></svg></a>
         </article>
 
         <article id="air-tour" class="experience-card tour-card">
@@ -111,14 +141,19 @@
             <li><svg><use href="#i-map"/></svg> Route selected for conditions and light</li>
             <li><svg><use href="#i-sparkles"/></svg> Direct access to pilot and flight deck</li>
           </ul>
-          <a href="#booking-dialog" data-booking-choice="Phoenix Aerial Experience">Arrange an aerial experience <svg><use href="#i-arrow-right"/></svg></a>
+          <a class="booking-cta" href="/booking.html?experience=tour">Book the Phoenix experience <svg><use href="#i-arrow-right"/></svg></a>
         </article>
+      </div>
+
+      <div class="booking-band" aria-label="Start a reservation">
+        <div><strong>Your departure starts here.</strong><p>Choose the experience, preferred date, passengers, and payment in one continuous reservation flow.</p></div>
+        <a class="button button-light booking-cta" href="/booking.html">Start booking <svg><use href="#i-arrow-right"/></svg></a>
       </div>
 
       <aside id="voucher" class="voucher-panel">
         <div class="voucher-icon"><svg><use href="#i-ticket"/></svg></div>
         <div><p class="eyebrow dark">Groupon voucher holders</p><h3>Your flight is already waiting.</h3><p>Have your voucher and preferred dates ready. We’ll confirm your party, coordinate the departure, and send the details you need before arriving at the airport.</p></div>
-        <a class="button button-dark" href="#booking-dialog" data-booking-choice="Groupon Voucher Flight">Schedule my flight <svg><use href="#i-arrow-right"/></svg></a>
+        <a class="button button-dark booking-cta" href="/booking.html">Continue to booking <svg><use href="#i-arrow-right"/></svg></a>
       </aside>
     </section>
 
@@ -151,6 +186,11 @@
             <figcaption><span>03</span> Aviation in its natural environment</figcaption>
           </figure>
         </div>
+
+        <div class="booking-band" aria-label="Book after viewing the flight film">
+          <div><strong>Seen enough?</strong><p>Select your departure and move directly into the secure reservation flow.</p></div>
+          <a class="button button-light booking-cta" href="/booking.html">Choose your flight <svg><use href="#i-arrow-right"/></svg></a>
+        </div>
       </div>
     </section>
 
@@ -159,6 +199,7 @@
         <p class="eyebrow">A different relationship with flight</p>
         <blockquote>“Aviation becomes different when you are no longer looking through a cabin window.”</blockquote>
         <p class="quote-note">One aircraft. One crew. One view of the system from inside it.</p>
+        <a class="plain-link" href="#experiences">Compare the two experiences <svg><use href="#i-arrow-right"/></svg></a>
       </div>
     </section>
 
@@ -173,13 +214,13 @@
             <p class="eyebrow">Flight training</p><h3>From first certificate to instructor qualification.</h3>
             <p class="gateway-copy">Structured instruction for Private Pilot, Instrument, Commercial, Multi-Engine, CFI, CFII, and MEI candidates—built around judgment, aircraft command, and the realities of the operating environment.</p>
             <ul class="gateway-list"><li><span>01</span> Begin flying</li><li><span>02</span> Advance as a pilot</li><li><span>03</span> Become an instructor</li></ul>
-            <a class="button button-outline" href="/training/"><svg><use href="#i-graduation"/></svg> Explore flight training</a>
+            <a class="plain-link" href="/training/">Explore flight training <svg><use href="#i-arrow-right"/></svg></a>
           </article>
           <article id="pilot-services" class="gateway-block gateway-services">
             <p class="eyebrow">Pilot services</p><h3>Stay current. Add capability. Return sharper.</h3>
             <p class="gateway-copy">Focused support for flight reviews, IPCs, high-performance and complex endorsements, Part 107, and individualized proficiency work—without enrolling in a full training program.</p>
             <ul class="gateway-list"><li><span>01</span> Currency and proficiency</li><li><span>02</span> Aircraft endorsements</li><li><span>03</span> Remote pilot support</li></ul>
-            <a class="button button-outline" href="#booking-dialog" data-booking-choice="Pilot Service / Proficiency Flight"><svg><use href="#i-shield"/></svg> Request pilot services</a>
+            <a class="plain-link" href="tel:+16024924042">Discuss pilot services <svg><use href="#i-arrow-right"/></svg></a>
           </article>
         </div>
       </div>
@@ -209,7 +250,7 @@
       <div class="shell contact-layout">
         <div><p class="eyebrow">Your next flight begins here</p><h2>Select your experience. We’ll coordinate the departure.</h2></div>
         <div class="contact-actions">
-          <a class="button button-copper" href="#booking-dialog" data-booking-choice=""><svg><use href="#i-plane"/></svg> Request a departure</a>
+          <a class="button button-copper booking-cta" href="/booking.html"><svg><use href="#i-plane"/></svg> Book your flight <svg><use href="#i-arrow-right"/></svg></a>
           <a class="contact-phone" href="tel:+16024924042">602 492 4042</a>
           <p>Phoenix, Arizona · Falcon Field &amp; Deer Valley<br>Other locations available by request</p>
         </div>
@@ -220,149 +261,5 @@
       <div class="shell"><p>© 2026 Pilot Consciousness · Phoenix Flight Experience</p><p><a href="/terms.html">Terms of Use</a> · Flights are subject to weather, aircraft availability, and operating limitations.</p></div>
     </footer>
   </main>
-
-  <dialog class="booking-dialog" id="booking-dialog" aria-labelledby="booking-title">
-    <button class="dialog-close" type="button" aria-label="Close booking form">×</button>
-    <div class="booking-dialog-layout">
-      <div class="booking-dialog-visual">
-        <div class="booking-dialog-brand"><span class="brand-mark">P</span><span>Pilot Consciousness</span></div>
-        <div>
-          <p class="eyebrow">Private departure request</p>
-          <h2 id="booking-title">Your flight,<br>personally coordinated.</h2>
-          <p>Tell us when you would like to fly. We’ll confirm the aircraft, airport, and departure directly.</p>
-        </div>
-        <p class="dialog-route">Phoenix · KFFZ / KDVT</p>
-      </div>
-
-      <div class="booking-dialog-form">
-        <div class="booking-form-head">
-          <span>Flight request</span>
-          <strong>No payment to request</strong>
-        </div>
-
-        <form id="flightRequestForm">
-          <input type="hidden" name="access_key" value="ceab2eb4-7886-4a5a-bb11-8d9fbe5c3f1d">
-          <input type="hidden" name="subject" value="Flight Request — Pilot Consciousness">
-          <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off">
-
-          <div class="booking-field full">
-            <label for="flightType">Experience</label>
-            <select id="flightType" name="experience" required>
-              <option value="">Select a flight</option>
-              <option>Introductory Flight Lesson</option>
-              <option>Phoenix Aerial Experience</option>
-              <option>Groupon Voucher Flight</option>
-              <option>Pilot Service / Proficiency Flight</option>
-            </select>
-          </div>
-          <div class="booking-field">
-            <label for="bookingName">Name</label>
-            <input id="bookingName" name="name" type="text" autocomplete="name" required>
-          </div>
-          <div class="booking-field">
-            <label for="bookingPhone">Phone</label>
-            <input id="bookingPhone" name="phone" type="tel" autocomplete="tel" required>
-          </div>
-          <div class="booking-field full">
-            <label for="bookingEmail">Email <span>optional</span></label>
-            <input id="bookingEmail" name="email" type="email" autocomplete="email">
-          </div>
-          <div class="booking-field">
-            <label for="preferredDate">Preferred date</label>
-            <input id="preferredDate" name="preferred_date" type="date" required>
-          </div>
-          <div class="booking-field">
-            <label for="timeWindow">Departure window</label>
-            <select id="timeWindow" name="time_window" required>
-              <option value="">Select</option>
-              <option>Morning</option>
-              <option>Midday</option>
-              <option>Afternoon</option>
-              <option>Sunset / evening</option>
-              <option>Flexible</option>
-            </select>
-          </div>
-          <div class="booking-field">
-            <label for="partySize">Guests</label>
-            <select id="partySize" name="party_size" required>
-              <option value="">Select</option>
-              <option>1</option>
-              <option>2</option>
-            </select>
-          </div>
-          <div class="booking-field">
-            <label for="voucherNumber">Voucher <span>if applicable</span></label>
-            <input id="voucherNumber" name="voucher_number" type="text">
-          </div>
-          <div class="booking-field full">
-            <label for="bookingNotes">Alternate dates or notes <span>optional</span></label>
-            <textarea id="bookingNotes" name="notes" rows="3"></textarea>
-          </div>
-          <button class="button button-copper full" type="submit" id="flightSubmit">Request this departure <svg><use href="#i-arrow-right"/></svg></button>
-          <p class="booking-status full" id="flightStatus" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </div>
-  </dialog>
-
-  <script>
-    (function () {
-      var dialog = document.getElementById('booking-dialog');
-      var form = document.getElementById('flightRequestForm');
-      var flightType = document.getElementById('flightType');
-      var preferredDate = document.getElementById('preferredDate');
-      var submit = document.getElementById('flightSubmit');
-      var status = document.getElementById('flightStatus');
-
-      var now = new Date();
-      var localToday = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-      preferredDate.min = localToday;
-
-      document.querySelectorAll('[data-booking-choice]').forEach(function (link) {
-        link.addEventListener('click', function (event) {
-          event.preventDefault();
-          flightType.value = link.getAttribute('data-booking-choice') || '';
-          status.className = 'booking-status full';
-          status.textContent = '';
-          dialog.showModal();
-        });
-      });
-
-      dialog.querySelector('.dialog-close').addEventListener('click', function () { dialog.close(); });
-      dialog.addEventListener('click', function (event) {
-        if (event.target === dialog) dialog.close();
-      });
-
-      form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        var originalLabel = submit.innerHTML;
-        submit.disabled = true;
-        submit.textContent = 'Sending request…';
-        status.className = 'booking-status full';
-        status.textContent = 'Sending your preferred dates…';
-
-        fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Accept': 'application/json' },
-          body: new FormData(form)
-        })
-          .then(function (response) { return response.json(); })
-          .then(function (result) {
-            if (!result || !result.success) throw new Error('Submission failed');
-            status.className = 'booking-status booking-success full';
-            status.textContent = 'Request received. We’ll contact you directly to confirm the departure.';
-            form.reset();
-          })
-          .catch(function () {
-            status.className = 'booking-status booking-error full';
-            status.innerHTML = 'The form could not send. Please call <a href="tel:+16024924042">602 492 4042</a> or email <a href="mailto:info@pilotconsciousness.com">info@pilotconsciousness.com</a>.';
-          })
-          .finally(function () {
-            submit.disabled = false;
-            submit.innerHTML = originalLabel;
-          });
-      });
-    }());
-  </script>
 </body>
 </html>
