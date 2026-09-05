@@ -8,13 +8,13 @@
   <meta name="description" content="Introductory flight lessons and private Phoenix aerial experiences, conducted by a professional flight instructor from Falcon Field and Deer Valley.">
   <link rel="stylesheet" href="/assets/experience.css?v=20260904-3">
   <style>
-    .experience-offer{margin:1rem 0 1.25rem;max-width:30rem;font-size:1.02rem;line-height:1.55;opacity:.84}
-    .experience-price{display:block;margin:1.55rem 0 .6rem;padding:0;border:0}
-    .experience-price strong{display:block;font-size:clamp(4.35rem,7vw,6.6rem);line-height:.78;letter-spacing:-.07em;font-weight:650;font-variant-numeric:tabular-nums;color:inherit}
-    .experience-price span{display:block;margin-top:.85rem;font-size:.84rem;line-height:1.35;letter-spacing:.12em;text-transform:uppercase;font-weight:750;opacity:.82}
-    .experience-value{margin:.75rem 0 1.55rem;font-size:.92rem;line-height:1.5;font-weight:600;opacity:.92}
-    .experience-card > a{font-size:1rem;font-weight:750;letter-spacing:-.01em}
-    @media (max-width:640px){.experience-price strong{font-size:4.7rem}}
+    .experience-fare{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:1.35rem;margin:1.35rem 0 1.4rem;padding:1.05rem 0 0;border-top:1px solid rgba(255,255,255,.2)}
+    .fare-price{display:flex;flex-direction:column;gap:.28rem}
+    .fare-price span{font-size:.68rem;line-height:1;letter-spacing:.15em;text-transform:uppercase;font-weight:750;opacity:.68}
+    .fare-price strong{font-size:clamp(3rem,4.5vw,4.35rem);line-height:.82;letter-spacing:-.055em;font-weight:650;font-variant-numeric:tabular-nums;color:inherit}
+    .fare-detail{margin:0 0 .12rem;max-width:15rem;font-size:.78rem;line-height:1.45;letter-spacing:.07em;text-transform:uppercase;font-weight:650;opacity:.76}
+    .fare-detail b{display:block;margin-top:.18rem;font-weight:800;opacity:1}
+    @media (max-width:640px){.experience-fare{grid-template-columns:1fr;gap:.75rem}.fare-price strong{font-size:3.7rem}}
   </style>
 </head>
 <body>
@@ -79,35 +79,39 @@
         <article id="intro-flight" class="experience-card lesson-card">
           <div class="card-number">01</div>
           <div>
-            <p class="card-kicker">Take the controls</p>
-            <h3>Your first real flight from the pilot seat.</h3>
-            <p class="experience-offer">Leave the passenger seat behind. Meet the aircraft, brief the mission, and then fly it yourself with a professional instructor beside you.</p>
-            <div class="experience-price"><strong>$299</strong><span>Private introductory flight</span></div>
-            <p class="experience-value">Aircraft · Instructor · Briefing · You at the controls</p>
+            <p class="card-kicker">For those drawn forward</p>
+            <h3>Introductory Flight Lesson</h3>
+            <p class="card-copy">Cross the threshold from passenger to pilot. Begin with the aircraft, the systems, and the mission; then take the controls under the guidance of a professional flight instructor. A real lesson, conducted to a professional standard.</p>
+            <div class="experience-fare">
+              <div class="fare-price"><span>Experience fare</span><strong>$299</strong></div>
+              <p class="fare-detail">Private flight · one participant<b>Aircraft + instructor included</b></p>
+            </div>
           </div>
           <ul>
-            <li><svg><use href="#i-headphones"/></svg> One-on-one briefing and instruction</li>
+            <li><svg><use href="#i-headphones"/></svg> Individual briefing and instruction</li>
             <li><svg><use href="#i-shield"/></svg> Hands-on flight from the pilot seat</li>
-            <li><svg><use href="#i-clock"/></svg> A complete real-world flight experience</li>
+            <li><svg><use href="#i-clock"/></svg> Briefing, aircraft, and flight as one mission</li>
           </ul>
-          <a href="#booking-dialog" data-booking-choice="Introductory Flight Lesson">Fly the airplane <svg><use href="#i-arrow-right"/></svg></a>
+          <a href="#booking-dialog" data-booking-choice="Introductory Flight Lesson">Begin your flight <svg><use href="#i-arrow-right"/></svg></a>
         </article>
 
         <article id="air-tour" class="experience-card tour-card">
           <div class="card-number">02</div>
           <div>
-            <p class="card-kicker">See Phoenix from the flight deck</p>
-            <h3>One aircraft. Your party. The city beneath you.</h3>
-            <p class="experience-offer">Skip the cabin-window view. Take your place aboard a private aircraft and watch the Valley, desert ranges, and western light unfold from the flight deck.</p>
-            <div class="experience-price"><strong>$399</strong><span>Private aerial experience · up to 2 guests</span></div>
-            <p class="experience-value">A private aircraft and the best seat over Phoenix.</p>
+            <p class="card-kicker">Private departure · One or two guests</p>
+            <h3>Phoenix Aerial Experience</h3>
+            <p class="card-copy">Take your place aboard a private aircraft and watch one of America’s great aviation cities assemble beneath you. The Valley grid, desert ranges, and western light—seen from the airspace that connects Phoenix to the world.</p>
+            <div class="experience-fare">
+              <div class="fare-price"><span>Private experience</span><strong>$399</strong></div>
+              <p class="fare-detail">Up to two guests · total for your party<b>One aircraft · your party</b></p>
+            </div>
           </div>
           <ul>
-            <li><svg><use href="#i-users"/></svg> The aircraft is private to your party</li>
+            <li><svg><use href="#i-users"/></svg> Private aircraft for your party</li>
             <li><svg><use href="#i-map"/></svg> Route selected for conditions and light</li>
             <li><svg><use href="#i-sparkles"/></svg> Direct access to pilot and flight deck</li>
           </ul>
-          <a href="#booking-dialog" data-booking-choice="Phoenix Aerial Experience">Take the flight <svg><use href="#i-arrow-right"/></svg></a>
+          <a href="#booking-dialog" data-booking-choice="Phoenix Aerial Experience">Arrange an aerial experience <svg><use href="#i-arrow-right"/></svg></a>
         </article>
       </div>
 
