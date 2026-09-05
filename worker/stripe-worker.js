@@ -71,7 +71,6 @@ async function createCheckoutSession(request, env, origin) {
   p.set('ui_mode', 'elements');
   p.set('return_url', 'https://pilotconsciousness.com/booking.html?session_id={CHECKOUT_SESSION_ID}');
   p.set('customer_email', body.contact.email);
-  p.set('billing_address_collection', 'required');
   p.set('line_items[0][quantity]', '1');
   p.set('line_items[0][price_data][currency]', 'usd');
   p.set('line_items[0][price_data][unit_amount]', String(product.amount));
