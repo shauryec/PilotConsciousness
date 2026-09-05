@@ -9,7 +9,7 @@ const PRODUCTS = {
   tour: { name: 'Phoenix Aerial Experience', amount: 39900, maxParty: 2 }
 };
 
-const STRIPE_VERSION = '2025-03-31.basil';
+const STRIPE_VERSION = '2026-03-25.dahlia';
 const BUILD_ID = 'stripe-worker-diagnostics-2026-09-05-1';
 
 function cors(origin) {
