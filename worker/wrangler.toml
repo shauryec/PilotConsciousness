@@ -1,0 +1,10 @@
+name = "pilot-consciousness-bookings"
+main = "stripe-worker.js"
+compatibility_date = "2026-09-05"
+
+# Set these as Worker secrets / variables before deployment:
+# wrangler secret put STRIPE_SECRET_KEY
+# wrangler secret put STRIPE_PUBLISHABLE_KEY
+
+# Recommended custom domain after deploy:
+# bookings-api.pilotconsciousness.com
