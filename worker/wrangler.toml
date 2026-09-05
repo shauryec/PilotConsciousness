@@ -1,4 +1,4 @@
-name = "pilot-consciousness"
+name = "pilotconsciousness"
 main = "stripe-worker.js"
 compatibility_date = "2026-09-05"
 
@@ -6,11 +6,10 @@ compatibility_date = "2026-09-05"
 [vars]
 STRIPE_PUBLISHABLE_KEY = "pk_test_51UCCEsRKpdDPxcg0cCgvfdTE73Szq1FQ8r6wTdCfCdomDv8Lh9OdlH1UqbeXrhCGlkJJhyv1wWcEOfdBAwKS7YvR00URhW9N8P"
 
-# Require the private Stripe key to exist as a Cloudflare Worker secret.
-[secrets]
-required = ["STRIPE_SECRET_KEY"]
-
 # Dedicated booking API hostname.
 [[routes]]
 pattern = "bookings-api.pilotconsciousness.com"
 custom_domain = true
+
+# Private Stripe key must be configured in Cloudflare as a Secret named:
+# STRIPE_SECRET_KEY
