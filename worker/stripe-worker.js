@@ -9,6 +9,8 @@ const PRODUCTS = {
   tour: { name: 'Phoenix Aerial Experience', amount: 39900, maxParty: 2 }
 };
 
+const STRIPE_VERSION = '2025-03-31.basil';
+
 function cors(origin) {
   const allowed = ALLOWED_ORIGINS.has(origin) ? origin : 'https://pilotconsciousness.com';
   return {
@@ -87,6 +89,7 @@ async function createCheckoutSession(request, env, origin) {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
+      'Stripe-Version': STRIPE_VERSION,
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     body: p
@@ -100,7 +103,10 @@ async function retrieveSession(url, env, origin) {
   const id = new URL(url).searchParams.get('session_id');
   if (!id || !/^cs_/.test(id)) return json({ error: 'Invalid session.' }, 400, origin);
   const r = await fetch(`https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(id)}`, {
-    headers: { 'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}` }
+    headers: {
+      'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
+      'Stripe-Version': STRIPE_VERSION
+    }
   });
   const data = await r.json();
   if (!r.ok) return json({ error: data?.error?.message || 'Unable to retrieve session.' }, 502, origin);
