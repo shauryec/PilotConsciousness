@@ -11,6 +11,7 @@ const PRODUCTS = {
 
 const STRIPE_VERSION = '2026-03-25.dahlia';
 const BUILD_ID = 'stripe-worker-diagnostics-2026-09-05-1';
+const TOUR_BOOKING_ENABLED = false;
 
 function cors(origin) {
   const allowed = ALLOWED_ORIGINS.has(origin) ? origin : 'https://pilotconsciousness.com';
@@ -34,6 +35,9 @@ function add(params, key, value) {
 }
 
 function validateBooking(body) {
+  if (body.experience === 'tour' && !TOUR_BOOKING_ENABLED) {
+    throw new Error('Phoenix Aerial Experience booking is temporarily unavailable.');
+  }
   const product = PRODUCTS[body.experience];
   if (!product) throw new Error('Unknown flight experience.');
   if (!/^\d{4}-\d{2}-\d{2}$/.test(body.date || '')) throw new Error('A valid departure date is required.');
@@ -135,14 +139,15 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
 
     if (url.pathname === '/config' && request.method === 'GET') {
-      return json({ publishableKey: env.STRIPE_PUBLISHABLE_KEY, build: BUILD_ID }, 200, origin);
+      return json({ publishableKey: env.STRIPE_PUBLISHABLE_KEY, build: BUILD_ID, tourBookingEnabled: TOUR_BOOKING_ENABLED }, 200, origin);
     }
     if (url.pathname === '/health' && request.method === 'GET') {
       return json({
         ok: true,
         build: BUILD_ID,
         hasStripePublishableKey: Boolean(env.STRIPE_PUBLISHABLE_KEY),
-        hasStripeSecret: Boolean(env.STRIPE_SECRET_KEY)
+        hasStripeSecret: Boolean(env.STRIPE_SECRET_KEY),
+        tourBookingEnabled: TOUR_BOOKING_ENABLED
       }, 200, origin);
     }
     if (url.pathname === '/create-checkout-session' && request.method === 'POST') {
