@@ -15,6 +15,10 @@
     .fare-detail{margin:0 0 .12rem;max-width:15rem;font-size:.78rem;line-height:1.45;letter-spacing:.07em;text-transform:uppercase;font-weight:650;opacity:.76}
     .fare-detail b{display:block;margin-top:.18rem;font-weight:800;opacity:1}
 
+    .experience-visual{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;margin:1.6rem 0 .15rem;border:1px solid rgba(255,255,255,.16)}
+    .lesson-card .experience-visual{object-position:center 48%}
+    .tour-card .experience-visual{object-position:center 42%}
+
     /* Booking is the only boxed action on the page. */
     .booking-cta{position:relative;overflow:hidden;isolation:isolate;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
     .booking-cta:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 0 35%,rgba(255,255,255,.16) 48%,transparent 61%);transform:translateX(-130%);transition:transform .65s ease;pointer-events:none;z-index:-1}
@@ -43,7 +47,7 @@
     .booking-band p{margin:0;color:rgba(255,255,255,.64);font-size:.78rem;line-height:1.5;letter-spacing:.04em}.booking-band strong{display:block;margin-bottom:.28rem;font-family:Georgia,"Times New Roman",serif;font-size:1.65rem;font-weight:400;letter-spacing:-.025em;color:white}
     .booking-band .button{flex:none;min-width:210px}
 
-    @media (max-width:760px){.booking-band{align-items:stretch;flex-direction:column}.booking-band .button{width:100%;min-width:0}.hero-booking{min-width:0}.experience-fare{grid-template-columns:1fr;gap:.75rem}.fare-price strong{font-size:3.7rem}}
+    @media (max-width:760px){.booking-band{align-items:stretch;flex-direction:column}.booking-band .button{width:100%;min-width:0}.hero-booking{min-width:0}.experience-fare{grid-template-columns:1fr;gap:.75rem}.fare-price strong{font-size:3.7rem}.experience-visual{margin-top:1.25rem}}
   </style>
 </head>
 <body>
@@ -117,6 +121,7 @@
               <p class="fare-detail">Private flight · one participant<b>Aircraft + instructor included</b></p>
             </div>
           </div>
+          <img class="experience-visual" src="/assets/intro-experience.webp" alt="Student pilot taking the controls with a flight instructor beside him in a Cirrus cockpit" loading="lazy" decoding="async">
           <ul>
             <li><svg><use href="#i-headphones"/></svg> Individual briefing and instruction</li>
             <li><svg><use href="#i-shield"/></svg> Hands-on flight from the pilot seat</li>
@@ -136,6 +141,7 @@
               <p class="fare-detail">Up to two guests · total for your party<b>One aircraft · your party</b></p>
             </div>
           </div>
+          <img class="experience-visual" src="/assets/phoenix-aerial-experience.webp" alt="Two guests enjoying a private aerial experience over Phoenix at sunset" loading="lazy" decoding="async">
           <ul>
             <li><svg><use href="#i-users"/></svg> Private aircraft for your party</li>
             <li><svg><use href="#i-map"/></svg> Route selected for conditions and light</li>
