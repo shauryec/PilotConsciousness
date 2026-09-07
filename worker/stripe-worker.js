@@ -5,13 +5,11 @@ const ALLOWED_ORIGINS = new Set([
 ]);
 
 const PRODUCTS = {
-  intro: { name: 'Introductory Flight Lesson', amount: 29900, maxParty: 1 },
-  tour: { name: 'Phoenix Aerial Experience', amount: 39900, maxParty: 2 }
+  intro: { name: 'Introductory Flight Lesson', amount: 29900, maxParty: 1 }
 };
 
 const STRIPE_VERSION = '2026-03-25.dahlia';
-const BUILD_ID = 'stripe-worker-diagnostics-2026-09-05-1';
-const TOUR_BOOKING_ENABLED = false;
+const BUILD_ID = 'stripe-worker-training-only-2026-09-07-1';
 
 function cors(origin) {
   const allowed = ALLOWED_ORIGINS.has(origin) ? origin : 'https://pilotconsciousness.com';
@@ -35,19 +33,16 @@ function add(params, key, value) {
 }
 
 function validateBooking(body) {
-  if (body.experience === 'tour' && !TOUR_BOOKING_ENABLED) {
-    throw new Error('Phoenix Aerial Experience booking is temporarily unavailable.');
-  }
-  const product = PRODUCTS[body.experience];
-  if (!product) throw new Error('Unknown flight experience.');
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(body.date || '')) throw new Error('A valid departure date is required.');
+  if (body.experience !== 'intro') throw new Error('Only introductory flight lesson reservations are available.');
+  const product = PRODUCTS.intro;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(body.date || '')) throw new Error('A valid lesson date is required.');
   if (!body.timeWindow || !body.airport) throw new Error('Departure window and airport preference are required.');
   const partySize = Number(body.partySize);
-  if (!Number.isInteger(partySize) || partySize < 1 || partySize > product.maxParty) throw new Error('Invalid party size.');
-  if (!Array.isArray(body.passengers) || body.passengers.length !== partySize) throw new Error('Passenger manifest does not match party size.');
+  if (partySize !== 1) throw new Error('The introductory flight lesson is for one primary participant.');
+  if (!Array.isArray(body.passengers) || body.passengers.length !== 1) throw new Error('Student pilot information is required.');
   body.passengers.forEach((name) => {
     const clean = String(name || '').trim().replace(/\s+/g, ' ');
-    if (clean.length < 3 || !clean.includes(' ')) throw new Error('Each passenger must have a full boarding name.');
+    if (clean.length < 3 || !clean.includes(' ')) throw new Error('The student pilot must have a full legal name.');
   });
   const c = body.contact || {};
   for (const key of ['name','email','phone','address1','city','state','postal','country']) {
@@ -79,13 +74,13 @@ async function createCheckoutSession(request, env, origin) {
   p.set('line_items[0][price_data][currency]', 'usd');
   p.set('line_items[0][price_data][unit_amount]', String(product.amount));
   p.set('line_items[0][price_data][product_data][name]', product.name);
-  p.set('line_items[0][price_data][product_data][description]', body.experience === 'tour' ? 'Private Phoenix aerial experience' : 'Private introductory flight lesson');
+  p.set('line_items[0][price_data][product_data][description]', 'Hands-on introductory flight lesson with a professional flight instructor');
 
-  add(p, 'metadata[experience]', body.experience);
+  add(p, 'metadata[experience]', 'intro');
   add(p, 'metadata[requested_date]', body.date);
   add(p, 'metadata[time_window]', body.timeWindow);
   add(p, 'metadata[airport]', body.airport);
-  add(p, 'metadata[party_size]', body.partySize);
+  add(p, 'metadata[party_size]', '1');
   add(p, 'metadata[passengers]', body.passengers.join(' | '));
   add(p, 'metadata[contact_name]', body.contact.name);
   add(p, 'metadata[contact_phone]', body.contact.phone);
@@ -139,7 +134,7 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(origin) });
 
     if (url.pathname === '/config' && request.method === 'GET') {
-      return json({ publishableKey: env.STRIPE_PUBLISHABLE_KEY, build: BUILD_ID, tourBookingEnabled: TOUR_BOOKING_ENABLED }, 200, origin);
+      return json({ publishableKey: env.STRIPE_PUBLISHABLE_KEY, build: BUILD_ID }, 200, origin);
     }
     if (url.pathname === '/health' && request.method === 'GET') {
       return json({
@@ -147,7 +142,7 @@ export default {
         build: BUILD_ID,
         hasStripePublishableKey: Boolean(env.STRIPE_PUBLISHABLE_KEY),
         hasStripeSecret: Boolean(env.STRIPE_SECRET_KEY),
-        tourBookingEnabled: TOUR_BOOKING_ENABLED
+        product: 'introductory-flight-lesson'
       }, 200, origin);
     }
     if (url.pathname === '/create-checkout-session' && request.method === 'POST') {
