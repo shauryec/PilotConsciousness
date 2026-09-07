@@ -12,7 +12,7 @@
     .fare-price{display:flex;flex-direction:column;gap:.28rem}
     .fare-price span{font-size:.68rem;line-height:1;letter-spacing:.15em;text-transform:uppercase;font-weight:750;opacity:.68}
     .fare-price strong{font-size:clamp(3rem,4.5vw,4.35rem);line-height:.82;letter-spacing:-.055em;font-weight:650;font-variant-numeric:tabular-nums;color:inherit}
-    .fare-detail{margin:0 0 .12rem;max-width:15rem;font-size:.78rem;line-height:1.45;letter-spacing:.07em;text-transform:uppercase;font-weight:650;opacity:.76}
+    .fare-detail{margin:0 0 .12rem;max-width:17rem;font-size:.78rem;line-height:1.45;letter-spacing:.07em;text-transform:uppercase;font-weight:650;opacity:.76}
     .fare-detail b{display:block;margin-top:.18rem;font-weight:800;opacity:1}
 
     .experience-visual{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;margin:1.6rem 0 .15rem;border:1px solid rgba(255,255,255,.16)}
@@ -43,11 +43,7 @@
     .lesson-card>a.booking-cta{box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
     .tour-card>a.booking-cta{box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
 
-    .booking-band{display:flex;align-items:center;justify-content:space-between;gap:28px;margin:44px 0 8px;padding:26px 28px;background:#0b1520;color:white}
-    .booking-band p{margin:0;color:rgba(255,255,255,.64);font-size:.78rem;line-height:1.5;letter-spacing:.04em}.booking-band strong{display:block;margin-bottom:.28rem;font-family:Georgia,"Times New Roman",serif;font-size:1.65rem;font-weight:400;letter-spacing:-.025em;color:white}
-    .booking-band .button{flex:none;min-width:210px}
-
-    @media (max-width:760px){.booking-band{align-items:stretch;flex-direction:column}.booking-band .button{width:100%;min-width:0}.hero-booking{min-width:0}.experience-fare{grid-template-columns:1fr;gap:.75rem}.fare-price strong{font-size:3.7rem}.experience-visual{margin-top:1.25rem}}
+    @media (max-width:760px){.hero-booking{min-width:0}.experience-fare{grid-template-columns:1fr;gap:.75rem}.fare-price strong{font-size:3.7rem}.experience-visual{margin-top:1.25rem}}
   </style>
 </head>
 <body>
@@ -87,7 +83,7 @@
       <div id="top" class="hero-content shell">
         <p class="eyebrow">Phoenix · KFFZ / KDVT</p>
         <h1 id="hero-title">From the cabin to command.</h1>
-        <p class="hero-copy">A first encounter with the aircraft as pilots know it: disciplined, precise, and alive. Fly with a professional instructor—or see Phoenix from a flight deck built for two.</p>
+        <p class="hero-copy">Experience Phoenix from the flight deck. Take the controls with a professional instructor, or share a private aerial departure for up to two guests.</p>
         <div class="hero-actions">
           <a class="button button-light booking-cta hero-booking" href="/booking.html">Reserve your flight <svg><use href="#i-arrow-right"/></svg></a>
           <a class="text-link internal-link" href="#experiences">View experiences <svg><use href="#i-arrow-down"/></svg></a>
@@ -97,16 +93,16 @@
 
       <div class="route-strip shell" aria-label="Book your flight">
         <a class="booking-cta" href="/booking.html?experience=intro"><span>01</span><strong>Take the controls</strong><small>Introductory flight · $299</small><svg><use href="#i-arrow-right"/></svg></a>
-        <a class="booking-cta" href="/booking.html?experience=tour"><span>02</span><strong>See Phoenix</strong><small>Private aerial experience · $399</small><svg><use href="#i-arrow-right"/></svg></a>
+        <a class="booking-cta" href="/booking.html?experience=tour"><span>02</span><strong>See Phoenix</strong><small>Private aerial experience · $399 total</small><svg><use href="#i-arrow-right"/></svg></a>
         <a class="booking-cta" href="/booking.html"><span>03</span><strong>Choose your departure</strong><small>Start a secure reservation</small><svg><use href="#i-arrow-right"/></svg></a>
       </div>
     </section>
 
     <section id="experiences" class="experiences section shell">
       <div class="section-intro">
-        <p class="eyebrow dark">Two departures · One standard</p>
+        <p class="eyebrow dark">Choose your flight</p>
         <h2>Take the controls. Or take in the city.</h2>
-        <p>General aviation presented with the clarity and composure people expect from the world’s finest flight operations. Whether you fly or observe, every detail is briefed, intentional, and personal.</p>
+        <p>Two private ways into the flight deck: a hands-on introductory lesson, or a Phoenix aerial experience for one or two guests.</p>
       </div>
 
       <div class="experience-grid">
@@ -137,8 +133,8 @@
             <h3>Phoenix Aerial Experience</h3>
             <p class="card-copy">Take your place aboard a private aircraft and watch one of America’s great aviation cities assemble beneath you. The Valley grid, desert ranges, and western light—seen from the airspace that connects Phoenix to the world.</p>
             <div class="experience-fare">
-              <div class="fare-price"><span>Private experience</span><strong>$399</strong></div>
-              <p class="fare-detail">Up to two guests · total for your party<b>One aircraft · your party</b></p>
+              <div class="fare-price"><span>Total private fare</span><strong>$399</strong></div>
+              <p class="fare-detail">For the entire aircraft<b>Up to two guests · one price</b></p>
             </div>
           </div>
           <img class="experience-visual" src="/assets/phoenix-aerial-experience.webp?v=2" alt="Two guests enjoying a private aerial experience over Phoenix at sunset" loading="lazy" decoding="async">
@@ -150,17 +146,6 @@
           <a class="booking-cta" href="/booking.html?experience=tour">Book the Phoenix experience <svg><use href="#i-arrow-right"/></svg></a>
         </article>
       </div>
-
-      <div class="booking-band" aria-label="Start a reservation">
-        <div><strong>Your departure starts here.</strong><p>Choose the experience, preferred date, passengers, and payment in one continuous reservation flow.</p></div>
-        <a class="button button-light booking-cta" href="/booking.html">Start booking <svg><use href="#i-arrow-right"/></svg></a>
-      </div>
-
-      <aside id="voucher" class="voucher-panel">
-        <div class="voucher-icon"><svg><use href="#i-ticket"/></svg></div>
-        <div><p class="eyebrow dark">Groupon voucher holders</p><h3>Your flight is already waiting.</h3><p>Have your voucher and preferred dates ready. We’ll confirm your party, coordinate the departure, and send the details you need before arriving at the airport.</p></div>
-        <a class="button button-dark booking-cta" href="/booking.html">Continue to booking <svg><use href="#i-arrow-right"/></svg></a>
-      </aside>
     </section>
 
     <section id="flight-film" class="media-section section" aria-labelledby="media-title">
@@ -192,12 +177,15 @@
             <figcaption><span>03</span> Aviation in its natural environment</figcaption>
           </figure>
         </div>
-
-        <div class="booking-band" aria-label="Book after viewing the flight film">
-          <div><strong>Seen enough?</strong><p>Select your departure and move directly into the secure reservation flow.</p></div>
-          <a class="button button-light booking-cta" href="/booking.html">Choose your flight <svg><use href="#i-arrow-right"/></svg></a>
-        </div>
       </div>
+    </section>
+
+    <section class="section shell" aria-label="Groupon flight redemption">
+      <aside id="voucher" class="voucher-panel">
+        <div class="voucher-icon"><svg><use href="#i-ticket"/></svg></div>
+        <div><p class="eyebrow dark">Groupon voucher holders</p><h3>Your flight is already waiting.</h3><p>Have your voucher and preferred dates ready. We’ll confirm your party, coordinate the departure, and send the details you need before arriving at the airport.</p></div>
+        <a class="button button-dark booking-cta" href="/booking.html">Continue to booking <svg><use href="#i-arrow-right"/></svg></a>
+      </aside>
     </section>
 
     <section id="standard" class="quote-section">
@@ -212,20 +200,18 @@
     <section class="gateway-section section" aria-labelledby="gateway-title">
       <div class="shell">
         <div class="gateway-intro">
-          <div><p class="eyebrow">Beyond the experience</p><h2 id="gateway-title">A complete aviation practice.</h2></div>
-          <p>The introductory flight is one point of entry. Pilot Consciousness supports the larger journey—from an initial certificate to advanced qualifications, instructor development, and recurrent proficiency.</p>
+          <div><p class="eyebrow">Beyond the experience</p><h2 id="gateway-title">Go deeper into aviation.</h2></div>
+          <p>Pilot Consciousness also provides structured flight training and focused pilot services in Phoenix.</p>
         </div>
         <div class="gateway-grid">
           <article id="training" class="gateway-block gateway-training">
             <p class="eyebrow">Flight training</p><h3>From first certificate to instructor qualification.</h3>
-            <p class="gateway-copy">Structured instruction for Private Pilot, Instrument, Commercial, Multi-Engine, CFI, CFII, and MEI candidates—built around judgment, aircraft command, and the realities of the operating environment.</p>
-            <ul class="gateway-list"><li><span>01</span> Begin flying</li><li><span>02</span> Advance as a pilot</li><li><span>03</span> Become an instructor</li></ul>
+            <p class="gateway-copy">Private through MEI training built around judgment, aircraft command, and real-world operating skill.</p>
             <a class="plain-link" href="/training/">Explore flight training <svg><use href="#i-arrow-right"/></svg></a>
           </article>
           <article id="pilot-services" class="gateway-block gateway-services">
             <p class="eyebrow">Pilot services</p><h3>Stay current. Add capability. Return sharper.</h3>
-            <p class="gateway-copy">Focused support for flight reviews, IPCs, high-performance and complex endorsements, Part 107, and individualized proficiency work—without enrolling in a full training program.</p>
-            <ul class="gateway-list"><li><span>01</span> Currency and proficiency</li><li><span>02</span> Aircraft endorsements</li><li><span>03</span> Remote pilot support</li></ul>
+            <p class="gateway-copy">Flight reviews, IPCs, endorsements, Part 107 support, and individualized proficiency work.</p>
             <a class="plain-link" href="tel:+16024924042">Discuss pilot services <svg><use href="#i-arrow-right"/></svg></a>
           </article>
         </div>
