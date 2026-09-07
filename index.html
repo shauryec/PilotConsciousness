@@ -19,6 +19,8 @@
     .lesson-card .experience-visual{object-position:center 48%}
     .tour-card .experience-visual{object-position:center 42%}
 
+    .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
+
     /* Booking is the only boxed action on the page. */
     .booking-cta{position:relative;overflow:hidden;isolation:isolate;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
     .booking-cta:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 0 35%,rgba(255,255,255,.16) 48%,transparent 61%);transform:translateX(-130%);transition:transform .65s ease;pointer-events:none;z-index:-1}
@@ -43,6 +45,7 @@
     .lesson-card>a.booking-cta{box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
     .tour-card>a.booking-cta{box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
 
+    @media (prefers-reduced-motion:reduce){.hero-video{display:none}.hero{background:url('/assets/phoenix-air-hero.jpg') center/cover no-repeat}}
     @media (max-width:760px){.hero-booking{min-width:0}.experience-fare{grid-template-columns:1fr;gap:.75rem}.fare-price strong{font-size:3.7rem}.experience-visual{margin-top:1.25rem}}
   </style>
 </head>
@@ -63,7 +66,9 @@
 
   <main>
     <section class="hero" aria-labelledby="hero-title">
-      <img class="hero-image" src="/assets/phoenix-air-hero.jpg" alt="A modern single-engine airplane flying above Phoenix at blue hour">
+      <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="/assets/phoenix-air-hero.jpg" aria-label="Scenes from a Phoenix flight experience">
+        <source src="/assets/phoenix-flight-film.webm" type="video/webm">
+      </video>
       <div class="hero-scrim"></div>
 
       <header class="site-header shell">
@@ -148,19 +153,13 @@
       </div>
     </section>
 
-    <section id="flight-film" class="media-section section" aria-labelledby="media-title">
+    <section id="flight-gallery" class="media-section section" aria-labelledby="media-title">
       <div class="shell">
         <div class="media-intro">
           <div>
             <p class="eyebrow">From the flight deck</p>
-            <h2 id="media-title">The experience, in motion.</h2>
+            <h2 id="media-title">Views from the experience.</h2>
           </div>
-        </div>
-
-        <div class="film-frame">
-          <video class="flight-film" autoplay muted loop playsinline preload="metadata" poster="/assets/night-city.webp" aria-label="Scenes from a Phoenix flight experience">
-            <source src="/assets/phoenix-flight-film.webm" type="video/webm">
-          </video>
         </div>
 
         <div class="flight-photo-grid" aria-label="Views from flight">
