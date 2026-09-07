@@ -4,49 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1520">
-  <title>Pilot Consciousness | Phoenix Flight Experiences</title>
-  <meta name="description" content="Introductory flight lessons and private Phoenix aerial experiences, conducted by a professional flight instructor from Falcon Field and Deer Valley.">
+  <title>Pilot Consciousness | Flight Training in Phoenix</title>
+  <meta name="description" content="Premium flight instruction in Phoenix, Arizona. Start with a hands-on introductory flight lesson, then continue through Private, Instrument, Commercial, Multi-Engine, CFI, CFII and MEI training.">
   <link rel="stylesheet" href="/assets/experience.css?v=20260904-3">
+  <link rel="stylesheet" href="/assets/training-home.css?v=20260907-1">
   <style>
-    .experience-fare{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:1.35rem;margin:1.35rem 0 1.4rem;padding:1.05rem 0 0;border-top:1px solid rgba(255,255,255,.2)}
-    .fare-price{display:flex;flex-direction:column;gap:.28rem}
-    .fare-price span{font-size:.68rem;line-height:1;letter-spacing:.15em;text-transform:uppercase;font-weight:750;opacity:.68}
-    .fare-price strong{font-size:clamp(3rem,4.5vw,4.35rem);line-height:.82;letter-spacing:-.055em;font-weight:650;font-variant-numeric:tabular-nums;color:inherit}
-    .fare-detail{margin:0 0 .12rem;max-width:17rem;font-size:.78rem;line-height:1.45;letter-spacing:.07em;text-transform:uppercase;font-weight:650;opacity:.76}
-    .fare-detail b{display:block;margin-top:.18rem;font-weight:800;opacity:1}
-
-    .experience-visual{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;margin:1.6rem 0 .15rem;border:1px solid rgba(255,255,255,.16)}
-    .lesson-card .experience-visual{object-position:center 48%}
-    .tour-card .experience-visual{object-position:center 42%}
-
-    .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
-
-    /* Booking is the only boxed action on the page. */
-    .booking-cta{position:relative;overflow:hidden;isolation:isolate;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
-    .booking-cta:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 0 35%,rgba(255,255,255,.16) 48%,transparent 61%);transform:translateX(-130%);transition:transform .65s ease;pointer-events:none;z-index:-1}
-    .booking-cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.18)}
-    .booking-cta:hover:after{transform:translateX(130%)}
-    .booking-cta svg{transition:transform .18s ease}.booking-cta:hover svg{transform:translateX(4px)}
-    .hero-booking{min-width:220px;justify-content:space-between;padding-inline:1.35rem}
-    .hero-actions .text-link.internal-link{opacity:.82}
-
-    /* Route strip remains the airline-style fare selector, but every panel now starts checkout. */
-    .route-strip a{transition:background .18s ease,transform .18s ease}
-    .route-strip a:hover{transform:translateY(-2px)}
-    .route-strip a strong:after{content:" · Book";font-weight:700;opacity:.58}
-
-    /* Internal/exploratory links are intentionally unboxed. */
-    .plain-link{display:inline-flex;align-items:center;gap:.55rem;margin-top:1.35rem;color:inherit;text-decoration:none;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;font-weight:750;border:0!important;background:transparent!important;padding:0!important;box-shadow:none!important}
-    .plain-link svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;transition:transform .18s ease}
-    .plain-link:hover svg{transform:translateX(4px)}
-
-    /* Make the actual purchase decision on each experience card feel deliberate and premium. */
-    .experience-card>a.booking-cta{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:58px;padding:0 1.25rem!important;margin-top:.2rem!important;font-size:.76rem!important;letter-spacing:.11em!important;text-transform:uppercase;font-weight:850!important}
-    .lesson-card>a.booking-cta{box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
-    .tour-card>a.booking-cta{box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
-
-    @media (prefers-reduced-motion:reduce){.hero-video{display:none}.hero{background:url('/assets/phoenix-air-hero.jpg') center/cover no-repeat}}
-    @media (max-width:760px){.hero-booking{min-width:0}.experience-fare{grid-template-columns:1fr;gap:.75rem}.fare-price strong{font-size:3.7rem}.experience-visual{margin-top:1.25rem}}
+    .contact-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px;max-width:650px}.contact-form .full{grid-column:1/-1}.contact-form label{display:block;margin-bottom:7px;color:rgba(255,255,255,.68);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.contact-form input,.contact-form select,.contact-form textarea{width:100%;min-height:50px;padding:12px 13px;color:#fff;background:#0a1720;border:1px solid rgba(255,255,255,.2);border-radius:0;font:inherit}.contact-form textarea{min-height:105px;resize:vertical}.contact-form button{grid-column:1/-1;justify-self:start}.contact-form-note{margin-top:14px!important;font-size:.75rem!important}.contact-split{display:grid;grid-template-columns:1.05fr .95fr;gap:70px;align-items:start}.contact-direct{padding-top:54px}.contact-direct a{display:block;padding:17px 0;border-top:1px solid rgba(255,255,255,.18);color:#fff;text-decoration:none}.contact-direct a:last-of-type{border-bottom:1px solid rgba(255,255,255,.18)}.contact-direct strong{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}.contact-direct span{display:block;margin-top:5px;color:rgba(255,255,255,.58);font-size:.85rem}.footer-link{color:inherit;text-decoration:none}@media(max-width:900px){.contact-split{grid-template-columns:1fr;gap:25px}.contact-direct{padding-top:0}}@media(max-width:620px){.contact-form{grid-template-columns:1fr}.contact-form .full,.contact-form button{grid-column:1}}
   </style>
 </head>
 <body>
@@ -56,201 +19,241 @@
     <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 14a8 8 0 0 1 16 0"/><path d="M18 19c0 1.1-.9 2-2 2h-1v-7h3c1.1 0 2 .9 2 2v1c0 1.1-.9 2-2 2Z"/><path d="M6 19c-1.1 0-2-.9-2-2v-1c0-1.1.9-2 2-2h3v7H8c-1.1 0-2-.9-2-2Z"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3Z"/><path d="m9 12 2 2 4-4"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6h4"/></symbol>
-    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
-    <symbol id="i-map" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
-    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.9 5.1L5 10l5.1 1.9L12 17l1.9-5.1L19 10l-5.1-1.9Z"/><path d="M5 3v4"/><path d="M3 5h4"/><path d="M19 17v4"/><path d="M17 19h4"/></symbol>
-    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 0 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 0 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="m9 12 2 2 4-4"/></symbol>
-    <symbol id="i-graduation" viewBox="0 0 24 24"><path d="m2 10 10-5 10 5-10 5Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/><path d="M22 10v6"/></symbol>
     <symbol id="i-plane" viewBox="0 0 24 24"><path d="M2 22h20"/><path d="M6.36 17.4 4 16l-1-2 1.5-.5 2.4.8 4.35-4.35-5.2-3.2L7.3 5.5l6.4 1.8 3.1-3.1a2.83 2.83 0 0 1 4 4Z"/><path d="m13 16-2 2-3-1 2.5-2.5"/></symbol>
+    <symbol id="i-graduation" viewBox="0 0 24 24"><path d="m2 10 10-5 10 5-10 5Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/><path d="M22 10v6"/></symbol>
   </svg>
 
   <main>
     <section class="hero" aria-labelledby="hero-title">
-      <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="/assets/phoenix-air-hero.jpg" aria-label="Scenes from a Phoenix flight experience">
+      <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="/assets/phoenix-air-hero.jpg" aria-label="Scenes from flight training in Phoenix">
         <source src="/assets/phoenix-flight-film.webm" type="video/webm">
       </video>
       <div class="hero-scrim"></div>
 
       <header class="site-header shell">
-        <a class="brand" href="#top" aria-label="Pilot Consciousness Phoenix Flight Experience home">
+        <a class="brand" href="#top" aria-label="Pilot Consciousness flight training home">
           <span class="brand-mark">P</span>
-          <span><strong>Pilot Consciousness</strong><small>Phoenix Flight Experience</small></span>
+          <span><strong>Pilot Consciousness</strong><small>Phoenix Flight Training</small></span>
         </a>
         <nav aria-label="Primary navigation">
-          <a href="#experiences">Experiences</a>
-          <a href="/training/">Flight training</a>
-          <a href="#pilot-services">Pilot services</a>
-          <a href="#standard">The standard</a>
-          <a class="nav-cta booking-cta" href="/booking.html">Book a flight</a>
+          <a href="#first-flight">First flight</a>
+          <a href="#training-path">Training</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#instructor">Instructor</a>
+          <a href="#contact">Schedule</a>
+          <a class="nav-cta booking-cta" href="/booking.html?experience=intro">Book first lesson</a>
         </nav>
       </header>
 
       <div id="top" class="hero-content shell">
         <p class="eyebrow">Phoenix · KFFZ / KDVT</p>
         <h1 id="hero-title">From the cabin to command.</h1>
-        <p class="hero-copy">Experience Phoenix from the flight deck. Take the controls with a professional instructor, or share a private aerial departure for up to two guests.</p>
+        <p class="hero-copy">Private flight instruction in Phoenix, Arizona. Start with a hands-on introductory lesson, then continue through certificates, ratings, and advanced training with the same emphasis on judgment, aircraft control, and real-world flying.</p>
         <div class="hero-actions">
-          <a class="button button-light booking-cta hero-booking" href="/booking.html">Reserve your flight <svg><use href="#i-arrow-right"/></svg></a>
-          <a class="text-link internal-link" href="#experiences">View experiences <svg><use href="#i-arrow-down"/></svg></a>
+          <a class="button button-light booking-cta hero-booking" href="/booking.html?experience=intro">Book introductory flight · $299 <svg><use href="#i-arrow-right"/></svg></a>
+          <a class="text-link internal-link" href="#training-path">Explore training <svg><use href="#i-arrow-down"/></svg></a>
           <a class="text-link" href="tel:+16024924042">Call 602 492 4042 <svg><use href="#i-arrow-right"/></svg></a>
         </div>
       </div>
 
-      <div class="route-strip shell" aria-label="Book your flight">
-        <a class="booking-cta" href="/booking.html?experience=intro"><span>01</span><strong>Take the controls</strong><small>Introductory flight · $299</small><svg><use href="#i-arrow-right"/></svg></a>
-        <a class="booking-cta" href="/booking.html?experience=tour"><span>02</span><strong>See Phoenix</strong><small>Private aerial experience · $399 total</small><svg><use href="#i-arrow-right"/></svg></a>
-        <a class="booking-cta" href="/booking.html"><span>03</span><strong>Choose your departure</strong><small>Start a secure reservation</small><svg><use href="#i-arrow-right"/></svg></a>
+      <div class="route-strip shell" aria-label="Flight training pathways">
+        <a class="booking-cta" href="/booking.html?experience=intro"><span>01</span><strong>Take the controls</strong><small>Introductory flight lesson · $299</small><svg><use href="#i-arrow-right"/></svg></a>
+        <a href="#training-path"><span>02</span><strong>Choose your route</strong><small>Private through MEI</small><svg><use href="#i-arrow-right"/></svg></a>
+        <a href="#pricing"><span>03</span><strong>Build the plan</strong><small>Published rates + estimator</small><svg><use href="#i-arrow-right"/></svg></a>
       </div>
     </section>
 
-    <section id="experiences" class="experiences section shell">
-      <div class="section-intro">
-        <p class="eyebrow dark">Choose your flight</p>
-        <h2>Take the controls. Or take in the city.</h2>
-        <p>Two private ways into the flight deck: a hands-on introductory lesson, or a Phoenix aerial experience for one or two guests.</p>
-      </div>
-
-      <div class="experience-grid">
-        <article id="intro-flight" class="experience-card lesson-card">
-          <div class="card-number">01</div>
-          <div>
-            <p class="card-kicker">For those drawn forward</p>
-            <h3>Introductory Flight Lesson</h3>
-            <p class="card-copy">Cross the threshold from passenger to pilot. Begin with the aircraft, the systems, and the mission; then take the controls under the guidance of a professional flight instructor. A real lesson, conducted to a professional standard.</p>
-            <div class="experience-fare">
-              <div class="fare-price"><span>Experience fare</span><strong>$299</strong></div>
-              <p class="fare-detail">Private flight · one participant<b>Aircraft + instructor included</b></p>
-            </div>
+    <section id="first-flight" class="first-flight section">
+      <div class="shell first-flight-grid">
+        <div class="first-flight-visual">
+          <img src="/assets/intro-experience.webp?v=2" alt="Student pilot flying with a flight instructor beside him in a Cirrus cockpit">
+          <div class="first-flight-caption">Your first lesson · Phoenix, Arizona</div>
+        </div>
+        <div class="first-flight-copy">
+          <p class="eyebrow dark">Your first flight</p>
+          <h2>Fly the airplane.</h2>
+          <p class="lead">This is not a sightseeing ride with a lesson attached. It is your first flight lesson: briefing, aircraft familiarization, cockpit setup, and hands-on flying with a professional instructor beside you.</p>
+          <div class="first-flight-price">
+            <div><span>Introductory lesson</span><strong>$299</strong></div>
+            <p>One primary participant<b>Aircraft + instructor included</b></p>
           </div>
-          <img class="experience-visual" src="/assets/intro-experience.webp?v=2" alt="Student pilot taking the controls with a flight instructor beside him in a Cirrus cockpit" loading="lazy" decoding="async">
-          <ul>
+          <ul class="first-flight-points">
             <li><svg><use href="#i-headphones"/></svg> Individual briefing and instruction</li>
             <li><svg><use href="#i-shield"/></svg> Hands-on flight from the pilot seat</li>
-            <li><svg><use href="#i-clock"/></svg> Briefing, aircraft, and flight as one mission</li>
+            <li><svg><use href="#i-clock"/></svg> A complete first lesson, not a passenger service</li>
           </ul>
-          <a class="booking-cta" href="/booking.html?experience=intro">Book the introductory flight <svg><use href="#i-arrow-right"/></svg></a>
-        </article>
+          <a class="button button-dark booking-cta" href="/booking.html?experience=intro">Book your first lesson <svg><use href="#i-arrow-right"/></svg></a>
+        </div>
+      </div>
+    </section>
 
-        <article id="air-tour" class="experience-card tour-card">
-          <div class="card-number">02</div>
-          <div>
-            <p class="card-kicker">Private departure · One or two guests</p>
-            <h3>Phoenix Aerial Experience</h3>
-            <p class="card-copy">Take your place aboard a private aircraft and watch one of America’s great aviation cities assemble beneath you. The Valley grid, desert ranges, and western light—seen from the airspace that connects Phoenix to the world.</p>
-            <div class="experience-fare">
-              <div class="fare-price"><span>Total private fare</span><strong>$399</strong></div>
-              <p class="fare-detail">For the entire aircraft<b>Up to two guests · one price</b></p>
+    <section class="training-film" aria-labelledby="film-title">
+      <div class="film-grid">
+        <div class="film-copy">
+          <p class="eyebrow">The experience, in motion</p>
+          <h2 id="film-title">The airplane is the classroom.</h2>
+          <p>From the briefing to the cockpit to the view outside, flight training is a physical experience. The film stays because the feeling matters—the difference is that the product is instruction.</p>
+        </div>
+        <div class="film-frame">
+          <video autoplay muted loop playsinline controls preload="metadata" poster="/assets/phoenix-air-hero.jpg">
+            <source src="/assets/phoenix-flight-film.webm" type="video/webm">
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <section id="training-path" class="training-path section">
+      <div class="shell">
+        <div class="section-intro">
+          <p class="eyebrow dark">Where it can lead</p>
+          <h2>One first flight. An entire training path.</h2>
+          <p>Start from zero, finish a rating already underway, or add the next capability. Select a path to load its planning assumptions into the estimator below.</p>
+        </div>
+        <div class="program-grid">
+          <a class="program-card" href="#trainingEstimator" data-select-program="private"><span class="code">PVT · ASEL</span><span class="arrow">↗</span><h3>Private Pilot</h3><p>Learn to operate the airplane independently and build the judgment to go somewhere with it.</p></a>
+          <a class="program-card" href="#trainingEstimator" data-select-program="instrument"><span class="code">IRA · IFR</span><span class="arrow">↗</span><h3>Instrument Rating</h3><p>Fly with precision when the horizon disappears, using procedures and automation deliberately.</p></a>
+          <a class="program-card" href="#trainingEstimator" data-select-program="commercial"><span class="code">CPL · ASEL</span><span class="arrow">↗</span><h3>Commercial Pilot</h3><p>Develop professional aircraft control, planning discipline, and passenger-quality operation.</p></a>
+          <a class="program-card" href="#trainingEstimator" data-select-program="multi"><span class="code">AMEL · ADD-ON</span><span class="arrow">↗</span><h3>Multi-Engine</h3><p>Add multiengine privileges with focused Seneca training and asymmetric-control proficiency.</p></a>
+          <a class="program-card" href="#trainingEstimator" data-select-program="cfi"><span class="code">CFI · ASEL</span><span class="arrow">↗</span><h3>CFI</h3><p>Learn to teach aircraft control, diagnose errors, and manage the right seat as pilot in command.</p></a>
+          <a class="program-card" href="#trainingEstimator" data-select-program="cfii"><span class="code">CFII · INSTR</span><span class="arrow">↗</span><h3>CFII</h3><p>Teach instrument flying while managing clearances, automation, workload, and student errors.</p></a>
+          <a class="program-card" href="#trainingEstimator" data-select-program="mei"><span class="code">MEI · AMEL</span><span class="arrow">↗</span><h3>MEI</h3><p>Teach multiengine priorities, systems, asymmetric control, and calm decision-making.</p></a>
+          <a class="program-card" href="#contact"><span class="code">PROFICIENCY</span><span class="arrow">↗</span><h3>IPC · Flight Review · Endorsements</h3><p>Stay current, return to flying, or work on a specific capability without forcing it into a certificate syllabus.</p></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="rates-section">
+      <div class="shell">
+        <div class="rates-head">
+          <div><p class="eyebrow">Published hourly rates</p><h2>State-of-the-art flying. Priced by the hour.</h2></div>
+          <p>No mystery package pricing. The aircraft, simulator, and instruction rates are published up front. Use the estimator to model the training route that fits your logbook.</p>
+        </div>
+
+        <div class="rate-grid" aria-label="Published hourly training rates">
+          <article class="rate-card"><div class="rate-code"><strong>SR20</strong><span>Single engine</span></div><div class="rate-price"><sup>$</sup>180 <small>/ hr</small></div><div class="rate-caption">Cirrus SR20 · dry</div></article>
+          <article class="rate-card"><div class="rate-code"><strong>PA-34</strong><span>Multi engine</span></div><div class="rate-price"><sup>$</sup>350 <small>/ hr</small></div><div class="rate-caption">Piper Seneca · dry</div></article>
+          <article class="rate-card"><div class="rate-code"><strong>CFI</strong><span>Instruction</span></div><div class="rate-price"><sup>$</sup>75 <small>/ hr</small></div><div class="rate-caption">Flight or ground instruction</div></article>
+          <article class="rate-card"><div class="rate-code"><strong>SIM</strong><span>Training device</span></div><div class="rate-price"><sup>$</sup>50 <small>/ hr</small></div><div class="rate-caption">Simulator · device only</div></article>
+        </div>
+
+        <div class="estimator-wrap" id="trainingEstimator">
+          <div class="estimator-top"><span>Training Cost Estimator</span><span>Dry subtotal · planning tool</span></div>
+          <div class="program-selector" role="tablist" aria-label="Select a certificate or rating">
+            <button class="program-tab active" type="button" role="tab" aria-selected="true" data-estimate-program="private">Private<small>PVT</small></button>
+            <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="instrument">Instrument<small>IRA</small></button>
+            <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="commercial">Commercial<small>CPL</small></button>
+            <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="multi">Multi<small>AMEL</small></button>
+            <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="cfi">CFI<small>ASEL</small></button>
+            <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="cfii">CFII<small>INSTR</small></button>
+            <button class="program-tab" type="button" role="tab" aria-selected="false" data-estimate-program="mei">MEI<small>AMEL</small></button>
+          </div>
+
+          <div class="estimator-grid">
+            <div class="estimator-inputs">
+              <div class="route-heading"><div><h3 id="estimateTitle">Private Pilot</h3><p id="estimateDescription">A first certificate in a technically advanced Cirrus, beginning at the Part 61 aeronautical-experience floor.</p></div><span class="reg-badge" id="estimateRule">14 CFR § 61.109(a)</span></div>
+              <div class="minimum-row"><span class="minimum-label">Regulatory starting point</span><div class="minimum-value" id="estimateMinimum">40 hours total · 20 hours flight training · 10 hours solo</div></div>
+              <div class="logbook-row" id="logbookRow"><div class="logbook-copy"><strong id="logbookLabel">Current total flight time</strong><span id="logbookHelp">The estimator calculates the remaining time to the applicable floor.</span></div><div class="logbook-slider-head"><span>Logged hours</span><output class="slider-value" id="logbookHoursOutput" for="logbookHours">40 hr</output></div><input class="range-control" id="logbookHours" type="range" min="0" max="300" step="1" value="40" aria-label="Current logged hours"></div>
+              <div class="hour-fields">
+                <div class="hour-field"><label for="sr20Hours"><span>Cirrus SR20 · $180 dry</span><output class="slider-value" id="sr20HoursOutput" for="sr20Hours">40 hr</output></label><input class="range-control" id="sr20Hours" type="range" min="0" max="250" step="1" value="40"></div>
+                <div class="hour-field"><label for="senecaHours"><span>Seneca · $350 dry</span><output class="slider-value" id="senecaHoursOutput" for="senecaHours">0 hr</output></label><input class="range-control" id="senecaHours" type="range" min="0" max="50" step="1" value="0"></div>
+                <div class="hour-field"><label for="instructionHours"><span>Instruction · $75 / hr</span><output class="slider-value" id="instructionHoursOutput" for="instructionHours">40 hr</output></label><input class="range-control" id="instructionHours" type="range" min="0" max="350" step="1" value="40"></div>
+                <div class="hour-field"><label for="simHours"><span>Simulator · $50 / hr</span><output class="slider-value" id="simHoursOutput" for="simHours">0 hr</output></label><input class="range-control" id="simHours" type="range" min="0" max="50" step="1" value="0"></div>
+              </div>
             </div>
-          </div>
-          <img class="experience-visual" src="/assets/phoenix-aerial-experience.webp?v=2" alt="Two guests enjoying a private aerial experience over Phoenix at sunset" loading="lazy" decoding="async">
-          <ul>
-            <li><svg><use href="#i-users"/></svg> Private aircraft for your party</li>
-            <li><svg><use href="#i-map"/></svg> Route selected for conditions and light</li>
-            <li><svg><use href="#i-sparkles"/></svg> Direct access to pilot and flight deck</li>
-          </ul>
-          <a class="booking-cta" href="/booking.html?experience=tour">Book the Phoenix experience <svg><use href="#i-arrow-right"/></svg></a>
-        </article>
-      </div>
-    </section>
-
-    <section id="flight-gallery" class="media-section section" aria-labelledby="media-title">
-      <div class="shell">
-        <div class="media-intro">
-          <div>
-            <p class="eyebrow">From the flight deck</p>
-            <h2 id="media-title">Views from the experience.</h2>
+            <aside class="estimator-summary" aria-live="polite">
+              <span class="summary-label">Estimated training subtotal</span>
+              <div class="summary-total" id="estimateTotal">$10,200</div>
+              <p class="summary-basis" id="estimateBasis">The FAA minimum is the starting point. Most pilots require additional time to reach practical-test proficiency.</p>
+              <div class="cost-lines">
+                <div class="cost-line"><span>Cirrus SR20</span><strong id="sr20Cost">$7,200</strong></div>
+                <div class="cost-line"><span>Seneca</span><strong id="senecaCost">$0</strong></div>
+                <div class="cost-line"><span>Instruction</span><strong id="instructionCost">$3,000</strong></div>
+                <div class="cost-line"><span>Simulator</span><strong id="simCost">$0</strong></div>
+              </div>
+              <div class="zero-minimum" id="zeroMinimum">The FAA does not prescribe a fixed training-hour minimum for this route. Add the hours you want to model after a proficiency and logbook review.</div>
+              <a class="button" href="#contact">Discuss this training plan</a>
+            </aside>
           </div>
         </div>
-
-        <div class="flight-photo-grid" aria-label="Views from flight">
-          <figure>
-            <img src="/assets/arizona-terrain.webp" alt="Arizona mountain terrain viewed beneath an aircraft wing" loading="lazy" decoding="async">
-            <figcaption><span>01</span> The Sonoran landscape from above</figcaption>
-          </figure>
-          <figure>
-            <img src="/assets/sunset-flight.webp" alt="A vivid Arizona sunset viewed forward from the cockpit" loading="lazy" decoding="async">
-            <figcaption><span>02</span> Western light, seen forward</figcaption>
-          </figure>
-          <figure>
-            <img src="/assets/feature1.jpg" alt="Aircraft flying in formation above red-rock terrain" loading="lazy" decoding="async">
-            <figcaption><span>03</span> Aviation in its natural environment</figcaption>
-          </figure>
-        </div>
+        <div class="estimator-disclaimer"><strong>Estimator limits:</strong> This is a planning tool, not a quote or guarantee of completion at the regulatory minimum. Dry aircraft rates exclude fuel. Examiner and knowledge-test fees, medical certification, renter/non-owned insurance, books, apps and other third-party charges are not included. Simulator credit depends on the device’s FAA approval and authorization. Eligibility, creditable time and final training scope are confirmed through a logbook and proficiency review.</div>
       </div>
     </section>
 
-    <section class="section shell" aria-label="Groupon flight redemption">
-      <aside id="voucher" class="voucher-panel">
-        <div class="voucher-icon"><svg><use href="#i-ticket"/></svg></div>
-        <div><p class="eyebrow dark">Groupon voucher holders</p><h3>Your flight is already waiting.</h3><p>Have your voucher and preferred dates ready. We’ll confirm your party, coordinate the departure, and send the details you need before arriving at the airport.</p></div>
-        <a class="button button-dark booking-cta" href="/booking.html">Continue to booking <svg><use href="#i-arrow-right"/></svg></a>
-      </aside>
-    </section>
-
-    <section id="standard" class="quote-section">
-      <div class="shell quote-layout">
-        <p class="eyebrow">A different relationship with flight</p>
-        <blockquote>“Aviation becomes different when you are no longer looking through a cabin window.”</blockquote>
-        <p class="quote-note">One aircraft. One crew. One view of the system from inside it.</p>
-        <a class="plain-link" href="#experiences">Compare the two experiences <svg><use href="#i-arrow-right"/></svg></a>
-      </div>
-    </section>
-
-    <section class="gateway-section section" aria-labelledby="gateway-title">
+    <section class="training-gallery section" id="gallery">
       <div class="shell">
-        <div class="gateway-intro">
-          <div><p class="eyebrow">Beyond the experience</p><h2 id="gateway-title">Go deeper into aviation.</h2></div>
-          <p>Pilot Consciousness also provides structured flight training and focused pilot services in Phoenix.</p>
-        </div>
-        <div class="gateway-grid">
-          <article id="training" class="gateway-block gateway-training">
-            <p class="eyebrow">Flight training</p><h3>From first certificate to instructor qualification.</h3>
-            <p class="gateway-copy">Private through MEI training built around judgment, aircraft command, and real-world operating skill.</p>
-            <a class="plain-link" href="/training/">Explore flight training <svg><use href="#i-arrow-right"/></svg></a>
-          </article>
-          <article id="pilot-services" class="gateway-block gateway-services">
-            <p class="eyebrow">Pilot services</p><h3>Stay current. Add capability. Return sharper.</h3>
-            <p class="gateway-copy">Flight reviews, IPCs, endorsements, Part 107 support, and individualized proficiency work.</p>
-            <a class="plain-link" href="tel:+16024924042">Discuss pilot services <svg><use href="#i-arrow-right"/></svg></a>
-          </article>
+        <div class="section-intro"><p class="eyebrow dark">From the flight deck</p><h2>The office.</h2><p>Real airplanes, real weather, Arizona terrain, and the operating environment where judgment becomes more than a paragraph in a textbook.</p></div>
+        <div class="training-photo-grid">
+          <figure><img src="/assets/student-flying.webp" alt="Flight student flying over Arizona terrain"><figcaption><span>01 · Aircraft control</span>Learning in the airplane</figcaption></figure>
+          <figure><img src="/assets/cloud-flying.webp" alt="Aircraft flying among building clouds"><figcaption><span>02 · Weather</span>Read what is changing</figcaption></figure>
+          <figure><img src="/assets/night-city.webp" alt="City lights at night from a light aircraft"><figcaption><span>03 · Night</span>Different cues, different margins</figcaption></figure>
+          <figure><img src="/assets/arizona-terrain.webp" alt="Arizona terrain beneath an aircraft wing"><figcaption><span>04 · Terrain</span>Plan the escape before you need it</figcaption></figure>
         </div>
       </div>
     </section>
 
-    <section id="what-to-expect" class="section shell journey">
-      <div class="section-intro compact"><p class="eyebrow dark">Your journey</p><h2>A departure, properly conducted.</h2></div>
-      <ol class="journey-list">
-        <li><span>01</span><div><h3>Flight selection</h3><p>Choose the instructional flight or aerial experience, identify your party, and request a departure window.</p></div></li>
-        <li><span>02</span><div><h3>Operational briefing</h3><p>Meet your pilot, review the mission and conditions, and understand the flight before approaching the aircraft.</p></div></li>
-        <li><span>03</span><div><h3>Aircraft familiarization</h3><p>Move from the walkaround to the flight deck with a clear understanding of the aircraft and your place aboard it.</p></div></li>
-        <li><span>04</span><div><h3>Departure</h3><p>Take the controls with your instructor—or watch the Valley fall away as the flight opens Phoenix to the horizon.</p></div></li>
-      </ol>
+    <section class="training-standard section" id="standard">
+      <div class="shell">
+        <p class="eyebrow">The standard</p>
+        <blockquote>“A checkride is a floor, not a finish line.”</blockquote>
+        <p class="standard-note">The goal is a pilot who can identify what is changing, preserve options, manage the aircraft, and make the next sound decision while the plan changes around them.</p>
+      </div>
     </section>
 
-    <section class="faq-section section shell">
-      <div class="section-intro compact"><p class="eyebrow dark">Flight information</p><h2>Arrive ready. We handle the rest.</h2></div>
+    <section class="instructor-section section" id="instructor">
+      <div class="shell instructor-grid">
+        <img class="instructor-photo" src="/assets/instructor.jpg?v=2" alt="Shaurye Chakravarty, flight instructor, in the cockpit">
+        <div class="instructor-copy">
+          <p class="eyebrow dark">Your instructor</p>
+          <h2>Shaurye Chakravarty</h2>
+          <p>I trained at Embry-Riddle Aeronautical University’s Prescott campus and built the bulk of my flight time in Arizona’s high-density-altitude environment. That experience shapes how I teach in Phoenix today: aircraft control first, judgment in context, deliberate automation, and clear command.</p>
+          <p>The objective is independent, repeatable performance—not a rehearsed sequence that disappears after the practical test.</p>
+          <div class="credential-grid"><span>CFI</span><span>CFII</span><span>MEI</span><span>Cirrus / Glass Cockpit</span><span>Arizona High-DA Experience</span><span>Private through Instructor Training</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section section shell" id="faq">
+      <div class="section-intro compact"><p class="eyebrow dark">Training information</p><h2>Start where you are.</h2></div>
       <div class="faq-grid">
-        <article><h3>Which flight should I select?</h3><p>Select the lesson to take the controls. Select the aerial experience when the aircraft, the city, and the shared view are the destination.</p></article>
-        <article><h3>Who may travel?</h3><p>Introductory lessons are built around one primary participant. Aerial experiences accommodate one or two guests.</p></article>
-        <article><h3>Is prior aviation knowledge required?</h3><p>No. Every flight begins with a clear briefing, direct communication, and the context needed to understand the operation.</p></article>
-        <article><h3>How are weather decisions made?</h3><p>Safety and experience quality set the standard. If conditions do not support both, we coordinate a new departure.</p></article>
+        <article><h3>Do I need any flight experience?</h3><p>No. The $299 introductory lesson is designed as a legitimate first instructional flight and requires no prior aviation knowledge.</p></article>
+        <article><h3>Can I continue after the introductory flight?</h3><p>Yes. If you want to pursue a certificate, the next step is a training plan based on your goals, schedule, aircraft access, and applicable aeronautical-experience requirements.</p></article>
+        <article><h3>Can you help if I already started somewhere else?</h3><p>Yes. Finish-up training begins with a logbook and proficiency review so the plan reflects what you actually need rather than restarting a syllabus.</p></article>
+        <article><h3>Where does training take place?</h3><p>Phoenix, Arizona, primarily from Falcon Field (KFFZ) and Deer Valley (KDVT). Other locations are available on request.</p></article>
       </div>
     </section>
 
-    <section id="contact" class="contact-section">
-      <div class="shell contact-layout">
-        <div><p class="eyebrow">Your next flight begins here</p><h2>Select your experience. We’ll coordinate the departure.</h2></div>
-        <div class="contact-actions">
-          <a class="button button-copper booking-cta" href="/booking.html"><svg><use href="#i-plane"/></svg> Book your flight <svg><use href="#i-arrow-right"/></svg></a>
-          <a class="contact-phone" href="tel:+16024924042">602 492 4042</a>
-          <p>Phoenix, Arizona · Falcon Field &amp; Deer Valley<br>Other locations available by request</p>
+    <section id="contact" class="training-contact section">
+      <div class="shell contact-split">
+        <div>
+          <p class="eyebrow">Your next flight begins here</p>
+          <h2>Schedule a call.</h2>
+          <p>Tell me where you are starting and what you want to accomplish. Choose a preferred call time and I’ll confirm the next step.</p>
+          <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="ceab2eb4-7886-4a5a-bb11-8d9fbe5c3f1d">
+            <input type="hidden" name="subject" value="Call Request — Pilot Consciousness">
+            <div><label for="callName">Name</label><input id="callName" name="name" required></div>
+            <div><label for="callEmail">Email</label><input id="callEmail" name="email" type="email" required></div>
+            <div><label for="callPhone">Phone</label><input id="callPhone" name="phone" type="tel" required></div>
+            <div><label for="callGoal">Training goal</label><select id="callGoal" name="program"><option>Introductory Flight</option><option>Private Pilot</option><option>Instrument Rating</option><option>Commercial Pilot</option><option>Multi-Engine Add-On</option><option>CFI</option><option>CFII</option><option>MEI</option><option>IPC / Flight Review / Proficiency</option></select></div>
+            <div><label for="callDate">Preferred date</label><input id="callDate" name="call_date" type="date" required></div>
+            <div><label for="callTime">Preferred time</label><input id="callTime" name="call_time" type="time" required></div>
+            <div class="full"><label for="callMessage">What do you want to accomplish?</label><textarea id="callMessage" name="message" placeholder="Current experience, timeline, certificate goal, or the kind of flying you want to be capable of."></textarea></div>
+            <button class="button button-copper" type="submit">Request call <svg><use href="#i-arrow-right"/></svg></button>
+          </form>
+          <p class="contact-form-note">Training area: Phoenix, Arizona · KFFZ and KDVT · other locations on request.</p>
+        </div>
+        <div class="contact-direct">
+          <a href="/booking.html?experience=intro"><strong>Book the first lesson</strong><span>Introductory Flight Lesson · $299</span></a>
+          <a href="tel:+16024924042"><strong>Phone</strong><span>602 492 4042</span></a>
+          <a href="mailto:info@pilotconsciousness.com"><strong>Email</strong><span>info@pilotconsciousness.com</span></a>
         </div>
       </div>
     </section>
 
     <footer class="site-footer">
-      <div class="shell"><p>© 2026 Pilot Consciousness · Phoenix Flight Experience</p><p><a href="/terms.html">Terms of Use</a> · Flights are subject to weather, aircraft availability, and operating limitations.</p></div>
+      <div class="shell"><p>© <span id="year">2026</span> Pilot Consciousness · Phoenix Flight Training</p><p><a class="footer-link" href="/terms.html">Terms of Use</a> · Training is subject to weather, aircraft availability, operating limitations, and written agreement.</p></div>
     </footer>
   </main>
+  <script src="/assets/training-home.js?v=20260907-1"></script>
 </body>
 </html>
