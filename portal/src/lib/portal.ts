@@ -169,7 +169,7 @@ export interface ResourceAssignment {
 
 export interface CourseChangeEvent {
   id: number
-  entity_type: 'course' | 'course_version' | 'phase' | 'lesson' | 'lesson_acs_item'
+  entity_type: 'course' | 'course_version' | 'phase' | 'lesson' | 'lesson_acs_item' | 'acs_publication' | 'acs_item'
   entity_id: string
   course_id: string | null
   course_version_id: string | null
@@ -182,7 +182,7 @@ export interface CourseChangeEvent {
 
 export interface TrainingAuditEvent {
   id: number
-  entity_type: 'enrollment' | 'lesson_attempt' | 'attempt_item' | 'grade' | 'remediation'
+  entity_type: 'enrollment' | 'lesson_attempt' | 'attempt_item' | 'grade' | 'remediation' | 'profile' | 'resource' | 'resource_assignment'
   entity_id: string
   enrollment_id: string | null
   student_id: string | null
@@ -406,26 +406,21 @@ export async function createCourseWithVersion(input: { name: string; shortName: 
   return { course, version: versionResult.data as CourseVersion, publication }
 }
 
-async function requireDraftVersion(versionId: string) {
-  const result = await client().from('course_versions').select('status').eq('id', versionId).single()
-  throwIfError(result.error)
-  if (!result.data) throw new Error('Course revision not found.')
-  if (result.data.status !== 'draft') throw new Error('Published course revisions are locked. Create a new revision to make changes.')
-}
-
-export async function updateCourseDraft(input: { courseId: string; courseVersionId: string; name: string; shortName: string }) {
+export async function updateCourseDraft(input: { courseId: string; courseVersionId: string; publicationId: string; name: string; shortName: string; active: boolean; versionStatus: CourseVersion['status']; acsCode: string; acsTitle: string; acsRevision: string }) {
   const db = client()
-  const version = await db.from('course_versions').select('status').eq('id', input.courseVersionId).eq('course_id', input.courseId).single()
+  const currentVersion = await db.from('course_versions').select('status, published_at').eq('id', input.courseVersionId).eq('course_id', input.courseId).single()
+  throwIfError(currentVersion.error)
+  const publication = await db.from('acs_publications').update({ code: input.acsCode.trim(), title: input.acsTitle.trim(), revision: input.acsRevision.trim() }).eq('id', input.publicationId)
+  throwIfError(publication.error)
+  const publishedAt = input.versionStatus === 'published' ? currentVersion.data?.published_at ?? new Date().toISOString() : null
+  const version = await db.from('course_versions').update({ status: input.versionStatus, published_at: publishedAt }).eq('id', input.courseVersionId).eq('course_id', input.courseId)
   throwIfError(version.error)
-  if (!version.data) throw new Error('Course revision not found.')
-  if (version.data.status !== 'draft') throw new Error('Published course revisions are locked. Create a new revision to make changes.')
-  const result = await db.from('courses').update({ name: input.name.trim(), short_name: input.shortName.trim() }).eq('id', input.courseId).select('*').single()
+  const result = await db.from('courses').update({ name: input.name.trim(), short_name: input.shortName.trim(), active: input.active }).eq('id', input.courseId).select('*').single()
   throwIfError(result.error)
   return result.data as PortalCourse
 }
 
 export async function updatePhase(input: { id: string; courseVersionId: string; phaseNumber: number; title: string; objective: string; completionStandard: string }) {
-  await requireDraftVersion(input.courseVersionId)
   const result = await client().from('phases').update({
     phase_number: input.phaseNumber,
     title: input.title.trim(),
@@ -437,7 +432,6 @@ export async function updatePhase(input: { id: string; courseVersionId: string; 
 }
 
 export async function updateLesson(input: { id: string; phaseId: string; courseVersionId: string; lessonNumber: number; title: string; kind: LessonKind; objective: string; completionStandard: string; plannedGroundMinutes: number; plannedTrainingMinutes: number; preparation: string }) {
-  await requireDraftVersion(input.courseVersionId)
   const result = await client().from('lessons').update({
     lesson_number: input.lessonNumber,
     title: input.title.trim(),
@@ -484,11 +478,49 @@ export async function addAcsItemToLesson(input: { publicationId: string; lessonI
   return item
 }
 
+export async function updateAcsItem(input: { id: string; code: string; areaOfOperation: string; task: string; elementType: AcsItem['element_type']; description: string }) {
+  const result = await client().from('acs_items').update({
+    code: input.code.trim(),
+    area_of_operation: input.areaOfOperation.trim(),
+    task: input.task.trim(),
+    element_type: input.elementType,
+    description: input.description.trim(),
+  }).eq('id', input.id).select('*').single()
+  throwIfError(result.error)
+  return result.data as AcsItem
+}
+
+export async function updateStudentProfile(input: { id: string; fullName: string; active: boolean }) {
+  const result = await client().from('profiles').update({ full_name: input.fullName.trim(), active: input.active }).eq('id', input.id).eq('role', 'student').select('*').single()
+  throwIfError(result.error)
+  return result.data as PortalProfile
+}
+
 export async function enrollStudent(input: { studentId: string; instructorId: string; courseVersionId: string }) {
   const existing = await client().from('enrollments').select('id').eq('student_id', input.studentId).eq('course_version_id', input.courseVersionId).eq('status', 'active').maybeSingle()
   throwIfError(existing.error)
   if (existing.data) throw new Error('This student already has an active enrollment in that course.')
   const result = await client().from('enrollments').insert({ student_id: input.studentId, instructor_id: input.instructorId, course_version_id: input.courseVersionId, status: 'active' }).select('*').single()
+  throwIfError(result.error)
+  return result.data as PortalEnrollment
+}
+
+export async function updateEnrollment(input: { id: string; instructorId: string; courseVersionId: string; status: PortalEnrollment['status'] }) {
+  const db = client()
+  const existing = await db.from('enrollments').select('course_version_id').eq('id', input.id).single()
+  throwIfError(existing.error)
+  if (!existing.data) throw new Error('Enrollment not found.')
+  if (existing.data.course_version_id !== input.courseVersionId) {
+    const attempts = await db.from('lesson_attempts').select('*', { count: 'exact', head: true }).eq('enrollment_id', input.id)
+    throwIfError(attempts.error)
+    if ((attempts.count ?? 0) > 0) throw new Error('The course revision cannot change after training has started. Create a new enrollment instead.')
+  }
+  const result = await db.from('enrollments').update({
+    instructor_id: input.instructorId,
+    course_version_id: input.courseVersionId,
+    status: input.status,
+    completed_at: input.status === 'completed' ? new Date().toISOString() : null,
+  }).eq('id', input.id).select('*').single()
   throwIfError(result.error)
   return result.data as PortalEnrollment
 }
@@ -575,6 +607,30 @@ export async function saveGradeSheet(input: { attemptId: string; conductedAt: st
   return input.attemptId
 }
 
+export async function updateClosedGradeSheet(input: { attemptId: string; conductedAt: string; groundMinutes: number; flightMinutes: number; simulatorMinutes: number; remarks: string; grades: Array<{ acsItemId: string; grade: OgmuiGrade; comment: string }> }) {
+  const missingComment = input.grades.find((grade) => ['U', 'I'].includes(grade.grade) && !grade.comment.trim())
+  if (missingComment) throw new Error('Unsatisfactory and Incomplete grades require remarks.')
+  if (input.groundMinutes + input.flightMinutes + input.simulatorMinutes <= 0) throw new Error('Enter ground, flight, or simulator time.')
+  const db = client()
+  const gradeResult = await db.from('grades').upsert(input.grades.map((grade) => ({
+    lesson_attempt_id: input.attemptId,
+    acs_item_id: grade.acsItemId,
+    grade: grade.grade,
+    instructor_comment: grade.comment.trim() || null,
+  })), { onConflict: 'lesson_attempt_id,acs_item_id' })
+  throwIfError(gradeResult.error)
+  const result = await db.from('lesson_attempts').update({
+    conducted_at: new Date(input.conductedAt).toISOString(),
+    ground_minutes: input.groundMinutes,
+    flight_minutes: input.flightMinutes,
+    simulator_minutes: input.simulatorMinutes,
+    training_minutes: input.flightMinutes + input.simulatorMinutes,
+    what_worked: input.remarks.trim() || null,
+  }).eq('id', input.attemptId).eq('status', 'published').select('*').single()
+  throwIfError(result.error)
+  return result.data as LessonAttempt
+}
+
 type AssignmentTarget = { course_version_id: string } | { lesson_id: string } | { enrollment_id: string }
 
 async function assignResource(resourceId: string, target: AssignmentTarget, required: boolean) {
@@ -601,6 +657,19 @@ export async function uploadTrainingResource(input: { title: string; kind: Exclu
   const resource = result.data as PortalResource
   await assignResource(resource.id, input.target, input.required)
   return resource
+}
+
+export async function updateResource(input: { id: string; title: string; description: string; revision: string; externalUrl?: string; active: boolean }) {
+  const values: Record<string, string | boolean | null> = {
+    title: input.title.trim(),
+    description: input.description.trim() || null,
+    revision: input.revision.trim() || null,
+    active: input.active,
+  }
+  if (input.externalUrl !== undefined) values.external_url = input.externalUrl.trim()
+  const result = await client().from('resources').update(values).eq('id', input.id).select('*').single()
+  throwIfError(result.error)
+  return result.data as PortalResource
 }
 
 export async function getResourceUrl(resource: PortalResource) {
