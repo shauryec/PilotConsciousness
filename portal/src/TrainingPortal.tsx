@@ -8,6 +8,9 @@ import {
   enrollStudent,
   getResourceUrl,
   saveGradeSheet,
+  updateCourseDraft,
+  updateLesson,
+  updatePhase,
   uploadTrainingResource,
   type AcsItem,
   type LessonAttempt,
@@ -166,6 +169,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
   const selectedLesson = workspace.lessons.find((lesson) => lesson.id === lessonId) ?? phaseLessons[0]
   const selectedMappings = workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === selectedLesson?.id)
   const selectedItems = selectedMappings.map((mapping) => workspace.acsItems.find((item) => item.id === mapping.acs_item_id)).filter(Boolean) as AcsItem[]
+  const editable = version?.status === 'draft'
 
   useEffect(() => {
     if (!courseId && workspace.courses[0]) setCourseId(workspace.courses[0].id)
@@ -224,6 +228,51 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
     form.reset()
   }
 
+  async function editCourse(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!selectedCourse || !version) return
+    const data = new FormData(event.currentTarget)
+    await run(() => updateCourseDraft({
+      courseId: selectedCourse.id,
+      courseVersionId: version.id,
+      name: String(data.get('name')),
+      shortName: String(data.get('shortName')),
+    }), 'Course details saved.')
+  }
+
+  async function editPhase(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!currentPhase || !version) return
+    const data = new FormData(event.currentTarget)
+    await run(() => updatePhase({
+      id: currentPhase.id,
+      courseVersionId: version.id,
+      phaseNumber: Number(data.get('phaseNumber')),
+      title: String(data.get('title')),
+      objective: String(data.get('objective')),
+      completionStandard: String(data.get('completionStandard')),
+    }), `Phase ${Number(data.get('phaseNumber'))} saved.`)
+  }
+
+  async function editLesson(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!selectedLesson || !currentPhase || !version) return
+    const data = new FormData(event.currentTarget)
+    await run(() => updateLesson({
+      id: selectedLesson.id,
+      phaseId: currentPhase.id,
+      courseVersionId: version.id,
+      lessonNumber: Number(data.get('lessonNumber')),
+      title: String(data.get('title')),
+      kind: String(data.get('kind')) as PortalLesson['kind'],
+      objective: String(data.get('objective')),
+      completionStandard: String(data.get('completionStandard')),
+      plannedGroundMinutes: Number(data.get('groundMinutes')),
+      plannedTrainingMinutes: Number(data.get('trainingMinutes')),
+      preparation: String(data.get('preparation')),
+    }), `Lesson ${Number(data.get('lessonNumber'))} saved.`)
+  }
+
   return <section className="workspace-view">
     <div className="view-heading"><div><p className="eyebrow dark">Syllabus builder</p><h1>Courses</h1><p>Each course is versioned, divided into phases and lessons, and evaluated against its ACS publication.</p></div></div>
     <details className="panel create-drawer" open={!workspace.courses.length}>
@@ -241,31 +290,63 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
       <aside className="panel course-catalog"><p className="eyebrow dark">Course catalog</p>{workspace.courses.map((course) => <button className={course.id === selectedCourse?.id ? 'active' : ''} onClick={() => { setCourseId(course.id); setPhaseId(''); setLessonId('') }} key={course.id}><span>{course.short_name.slice(0, 2).toUpperCase()}</span><div><strong>{course.name}</strong><small>{workspace.versions.filter((entry) => entry.course_id === course.id).length} revision</small></div></button>)}</aside>
       <div className="builder-main">
         <article className="panel builder-header"><div><p className="eyebrow dark">{publication?.code ?? 'ACS publication'}</p><h2>{selectedCourse?.name}</h2><p>{publication?.title} · Revision {version?.revision} · {version?.status}</p></div><span>{phases.length} phases · {lessons.length} lessons</span></article>
+        {selectedCourse && version && editable && <details className="panel edit-drawer" key={`${selectedCourse.id}-${selectedCourse.name}-${selectedCourse.short_name}`}>
+          <summary>Edit course details</summary>
+          <form className="portal-form form-grid" onSubmit={editCourse}>
+            <label>Course name<input name="name" defaultValue={selectedCourse.name} required /></label>
+            <label>Short name<input name="shortName" defaultValue={selectedCourse.short_name} required /></label>
+            <div className="locked-field wide"><span>ACS publication</span><strong>{publication?.code} · {publication?.title}</strong><small>The canonical ACS publication remains fixed for this course revision.</small></div>
+            <button className="button button-primary" type="submit">Save course changes</button>
+          </form>
+        </details>}
+        {version && !editable && <div className="revision-lock" role="note"><strong>Revision locked</strong><span>Published course revisions cannot be changed. A new revision preserves existing student records.</span></div>}
         <div className="builder-columns">
           <article className="panel builder-panel">
             <div className="panel-heading"><div><p className="eyebrow dark">Course structure</p><h2>Phases & lessons</h2></div></div>
             <div className="phase-tabs">{phases.map((phase) => <button className={phase.id === currentPhase?.id ? 'active' : ''} onClick={() => { setPhaseId(phase.id); setLessonId('') }} key={phase.id}><span>{String(phase.phase_number).padStart(2, '0')}</span>{phase.title}</button>)}</div>
             {currentPhase ? <>
+              {editable && <details className="inline-create edit-entity" key={`${currentPhase.id}-${currentPhase.title}-${currentPhase.phase_number}`}>
+                <summary>Edit phase {currentPhase.phase_number}</summary>
+                <form className="portal-form" onSubmit={editPhase}>
+                  <div className="form-grid"><label>Phase number<input name="phaseNumber" type="number" min="1" defaultValue={currentPhase.phase_number} required /></label><label>Phase title<input name="title" defaultValue={currentPhase.title} required /></label></div>
+                  <label>Objective<textarea name="objective" defaultValue={currentPhase.objective ?? ''} /></label>
+                  <label>Completion standard<textarea name="completionStandard" defaultValue={currentPhase.completion_standard ?? ''} /></label>
+                  <button className="button button-primary" type="submit">Save phase changes</button>
+                </form>
+              </details>}
               <div className="lesson-builder-list">{phaseLessons.map((lesson) => <button className={lesson.id === selectedLesson?.id ? 'active' : ''} onClick={() => setLessonId(lesson.id)} key={lesson.id}><span>{lesson.lesson_number}</span><div><strong>{lesson.title}</strong><small>{lesson.kind} · {lesson.planned_ground_minutes + lesson.planned_training_minutes} planned min</small></div><b>→</b></button>)}</div>
-              <details className="inline-create"><summary>Add lesson</summary><form className="portal-form" onSubmit={createLesson}>
+              {editable && <details className="inline-create"><summary>Add lesson</summary><form className="portal-form" onSubmit={createLesson}>
                 <div className="form-grid"><label>Lesson number<input name="lessonNumber" type="number" min="1" defaultValue={(phaseLessons.at(-1)?.lesson_number ?? 0) + 1} required /></label><label>Lesson type<select name="kind" defaultValue="flight"><option value="flight">Flight</option><option value="ground">Ground</option><option value="simulator">Simulator</option><option value="review">Review</option></select></label></div>
                 <label>Lesson title<input name="title" required /></label><label>Objective<textarea name="objective" required /></label><label>Completion standard<textarea name="completionStandard" required /></label><label>Student preparation<textarea name="preparation" /></label>
                 <div className="form-grid"><label>Ground minutes<input name="groundMinutes" type="number" min="0" defaultValue="30" required /></label><label>Training minutes<input name="trainingMinutes" type="number" min="0" defaultValue="90" required /></label></div>
                 <button className="button button-primary" type="submit">Add lesson</button>
-              </form></details>
+              </form></details>}
             </> : <EmptyCollection label="No phases yet" detail="Add the first phase to establish the course sequence." />}
-            <details className="inline-create"><summary>Add phase</summary><form className="portal-form" onSubmit={createPhase}>
+            {editable && <details className="inline-create"><summary>Add phase</summary><form className="portal-form" onSubmit={createPhase}>
               <label>Phase number<input name="phaseNumber" type="number" min="1" defaultValue={(phases.at(-1)?.phase_number ?? 0) + 1} required /></label><label>Phase title<input name="title" placeholder="Foundations" required /></label><label>Objective<textarea name="objective" /></label><label>Completion standard<textarea name="completionStandard" /></label><button className="button button-primary" type="submit">Add phase</button>
-            </form></details>
+            </form></details>}
           </article>
           <article className="panel builder-panel">
             <div className="panel-heading"><div><p className="eyebrow dark">Grading standard</p><h2>{selectedLesson ? `Lesson ${selectedLesson.lesson_number} ACS` : 'ACS line items'}</h2></div><span className="count-badge">{selectedItems.length}</span></div>
             {selectedLesson ? <>
+              <div className="lesson-summary"><span>{selectedLesson.kind}</span><strong>{selectedLesson.title}</strong><p>{selectedLesson.objective}</p><small>{selectedLesson.planned_ground_minutes} ground · {selectedLesson.planned_training_minutes} training min</small></div>
+              {editable && currentPhase && version && <details className="inline-create edit-entity" key={`${selectedLesson.id}-${selectedLesson.title}-${selectedLesson.lesson_number}`}>
+                <summary>Edit lesson {selectedLesson.lesson_number}</summary>
+                <form className="portal-form" onSubmit={editLesson}>
+                  <div className="form-grid"><label>Lesson number<input name="lessonNumber" type="number" min="1" defaultValue={selectedLesson.lesson_number} required /></label><label>Lesson type<select name="kind" defaultValue={selectedLesson.kind}><option value="flight">Flight</option><option value="ground">Ground</option><option value="simulator">Simulator</option><option value="review">Review</option></select></label></div>
+                  <label>Lesson title<input name="title" defaultValue={selectedLesson.title} required /></label>
+                  <label>Objective<textarea name="objective" defaultValue={selectedLesson.objective} required /></label>
+                  <label>Completion standard<textarea name="completionStandard" defaultValue={selectedLesson.completion_standard} required /></label>
+                  <label>Student preparation<textarea name="preparation" defaultValue={selectedLesson.preparation ?? ''} /></label>
+                  <div className="form-grid"><label>Ground minutes<input name="groundMinutes" type="number" min="0" defaultValue={selectedLesson.planned_ground_minutes} required /></label><label>Training minutes<input name="trainingMinutes" type="number" min="0" defaultValue={selectedLesson.planned_training_minutes} required /></label></div>
+                  <button className="button button-primary" type="submit">Save lesson changes</button>
+                </form>
+              </details>}
               <div className="acs-builder-list">{selectedItems.map((item) => <div key={item.id}><code>{item.code}</code><strong>{item.description}</strong><small>{item.area_of_operation} · {item.task} · {item.element_type.replace('_', ' ')}</small></div>)}</div>
-              <details className="inline-create" open={!selectedItems.length}><summary>Attach ACS line item</summary><form className="portal-form" onSubmit={createAcsItem}>
+              {editable && <details className="inline-create" open={!selectedItems.length}><summary>Attach ACS line item</summary><form className="portal-form" onSubmit={createAcsItem}>
                 <div className="form-grid"><label>ACS code<input name="code" placeholder="PA.IV.B.S2" required /></label><label>Element<select name="elementType" defaultValue="skill"><option value="knowledge">Knowledge</option><option value="risk_management">Risk management</option><option value="skill">Skill</option></select></label></div>
                 <label>Area of operation<input name="area" required /></label><label>Task<input name="task" required /></label><label>Line-item description<textarea name="description" required /></label><button className="button button-primary" type="submit">Attach line item</button>
-              </form></details>
+              </form></details>}
             </> : <EmptyCollection label="Select a lesson" detail="ACS line items are attached at lesson level and become the grade sheet." />}
           </article>
         </div>
@@ -418,19 +499,19 @@ function LibraryView({ profile, workspace, run }: { profile: PortalProfile; work
 export function StaffPortal({ profile, workspace, refresh }: { profile: PortalProfile; workspace: StaffWorkspace; refresh: () => Promise<void> }) {
   const [view, setView] = useState<StaffView>('overview')
   const [busy, setBusy] = useState(false)
-  const [notice, setNotice] = useState<{ kind: 'success' | 'error'; text: string } | null>(null)
+  const [notice, setNotice] = useState<{ kind: 'saving' | 'success' | 'error'; title: string; text: string } | null>(null)
 
   const run: Runner = async (action, success) => {
     if (busy) return undefined
     setBusy(true)
-    setNotice(null)
+    setNotice({ kind: 'saving', title: 'Saving…', text: 'Keep this page open while the portal confirms the change.' })
     try {
       const result = await action()
       await refresh()
-      setNotice({ kind: 'success', text: success })
+      setNotice({ kind: 'success', title: 'Saved', text: success })
       return result
     } catch (reason) {
-      setNotice({ kind: 'error', text: reason instanceof Error ? reason.message : 'The change could not be saved.' })
+      setNotice({ kind: 'error', title: 'Not saved', text: reason instanceof Error ? reason.message : 'The change could not be saved.' })
       return undefined
     } finally {
       setBusy(false)
@@ -441,7 +522,8 @@ export function StaffPortal({ profile, workspace, refresh }: { profile: PortalPr
 
   return <div className={`portal-shell ${busy ? 'is-busy' : ''}`}>
     <aside className="sidebar"><Brand /><nav>{staffNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="course-chip"><span>Training model</span><strong>Course → Phase → Lesson</strong><small>ACS → OGMUI → Feedback</small></div><div className="account-chip"><span>{initials(profile.full_name)}</span><div><strong>{profile.full_name}</strong><small>{profile.role === 'owner' ? 'Owner' : 'Instructor'}</small></div><button aria-label="Sign out" title="Sign out" onClick={() => void supabase?.auth.signOut()}>↗</button></div></aside>
-    <main className="portal-main"><header className="mobile-header"><Brand /><button className="mobile-account" onClick={() => void supabase?.auth.signOut()} aria-label="Sign out">{initials(profile.full_name)}</button></header><nav className="mobile-nav">{staffNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="main-inner">{notice && <div className={`workspace-notice ${notice.kind}`} role="status">{notice.text}<button onClick={() => setNotice(null)} aria-label="Dismiss">×</button></div>}{content}</div></main>
+    <main className="portal-main"><header className="mobile-header"><Brand /><button className="mobile-account" onClick={() => void supabase?.auth.signOut()} aria-label="Sign out">{initials(profile.full_name)}</button></header><nav className="mobile-nav">{staffNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="main-inner">{content}</div></main>
+    {notice && <div className={`save-status ${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'} aria-live="polite"><span className="save-status-mark" aria-hidden="true">{notice.kind === 'saving' ? '•••' : notice.kind === 'success' ? '✓' : '!'}</span><div><strong>{notice.title}</strong><small>{notice.text}</small></div>{notice.kind !== 'saving' && <button onClick={() => setNotice(null)} aria-label="Dismiss save status">×</button>}</div>}
   </div>
 }
 

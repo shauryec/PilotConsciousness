@@ -326,6 +326,52 @@ export async function createCourseWithVersion(input: { name: string; shortName: 
   return { course, version: versionResult.data as CourseVersion, publication }
 }
 
+async function requireDraftVersion(versionId: string) {
+  const result = await client().from('course_versions').select('status').eq('id', versionId).single()
+  throwIfError(result.error)
+  if (!result.data) throw new Error('Course revision not found.')
+  if (result.data.status !== 'draft') throw new Error('Published course revisions are locked. Create a new revision to make changes.')
+}
+
+export async function updateCourseDraft(input: { courseId: string; courseVersionId: string; name: string; shortName: string }) {
+  const db = client()
+  const version = await db.from('course_versions').select('status').eq('id', input.courseVersionId).eq('course_id', input.courseId).single()
+  throwIfError(version.error)
+  if (!version.data) throw new Error('Course revision not found.')
+  if (version.data.status !== 'draft') throw new Error('Published course revisions are locked. Create a new revision to make changes.')
+  const result = await db.from('courses').update({ name: input.name.trim(), short_name: input.shortName.trim() }).eq('id', input.courseId).select('*').single()
+  throwIfError(result.error)
+  return result.data as PortalCourse
+}
+
+export async function updatePhase(input: { id: string; courseVersionId: string; phaseNumber: number; title: string; objective: string; completionStandard: string }) {
+  await requireDraftVersion(input.courseVersionId)
+  const result = await client().from('phases').update({
+    phase_number: input.phaseNumber,
+    title: input.title.trim(),
+    objective: input.objective.trim() || null,
+    completion_standard: input.completionStandard.trim() || null,
+  }).eq('id', input.id).eq('course_version_id', input.courseVersionId).select('*').single()
+  throwIfError(result.error)
+  return result.data as PortalPhase
+}
+
+export async function updateLesson(input: { id: string; phaseId: string; courseVersionId: string; lessonNumber: number; title: string; kind: LessonKind; objective: string; completionStandard: string; plannedGroundMinutes: number; plannedTrainingMinutes: number; preparation: string }) {
+  await requireDraftVersion(input.courseVersionId)
+  const result = await client().from('lessons').update({
+    lesson_number: input.lessonNumber,
+    title: input.title.trim(),
+    kind: input.kind,
+    objective: input.objective.trim(),
+    completion_standard: input.completionStandard.trim(),
+    planned_ground_minutes: input.plannedGroundMinutes,
+    planned_training_minutes: input.plannedTrainingMinutes,
+    preparation: input.preparation.trim() || null,
+  }).eq('id', input.id).eq('phase_id', input.phaseId).select('*').single()
+  throwIfError(result.error)
+  return result.data as PortalLesson
+}
+
 export async function addPhase(input: { courseVersionId: string; phaseNumber: number; title: string; objective: string; completionStandard: string }) {
   const result = await client().from('phases').insert({ course_version_id: input.courseVersionId, phase_number: input.phaseNumber, title: input.title.trim(), objective: input.objective.trim() || null, completion_standard: input.completionStandard.trim() || null }).select('*').single()
   throwIfError(result.error)
