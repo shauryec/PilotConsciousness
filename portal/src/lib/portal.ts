@@ -141,6 +141,19 @@ export interface ResourceAssignment {
   assigned_at: string
 }
 
+export interface CourseChangeEvent {
+  id: number
+  entity_type: 'course' | 'course_version' | 'phase' | 'lesson' | 'lesson_acs_item'
+  entity_id: string
+  course_id: string | null
+  course_version_id: string | null
+  action: 'baseline' | 'created' | 'updated' | 'deleted'
+  changed_by: string | null
+  changed_at: string
+  before_data: Record<string, unknown> | null
+  after_data: Record<string, unknown> | null
+}
+
 export interface StaffWorkspace {
   profiles: PortalProfile[]
   students: PortalProfile[]
@@ -156,6 +169,7 @@ export interface StaffWorkspace {
   grades: GradeRecord[]
   resources: PortalResource[]
   assignments: ResourceAssignment[]
+  courseChanges: CourseChangeEvent[]
   stats: { students: number; activeEnrollments: number; courses: number; draftGradeSheets: number }
 }
 
@@ -206,9 +220,12 @@ export async function loadStaffWorkspace(): Promise<StaffWorkspace> {
     db.from('grades').select('id, lesson_attempt_id, acs_item_id, grade, instructor_comment'),
     db.from('resources').select('*').eq('active', true).order('created_at', { ascending: false }),
     db.from('resource_assignments').select('*').order('assigned_at', { ascending: false }),
+    db.from('course_change_log').select('*').order('changed_at', { ascending: false }).limit(250),
   ])
 
-  results.forEach((result) => throwIfError(result.error))
+  results.slice(0, 13).forEach((result) => throwIfError(result.error))
+  const historyResult = results[13]
+  if (historyResult.error && !['42P01', 'PGRST205'].includes(historyResult.error.code)) throwIfError(historyResult.error)
   const profiles = (results[0].data ?? []) as PortalProfile[]
   const courses = (results[1].data ?? []) as PortalCourse[]
   const enrollments = (results[8].data ?? []) as PortalEnrollment[]
@@ -229,6 +246,7 @@ export async function loadStaffWorkspace(): Promise<StaffWorkspace> {
     grades: (results[10].data ?? []) as GradeRecord[],
     resources: (results[11].data ?? []) as PortalResource[],
     assignments: (results[12].data ?? []) as ResourceAssignment[],
+    courseChanges: historyResult.error ? [] : (historyResult.data ?? []) as CourseChangeEvent[],
     stats: {
       students: profiles.filter((profile) => profile.role === 'student').length,
       activeEnrollments: enrollments.filter((enrollment) => enrollment.status === 'active').length,
