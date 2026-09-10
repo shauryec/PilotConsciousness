@@ -13,6 +13,7 @@ import {
   updatePhase,
   uploadTrainingResource,
   type AcsItem,
+  type CourseChangeEvent,
   type LessonAttempt,
   type OgmuiGrade,
   type PortalLesson,
@@ -37,6 +38,10 @@ function initials(name: string) {
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(value))
+}
+
+function formatDateTime(value: string) {
+  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }).format(new Date(value))
 }
 
 function localDateTimeValue(value = new Date()) {
@@ -81,6 +86,59 @@ function studentName(workspace: StaffWorkspace, studentId: string) {
 function lessonName(workspace: StaffWorkspace, lessonId: string) {
   const lesson = workspace.lessons.find((entry) => entry.id === lessonId)
   return lesson ? `Lesson ${lesson.lesson_number} · ${lesson.title}` : 'Unknown lesson'
+}
+
+const historyFields: Record<CourseChangeEvent['entity_type'], string[]> = {
+  course: ['name', 'short_name', 'active'],
+  course_version: ['revision', 'status', 'published_at'],
+  phase: ['phase_number', 'title', 'objective', 'completion_standard'],
+  lesson: ['lesson_number', 'title', 'kind', 'objective', 'completion_standard', 'planned_ground_minutes', 'planned_training_minutes', 'preparation'],
+  lesson_acs_item: ['sort_order'],
+}
+
+const historyFieldLabels: Record<string, string> = {
+  name: 'Course name',
+  short_name: 'Short name',
+  active: 'Active',
+  revision: 'Revision',
+  status: 'Status',
+  published_at: 'Published',
+  phase_number: 'Phase number',
+  title: 'Title',
+  objective: 'Objective',
+  completion_standard: 'Completion standard',
+  lesson_number: 'Lesson number',
+  kind: 'Lesson type',
+  planned_ground_minutes: 'Ground minutes',
+  planned_training_minutes: 'Training minutes',
+  preparation: 'Student preparation',
+  sort_order: 'ACS order',
+}
+
+function historyValue(value: unknown, field: string) {
+  if (value === null || value === undefined || value === '') return 'Not set'
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No'
+  if (field.endsWith('_at') && typeof value === 'string') return formatDateTime(value)
+  return String(value)
+}
+
+function historyDetails(event: CourseChangeEvent) {
+  const before = event.before_data ?? {}
+  const after = event.after_data ?? {}
+  return historyFields[event.entity_type]
+    .filter((field) => event.action !== 'updated' || JSON.stringify(before[field]) !== JSON.stringify(after[field]))
+    .map((field) => ({ field, before: before[field], after: after[field] }))
+}
+
+function historyEntityName(event: CourseChangeEvent, workspace: StaffWorkspace) {
+  const snapshot = event.after_data ?? event.before_data ?? {}
+  if (event.entity_type === 'course') return String(snapshot.name ?? 'Course')
+  if (event.entity_type === 'course_version') return `Course revision ${snapshot.revision ?? ''}`.trim()
+  if (event.entity_type === 'phase') return `Phase ${snapshot.phase_number ?? ''} · ${snapshot.title ?? 'Untitled'}`
+  if (event.entity_type === 'lesson') return `Lesson ${snapshot.lesson_number ?? ''} · ${snapshot.title ?? 'Untitled'}`
+  const item = workspace.acsItems.find((entry) => entry.id === snapshot.acs_item_id)
+  const lesson = workspace.lessons.find((entry) => entry.id === snapshot.lesson_id)
+  return `${item?.code ?? 'ACS line item'} · ${lesson ? `Lesson ${lesson.lesson_number}` : 'lesson mapping'}`
 }
 
 function StaffOverview({ profile, workspace, navigate }: { profile: PortalProfile; workspace: StaffWorkspace; navigate: (view: StaffView) => void }) {
@@ -170,6 +228,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
   const selectedMappings = workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === selectedLesson?.id)
   const selectedItems = selectedMappings.map((mapping) => workspace.acsItems.find((item) => item.id === mapping.acs_item_id)).filter(Boolean) as AcsItem[]
   const editable = version?.status === 'draft'
+  const courseChanges = workspace.courseChanges.filter((event) => event.course_id === selectedCourse?.id).slice(0, 40)
 
   useEffect(() => {
     if (!courseId && workspace.courses[0]) setCourseId(workspace.courses[0].id)
@@ -350,6 +409,26 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
             </> : <EmptyCollection label="Select a lesson" detail="ACS line items are attached at lesson level and become the grade sheet." />}
           </article>
         </div>
+        <article className="panel course-history">
+          <div className="panel-heading"><div><p className="eyebrow dark">Permanent record</p><h2>Course change history</h2></div><span className="count-badge">{courseChanges.length}</span></div>
+          <p className="history-intro">The baseline preserves the course as it existed when history was enabled. Every later change is stored with its editor, timestamp, and before-and-after values.</p>
+          {courseChanges.length ? <div className="history-list">{courseChanges.map((event) => {
+            const actor = event.changed_by ? workspace.profiles.find((profile) => profile.id === event.changed_by)?.full_name ?? 'Portal staff' : 'System baseline'
+            const details = historyDetails(event)
+            const actionLabel = event.action === 'baseline' ? 'Baseline recorded' : event.action === 'created' ? 'Created' : event.action === 'updated' ? 'Updated' : 'Deleted'
+            return <details key={event.id}>
+              <summary>
+                <span className={`history-action ${event.action}`}>{actionLabel}</span>
+                <div><strong>{historyEntityName(event, workspace)}</strong><small>{actor} · {formatDateTime(event.changed_at)}</small></div>
+                <b>View record</b>
+              </summary>
+              <div className="history-diff" role="table" aria-label={`${historyEntityName(event, workspace)} changes`}>
+                <div className="history-diff-head" role="row"><span role="columnheader">Field</span><span role="columnheader">Before</span><span role="columnheader">After</span></div>
+                {details.map(({ field, before, after }) => <div role="row" key={field}><strong role="cell">{historyFieldLabels[field] ?? field}</strong><span role="cell">{event.action === 'created' || event.action === 'baseline' ? '—' : historyValue(before, field)}</span><span role="cell">{event.action === 'deleted' ? '—' : historyValue(after, field)}</span></div>)}
+              </div>
+            </details>
+          })}</div> : <EmptyCollection label="No history recorded yet" detail="Install the course-history update to capture the current baseline and all future edits." />}
+        </article>
       </div>
     </div> : <EmptyCollection label="No courses yet" detail="Create the first course above. Its first revision will be ready for phases, lessons, and ACS line items." />}
   </section>
