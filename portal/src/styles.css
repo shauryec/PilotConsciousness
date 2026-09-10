@@ -488,6 +488,65 @@ select, textarea, input { border-radius: 0; }
 .editor-actions { display: flex; justify-content: flex-end; gap: 10px; }
 .resource-admin-list { margin-top: 18px; }
 .resource-admin-list b { color: var(--blue); font-size: .72rem; text-transform: uppercase; }
+.lesson-operations { max-width: 1180px; }
+.student-file-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 22px; align-items: start; margin-top: 22px; }
+.student-directory { padding: 18px; }
+.student-directory > p { padding: 8px 9px; }
+.student-directory > button { display: grid; width: 100%; grid-template-columns: 36px 1fr; align-items: center; gap: 11px; padding: 12px 9px; color: var(--ink); background: transparent; border: 0; border-top: 1px solid var(--line); text-align: left; }
+.student-directory > button.active { background: #eaf1f4; }
+.student-directory > button > span, .profile-initials { display: grid; width: 34px; height: 34px; place-items: center; color: var(--blue); background: #e6eef2; font-size: .68rem; font-weight: 800; }
+.student-directory strong, .student-directory small { display: block; }
+.student-directory strong { font-size: .8rem; }
+.student-directory small { margin-top: 4px; color: var(--muted); font-size: .68rem; }
+.student-file { display: grid; gap: 22px; min-width: 0; }
+.student-profile-head { padding: 24px; }
+.student-profile-head > div:first-child { display: flex; align-items: center; gap: 15px; }
+.student-profile-head .profile-initials { width: 46px; height: 46px; flex: 0 0 auto; color: #fff; background: var(--blue); }
+.student-profile-head h2, .student-profile-head p { margin: 3px 0 0; }
+.student-profile-head > .edit-drawer, .enrollment-head > .edit-drawer { margin-top: 18px; border: 1px solid var(--line); }
+.enrollment-file { display: grid; gap: 16px; }
+.enrollment-head { padding: 22px 24px; }
+.enrollment-head h2 { margin: 5px 0; }
+.enrollment-head small { color: var(--muted); font-size: .74rem; }
+.student-grade-sheets { display: grid; gap: 12px; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
+.section-heading h2 { margin: 0; }
+.section-heading span { color: var(--muted); font-size: .72rem; font-weight: 700; text-transform: uppercase; }
+.student-grade-sheet { padding: 22px 24px; }
+.student-grade-sheet > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.student-grade-sheet > header h3 { margin: 5px 0 0; font-family: 'Oswald', sans-serif; font-size: 1.15rem; }
+.student-grade-sheet > header small { color: var(--muted); font-size: .72rem; }
+.student-grade-sheet > header > div:last-child { display: flex; align-items: center; gap: 8px; }
+.compact-button { min-height: 34px; padding: 7px 10px; font-size: .7rem; }
+.record-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 18px; background: var(--line); border: 1px solid var(--line); }
+.record-facts span { display: grid; gap: 3px; padding: 12px; color: var(--muted); background: #f7f9fa; font-size: .68rem; text-transform: uppercase; }
+.record-facts b { color: var(--ink); font-family: 'Oswald', sans-serif; font-size: 1rem; }
+.record-remarks { margin: 16px 0; padding: 14px 16px; background: #f5f8f9; border-left: 3px solid var(--blue); }
+.record-remarks span { color: var(--blue); font-size: .68rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.record-remarks p { margin: 6px 0 0; color: var(--muted); font-size: .8rem; line-height: 1.55; }
+.record-edit-form { padding-top: 18px; border-top: 1px solid var(--line); }
+.record-time-grid { grid-template-columns: repeat(4, 1fr); }
+.record-grade-edit { border-top: 1px solid var(--line); }
+.record-grade-edit > div { display: grid; grid-template-columns: minmax(220px, 1fr) auto minmax(220px, .8fr); gap: 14px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.record-grade-edit code, .record-grade-edit strong { display: block; }
+.record-grade-edit code { margin-bottom: 5px; color: var(--blue); font-size: .72rem; }
+.record-grade-edit strong { font-size: .8rem; line-height: 1.45; }
+.record-grade-edit label { margin: 0; }
+.record-grade-edit textarea { min-height: 68px; }
+.correction-note { display: grid; gap: 3px; padding: 13px 15px; color: #604b20; background: #fbf4e5; border-left: 3px solid #b28a39; }
+.correction-note strong { font-size: .78rem; }
+.correction-note span { font-size: .72rem; line-height: 1.5; }
+.line-item-edit { margin-top: 10px; border: 1px solid var(--line); }
+.line-item-edit > summary { padding: 9px 11px; cursor: pointer; color: var(--blue); background: #f5f8f9; font-size: .72rem; font-weight: 750; list-style: none; }
+.line-item-edit > summary::after { float: right; content: '+'; }
+.line-item-edit[open] > summary::after { content: '−'; }
+.line-item-edit > form { padding: 0 13px 14px; }
+.resource-admin-record { border-top: 1px solid var(--line); }
+.resource-admin-record > div { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px; padding: 14px 10px; }
+.resource-admin-record > div > span { display: grid; width: 34px; height: 34px; place-items: center; color: var(--blue); border: 1px solid #c4d1d7; font-size: .65rem; font-weight: 800; }
+.resource-admin-record strong, .resource-admin-record small { display: block; }
+.resource-admin-record strong { font-size: .82rem; }
+.resource-admin-record small { margin-top: 4px; color: var(--muted); font-size: .72rem; }
 .student-phase + .student-phase { margin-top: 28px; }
 .student-phase h2 { padding: 0 10px; }
 .resource-mini { display: grid; width: 32px; height: 32px; place-items: center; color: var(--blue); border: 1px solid #c4d1d7; font-size: .65rem; font-weight: 800; }
@@ -520,12 +579,19 @@ select, textarea, input { border-radius: 0; }
   .builder-columns { grid-template-columns: 1fr; }
   .grade-line { grid-template-columns: 1fr auto; }
   .remarks-toggle { grid-column: 1 / -1; }
+  .record-grade-edit > div { grid-template-columns: 1fr auto; }
+  .record-grade-edit > div > label { grid-column: 1 / -1; }
 }
 
 @media (max-width: 980px) {
   .split-workspace, .grade-workspace { grid-template-columns: 1fr; }
+  .student-file-layout { grid-template-columns: 1fr; }
+  .student-directory { display: flex; gap: 6px; overflow-x: auto; }
+  .student-directory > p { display: none; }
+  .student-directory > button { min-width: 210px; border: 1px solid var(--line); }
   .attempt-list { max-height: 380px; overflow-y: auto; }
   .time-entry { grid-template-columns: 1fr 1fr; }
+  .record-time-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 760px) {
@@ -552,4 +618,8 @@ select, textarea, input { border-radius: 0; }
   .audit-tabs button { flex: 1; }
   .time-entry { grid-template-columns: 1fr; }
   .carryover-strip > div:last-child { grid-template-columns: 1fr; }
+  .student-grade-sheet > header, .student-grade-sheet > header > div:last-child { align-items: stretch; flex-direction: column; }
+  .record-facts, .record-time-grid { grid-template-columns: 1fr 1fr; }
+  .record-grade-edit > div { grid-template-columns: 1fr; }
+  .record-grade-edit > div > label { grid-column: auto; }
 }
