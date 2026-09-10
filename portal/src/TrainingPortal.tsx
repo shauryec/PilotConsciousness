@@ -7,6 +7,7 @@ import {
   createLinkedResource,
   enrollStudent,
   getResourceUrl,
+  openLessonAttempt,
   saveGradeSheet,
   updateCourseDraft,
   updateLesson,
@@ -14,6 +15,7 @@ import {
   uploadTrainingResource,
   type AcsItem,
   type CourseChangeEvent,
+  type LessonAttemptItem,
   type LessonAttempt,
   type OgmuiGrade,
   type PortalLesson,
@@ -21,6 +23,7 @@ import {
   type PortalResource,
   type StaffWorkspace,
   type StudentWorkspace,
+  type TrainingAuditEvent,
 } from './lib/portal'
 import { supabase } from './lib/supabase'
 
@@ -63,7 +66,7 @@ function EmptyCollection({ label, detail }: { label: string; detail: string }) {
 
 type Runner = <T>(action: () => Promise<T>, success: string) => Promise<T | undefined>
 
-type StaffView = 'overview' | 'students' | 'courses' | 'grades' | 'library'
+type StaffView = 'overview' | 'students' | 'courses' | 'grades' | 'library' | 'audit'
 
 const staffNavItems: Array<{ id: StaffView; label: string; short: string }> = [
   { id: 'overview', label: 'Overview', short: 'OV' },
@@ -71,6 +74,7 @@ const staffNavItems: Array<{ id: StaffView; label: string; short: string }> = [
   { id: 'courses', label: 'Courses', short: 'CR' },
   { id: 'grades', label: 'Grade Sheets', short: 'GS' },
   { id: 'library', label: 'Resource Library', short: 'RL' },
+  { id: 'audit', label: 'Audit Log', short: 'AL' },
 ]
 
 function courseName(workspace: StaffWorkspace, versionId: string) {
@@ -139,6 +143,52 @@ function historyEntityName(event: CourseChangeEvent, workspace: StaffWorkspace) 
   const item = workspace.acsItems.find((entry) => entry.id === snapshot.acs_item_id)
   const lesson = workspace.lessons.find((entry) => entry.id === snapshot.lesson_id)
   return `${item?.code ?? 'ACS line item'} · ${lesson ? `Lesson ${lesson.lesson_number}` : 'lesson mapping'}`
+}
+
+const trainingHistoryFields: Record<TrainingAuditEvent['entity_type'], string[]> = {
+  enrollment: ['status', 'enrolled_at', 'completed_at'],
+  lesson_attempt: ['attempt_number', 'status', 'opened_at', 'conducted_at', 'closed_at', 'ground_minutes', 'flight_minutes', 'simulator_minutes', 'what_worked', 'what_did_not_work', 'corrective_action', 'next_lesson_preparation'],
+  attempt_item: ['source', 'sort_order'],
+  grade: ['grade', 'instructor_comment'],
+  remediation: ['reason', 'opened_at', 'resolved_at'],
+}
+
+Object.assign(historyFieldLabels, {
+  enrolled_at: 'Enrolled',
+  completed_at: 'Course completed',
+  attempt_number: 'Attempt',
+  opened_at: 'Opened',
+  conducted_at: 'Conducted',
+  closed_at: 'Closed',
+  ground_minutes: 'Ground minutes',
+  flight_minutes: 'Flight minutes',
+  simulator_minutes: 'Simulator minutes',
+  what_worked: 'What worked',
+  what_did_not_work: 'What did not work',
+  corrective_action: 'Corrective action',
+  next_lesson_preparation: 'Next preparation',
+  source: 'Line-item source',
+  grade: 'OGMUI grade',
+  instructor_comment: 'Instructor comment',
+  reason: 'Open requirement',
+  resolved_at: 'Resolved',
+})
+
+function trainingHistoryDetails(event: TrainingAuditEvent) {
+  const before = event.before_data ?? {}
+  const after = event.after_data ?? {}
+  return trainingHistoryFields[event.entity_type]
+    .filter((field) => event.action !== 'updated' || JSON.stringify(before[field]) !== JSON.stringify(after[field]))
+    .map((field) => ({ field, before: before[field], after: after[field] }))
+}
+
+function trainingEntityName(event: TrainingAuditEvent, workspace: StaffWorkspace) {
+  const snapshot = event.after_data ?? event.before_data ?? {}
+  if (event.entity_type === 'enrollment') return `Enrollment · ${studentName(workspace, event.student_id ?? '')}`
+  if (event.entity_type === 'lesson_attempt') return `${lessonName(workspace, String(snapshot.lesson_id ?? ''))} · Attempt ${snapshot.attempt_number ?? ''}`
+  if (event.entity_type === 'grade') return `Grade · ${workspace.acsItems.find((item) => item.id === snapshot.acs_item_id)?.code ?? 'ACS line item'}`
+  if (event.entity_type === 'attempt_item') return `Lesson line item · ${workspace.acsItems.find((item) => item.id === snapshot.acs_item_id)?.code ?? 'ACS'}`
+  return `${snapshot.reason === 'U' ? 'Repeat required' : 'Incomplete carryover'} · ${workspace.acsItems.find((item) => item.id === snapshot.acs_item_id)?.code ?? 'ACS line item'}`
 }
 
 function StaffOverview({ profile, workspace, navigate }: { profile: PortalProfile; workspace: StaffWorkspace; navigate: (view: StaffView) => void }) {
@@ -228,7 +278,6 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
   const selectedMappings = workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === selectedLesson?.id)
   const selectedItems = selectedMappings.map((mapping) => workspace.acsItems.find((item) => item.id === mapping.acs_item_id)).filter(Boolean) as AcsItem[]
   const editable = version?.status === 'draft'
-  const courseChanges = workspace.courseChanges.filter((event) => event.course_id === selectedCourse?.id).slice(0, 40)
 
   useEffect(() => {
     if (!courseId && workspace.courses[0]) setCourseId(workspace.courses[0].id)
@@ -409,32 +458,12 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
             </> : <EmptyCollection label="Select a lesson" detail="ACS line items are attached at lesson level and become the grade sheet." />}
           </article>
         </div>
-        <article className="panel course-history">
-          <div className="panel-heading"><div><p className="eyebrow dark">Permanent record</p><h2>Course change history</h2></div><span className="count-badge">{courseChanges.length}</span></div>
-          <p className="history-intro">The baseline preserves the course as it existed when history was enabled. Every later change is stored with its editor, timestamp, and before-and-after values.</p>
-          {courseChanges.length ? <div className="history-list">{courseChanges.map((event) => {
-            const actor = event.changed_by ? workspace.profiles.find((profile) => profile.id === event.changed_by)?.full_name ?? 'Portal staff' : 'System baseline'
-            const details = historyDetails(event)
-            const actionLabel = event.action === 'baseline' ? 'Baseline recorded' : event.action === 'created' ? 'Created' : event.action === 'updated' ? 'Updated' : 'Deleted'
-            return <details key={event.id}>
-              <summary>
-                <span className={`history-action ${event.action}`}>{actionLabel}</span>
-                <div><strong>{historyEntityName(event, workspace)}</strong><small>{actor} · {formatDateTime(event.changed_at)}</small></div>
-                <b>View record</b>
-              </summary>
-              <div className="history-diff" role="table" aria-label={`${historyEntityName(event, workspace)} changes`}>
-                <div className="history-diff-head" role="row"><span role="columnheader">Field</span><span role="columnheader">Before</span><span role="columnheader">After</span></div>
-                {details.map(({ field, before, after }) => <div role="row" key={field}><strong role="cell">{historyFieldLabels[field] ?? field}</strong><span role="cell">{event.action === 'created' || event.action === 'baseline' ? '—' : historyValue(before, field)}</span><span role="cell">{event.action === 'deleted' ? '—' : historyValue(after, field)}</span></div>)}
-              </div>
-            </details>
-          })}</div> : <EmptyCollection label="No history recorded yet" detail="Install the course-history update to capture the current baseline and all future edits." />}
-        </article>
       </div>
     </div> : <EmptyCollection label="No courses yet" detail="Create the first course above. Its first revision will be ready for phases, lessons, and ACS line items." />}
   </section>
 }
 
-interface GradeDraft { grade: OgmuiGrade; comment: string }
+interface GradeDraft { grade: OgmuiGrade | ''; comment: string }
 
 function GradeSheetsView({ profile, workspace, run }: { profile: PortalProfile; workspace: StaffWorkspace; run: Runner }) {
   const [enrollmentId, setEnrollmentId] = useState(workspace.enrollments.find((entry) => entry.status === 'active')?.id ?? '')
@@ -443,13 +472,17 @@ function GradeSheetsView({ profile, workspace, run }: { profile: PortalProfile; 
   const phaseIds = workspace.phases.filter((phase) => phase.course_version_id === version?.id).map((phase) => phase.id)
   const lessons = workspace.lessons.filter((lesson) => phaseIds.includes(lesson.phase_id))
   const [lessonId, setLessonId] = useState(lessons[0]?.id ?? '')
-  const selectedLesson = lessons.find((lesson) => lesson.id === lessonId) ?? lessons[0]
-  const mappings = workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === selectedLesson?.id)
-  const items = mappings.map((mapping) => workspace.acsItems.find((item) => item.id === mapping.acs_item_id)).filter(Boolean) as AcsItem[]
-  const [attemptId, setAttemptId] = useState<string | undefined>()
+  const repeatRequirement = workspace.remediations.find((entry) => entry.enrollment_id === enrollmentId && !entry.resolved_at && entry.reason === 'U')
+  const openAttempt = workspace.attempts.find((entry) => entry.enrollment_id === enrollmentId && entry.status === 'draft')
+  const selectedLesson = lessons.find((lesson) => lesson.id === (openAttempt?.lesson_id ?? lessonId)) ?? lessons[0]
+  const plannedMappings = workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === selectedLesson?.id)
+  const currentAttemptItems = openAttempt ? workspace.attemptItems.filter((item) => item.lesson_attempt_id === openAttempt.id).sort((a, b) => a.sort_order - b.sort_order) : []
+  const displayItems: LessonAttemptItem[] = openAttempt ? currentAttemptItems : plannedMappings.map((mapping, index) => ({ id: `planned-${mapping.acs_item_id}`, lesson_attempt_id: '', acs_item_id: mapping.acs_item_id, source: 'planned', remediation_requirement_id: null, sort_order: index, created_at: '' }))
+  const items = displayItems.map((entry) => workspace.acsItems.find((item) => item.id === entry.acs_item_id)).filter(Boolean) as AcsItem[]
   const [conductedAt, setConductedAt] = useState(localDateTimeValue())
-  const [groundMinutes, setGroundMinutes] = useState(30)
-  const [trainingMinutes, setTrainingMinutes] = useState(90)
+  const [groundMinutes, setGroundMinutes] = useState(0)
+  const [flightMinutes, setFlightMinutes] = useState(0)
+  const [simulatorMinutes, setSimulatorMinutes] = useState(0)
   const [whatWorked, setWhatWorked] = useState('')
   const [whatDidNotWork, setWhatDidNotWork] = useState('')
   const [correctiveAction, setCorrectiveAction] = useState('')
@@ -459,75 +492,115 @@ function GradeSheetsView({ profile, workspace, run }: { profile: PortalProfile; 
   useEffect(() => {
     if (!enrollmentId && workspace.enrollments[0]) setEnrollmentId(workspace.enrollments[0].id)
     if (lessons[0] && !lessons.some((lesson) => lesson.id === lessonId)) setLessonId(lessons[0].id)
+    if (repeatRequirement?.required_lesson_id && repeatRequirement.required_lesson_id !== lessonId) setLessonId(repeatRequirement.required_lesson_id)
   }, [enrollmentId, lessonId, lessons, workspace.enrollments])
 
-  function resetForm(nextLessonId = lessonId) {
-    setLessonId(nextLessonId)
-    setAttemptId(undefined)
-    setConductedAt(localDateTimeValue())
-    setGroundMinutes(30)
-    setTrainingMinutes(90)
-    setWhatWorked('')
-    setWhatDidNotWork('')
-    setCorrectiveAction('')
-    setNextPreparation('')
-    setGradeDrafts({})
-  }
-
-  function editAttempt(attempt: LessonAttempt) {
-    setEnrollmentId(attempt.enrollment_id)
-    setLessonId(attempt.lesson_id)
-    setAttemptId(attempt.id)
-    setConductedAt(localDateTimeValue(new Date(attempt.conducted_at)))
-    setGroundMinutes(attempt.ground_minutes)
-    setTrainingMinutes(attempt.training_minutes)
-    setWhatWorked(attempt.what_worked ?? '')
-    setWhatDidNotWork(attempt.what_did_not_work ?? '')
-    setCorrectiveAction(attempt.corrective_action ?? '')
-    setNextPreparation(attempt.next_lesson_preparation ?? '')
+  useEffect(() => {
+    if (!openAttempt) {
+      setConductedAt(localDateTimeValue())
+      setGroundMinutes(0)
+      setFlightMinutes(0)
+      setSimulatorMinutes(0)
+      setWhatWorked('')
+      setWhatDidNotWork('')
+      setCorrectiveAction('')
+      setNextPreparation('')
+      setGradeDrafts({})
+      return
+    }
+    setLessonId(openAttempt.lesson_id)
+    setConductedAt(localDateTimeValue(new Date(openAttempt.conducted_at)))
+    setGroundMinutes(openAttempt.ground_minutes ?? 0)
+    setFlightMinutes(openAttempt.flight_minutes ?? openAttempt.training_minutes ?? 0)
+    setSimulatorMinutes(openAttempt.simulator_minutes ?? 0)
+    setWhatWorked(openAttempt.what_worked ?? '')
+    setWhatDidNotWork(openAttempt.what_did_not_work ?? '')
+    setCorrectiveAction(openAttempt.corrective_action ?? '')
+    setNextPreparation(openAttempt.next_lesson_preparation ?? '')
     const draft: Record<string, GradeDraft> = {}
-    workspace.grades.filter((grade) => grade.lesson_attempt_id === attempt.id).forEach((grade) => { draft[grade.acs_item_id] = { grade: grade.grade, comment: grade.instructor_comment ?? '' } })
+    workspace.grades.filter((grade) => grade.lesson_attempt_id === openAttempt.id).forEach((grade) => { draft[grade.acs_item_id] = { grade: grade.grade, comment: grade.instructor_comment ?? '' } })
     setGradeDrafts(draft)
+  }, [openAttempt?.id])
+
+  async function openLesson() {
+    if (!enrollment || !selectedLesson) return
+    await run(() => openLessonAttempt({ enrollmentId: enrollment.id, lessonId: selectedLesson.id, instructorId: profile.id }), `Lesson ${selectedLesson.lesson_number} is open. Review the objectives and ACS items with the student.`)
   }
 
   async function submit(status: 'draft' | 'published') {
-    if (!enrollment || !selectedLesson || !items.length) return
-    const result = await run(() => saveGradeSheet({
-      attemptId,
-      enrollmentId: enrollment.id,
-      lessonId: selectedLesson.id,
-      instructorId: profile.id,
+    if (!openAttempt || !selectedLesson || !items.length) return
+    await run(() => saveGradeSheet({
+      attemptId: openAttempt.id,
       conductedAt,
       groundMinutes,
-      trainingMinutes,
+      flightMinutes,
+      simulatorMinutes,
       whatWorked,
       whatDidNotWork,
       correctiveAction,
       nextPreparation,
       status,
-      grades: items.map((item) => ({ acsItemId: item.id, grade: gradeDrafts[item.id]?.grade ?? 'I', comment: gradeDrafts[item.id]?.comment ?? '' })),
-    }), status === 'published' ? 'Grade sheet published. The student can now read it.' : 'Draft grade sheet saved privately.')
-    if (result) status === 'published' ? resetForm(selectedLesson.id) : setAttemptId(result)
+      grades: items.map((item) => ({ acsItemId: item.id, grade: gradeDrafts[item.id]?.grade ?? '', comment: gradeDrafts[item.id]?.comment ?? '' })),
+    }), status === 'published' ? 'Lesson closed. The permanent grade sheet is now visible to the student.' : 'Open lesson record saved.')
   }
 
-  const recentAttempts = workspace.attempts.slice(0, 12)
+  const recentAttempts = workspace.attempts.filter((attempt) => attempt.status === 'published').slice(0, 10)
+  const openRemediations = workspace.remediations.filter((entry) => entry.enrollment_id === enrollmentId && !entry.resolved_at)
   return <section className="workspace-view">
-    <div className="view-heading"><div><p className="eyebrow dark">Permanent training record</p><h1>Grade Sheets</h1><p>Evaluate the ACS line items assigned to a lesson, capture the debrief, then publish it to the student.</p></div><div className="grade-key">{(Object.keys(gradeLabels) as OgmuiGrade[]).map((grade) => <span key={grade}><Grade value={grade} />{gradeLabels[grade]}</span>)}</div></div>
+    <div className="view-heading"><div><p className="eyebrow dark">Lesson operations</p><h1>Open & Close Lessons</h1><p>Open the lesson with the student, review its objectives and line items, then close the permanent record after training.</p></div><div className="grade-key">{(Object.keys(gradeLabels) as OgmuiGrade[]).map((grade) => <span key={grade}><Grade value={grade} />{gradeLabels[grade]}</span>)}</div></div>
     <div className="grade-workspace">
-      <aside className="panel attempt-list"><div className="panel-heading"><div><p className="eyebrow dark">History</p><h2>Recent sheets</h2></div><button className="quiet-link" onClick={() => resetForm()}>New</button></div>{recentAttempts.length ? recentAttempts.map((attempt) => <button className={attempt.id === attemptId ? 'active' : ''} onClick={() => editAttempt(attempt)} key={attempt.id}><span className={attempt.status}>{attempt.status === 'published' ? '✓' : '•'}</span><div><strong>{studentName(workspace, workspace.enrollments.find((entry) => entry.id === attempt.enrollment_id)?.student_id ?? '')}</strong><small>{lessonName(workspace, attempt.lesson_id)} · Attempt {attempt.attempt_number}</small></div></button>) : <EmptyCollection label="No grade sheets" detail="Select an enrollment and lesson to create the first record." />}</aside>
+      <aside className="panel attempt-list"><div className="panel-heading"><div><p className="eyebrow dark">Recent history</p><h2>Closed lessons</h2></div></div>{recentAttempts.length ? recentAttempts.map((attempt) => <div className="attempt-record" key={attempt.id}><span className="published">✓</span><div><strong>{studentName(workspace, workspace.enrollments.find((entry) => entry.id === attempt.enrollment_id)?.student_id ?? '')}</strong><small>{lessonName(workspace, attempt.lesson_id)} · Attempt {attempt.attempt_number}</small></div></div>) : <EmptyCollection label="No closed lessons" detail="Completed grade sheets will remain here permanently." />}</aside>
       <article className="panel grade-editor">
         {workspace.enrollments.length ? <>
-          <div className="form-grid portal-form"><label>Student & course<select value={enrollmentId} onChange={(event) => { setEnrollmentId(event.target.value); resetForm('') }}>{workspace.enrollments.map((entry) => <option value={entry.id} key={entry.id}>{studentName(workspace, entry.student_id)} · {courseName(workspace, entry.course_version_id)}</option>)}</select></label><label>Lesson<select value={selectedLesson?.id ?? ''} onChange={(event) => resetForm(event.target.value)}>{lessons.map((lesson) => <option value={lesson.id} key={lesson.id}>{lessonName(workspace, lesson.id)}</option>)}</select></label></div>
+          <div className="form-grid portal-form"><label>Student & course<select disabled={Boolean(openAttempt)} value={enrollmentId} onChange={(event) => setEnrollmentId(event.target.value)}>{workspace.enrollments.filter((entry) => entry.status === 'active').map((entry) => <option value={entry.id} key={entry.id}>{studentName(workspace, entry.student_id)} · {courseName(workspace, entry.course_version_id)}</option>)}</select></label><label>{repeatRequirement ? 'Required repeat lesson' : 'Lesson'}<select disabled={Boolean(openAttempt || repeatRequirement)} value={selectedLesson?.id ?? ''} onChange={(event) => setLessonId(event.target.value)}>{lessons.map((lesson) => <option value={lesson.id} key={lesson.id}>{lessonName(workspace, lesson.id)}</option>)}</select></label></div>
           {selectedLesson && items.length ? <>
-            <div className="grade-editor-head"><div><p className="eyebrow dark">{attemptId ? 'Editing draft' : 'New grade sheet'}</p><h2>{selectedLesson.title}</h2><p>{studentName(workspace, enrollment?.student_id ?? '')}</p></div><span>{items.length} ACS item{items.length === 1 ? '' : 's'}</span></div>
-            <div className="form-grid portal-form"><label>Conducted at<input type="datetime-local" value={conductedAt} onChange={(event) => setConductedAt(event.target.value)} /></label><label>Ground / training minutes<div className="paired-input"><input type="number" min="0" value={groundMinutes} onChange={(event) => setGroundMinutes(Number(event.target.value))} /><input type="number" min="0" value={trainingMinutes} onChange={(event) => setTrainingMinutes(Number(event.target.value))} /></div></label></div>
-            <div className="grade-lines">{items.map((item) => <div key={item.id}><div><code>{item.code}</code><strong>{item.description}</strong><small>{item.element_type.replace('_', ' ')}</small></div><label>OGMUI<select aria-label={`${item.code} grade`} value={gradeDrafts[item.id]?.grade ?? 'I'} onChange={(event) => setGradeDrafts((current) => ({ ...current, [item.id]: { grade: event.target.value as OgmuiGrade, comment: current[item.id]?.comment ?? '' } }))}>{(Object.keys(gradeLabels) as OgmuiGrade[]).map((grade) => <option value={grade} key={grade}>{grade} · {gradeLabels[grade]}</option>)}</select></label><label>Instructor comment<textarea aria-label={`${item.code} instructor comment`} value={gradeDrafts[item.id]?.comment ?? ''} onChange={(event) => setGradeDrafts((current) => ({ ...current, [item.id]: { grade: current[item.id]?.grade ?? 'I', comment: event.target.value } }))} /></label></div>)}</div>
-            <div className="debrief-editor portal-form"><div className="form-grid"><label>What worked<textarea value={whatWorked} onChange={(event) => setWhatWorked(event.target.value)} /></label><label>What did not work<textarea value={whatDidNotWork} onChange={(event) => setWhatDidNotWork(event.target.value)} /></label><label>Corrective action<textarea value={correctiveAction} onChange={(event) => setCorrectiveAction(event.target.value)} /></label><label>Next-lesson preparation<textarea value={nextPreparation} onChange={(event) => setNextPreparation(event.target.value)} /></label></div><div className="editor-actions"><button className="button button-outline" type="button" onClick={() => void submit('draft')}>Save draft</button><button className="button button-primary" type="button" onClick={() => void submit('published')}>Publish to student <span>→</span></button></div></div>
+            <div className="grade-editor-head"><div><p className="eyebrow dark">{openAttempt ? `Open since ${formatDateTime(openAttempt.opened_at ?? openAttempt.created_at)}` : repeatRequirement ? 'Repeat required' : 'Ready to open'}</p><h2>{selectedLesson.title}</h2><p>{studentName(workspace, enrollment?.student_id ?? '')} · Attempt {(workspace.attempts.filter((entry) => entry.enrollment_id === enrollmentId && entry.lesson_id === selectedLesson.id).at(0)?.attempt_number ?? 0) + (openAttempt ? 0 : 1)}</p></div><span>{items.length + (openAttempt ? 0 : openRemediations.filter((entry) => !plannedMappings.some((mapping) => mapping.acs_item_id === entry.acs_item_id)).length)} ACS item{items.length === 1 ? '' : 's'}</span></div>
+            <div className="lesson-opening-brief"><div><span>Objective</span><p>{selectedLesson.objective}</p></div><div><span>Completion standard</span><p>{selectedLesson.completion_standard}</p></div></div>
+            {!openAttempt ? <>
+              {openRemediations.length > 0 && <div className="carryover-alert"><strong>{openRemediations.length} unresolved line item{openRemediations.length === 1 ? '' : 's'} will be added</strong><span>{repeatRequirement ? 'An Unsatisfactory result requires this repeat lesson.' : 'Incomplete items remain open and carry into this lesson.'}</span></div>}
+              <div className="opening-items">{items.map((item) => <div key={item.id}><code>{item.code}</code><strong>{item.description}</strong></div>)}</div>
+              <button className="button button-primary open-lesson-button" type="button" onClick={() => void openLesson()}>Open lesson with student <span>→</span></button>
+            </> : <>
+              <div className="time-entry portal-form"><label>Lesson date & time<input type="datetime-local" value={conductedAt} onChange={(event) => setConductedAt(event.target.value)} /></label><label>Ground minutes<input type="number" min="0" value={groundMinutes} onChange={(event) => setGroundMinutes(Number(event.target.value))} /></label><label>Flight minutes<input type="number" min="0" value={flightMinutes} onChange={(event) => setFlightMinutes(Number(event.target.value))} /></label><label>Simulator minutes<input type="number" min="0" value={simulatorMinutes} onChange={(event) => setSimulatorMinutes(Number(event.target.value))} /></label></div>
+              <div className="grade-lines">{items.map((item, index) => { const attemptItem = displayItems[index]; const unresolved = ['U', 'I'].includes(gradeDrafts[item.id]?.grade ?? ''); return <div key={item.id}><div><code>{item.code}</code><strong>{item.description}</strong><small>{attemptItem.source === 'planned' ? item.element_type.replace('_', ' ') : attemptItem.source === 'repeat_unsatisfactory' ? 'repeat required · prior unsatisfactory' : 'carryover · prior incomplete'}</small></div><label>OGMUI<select aria-label={`${item.code} grade`} value={gradeDrafts[item.id]?.grade ?? ''} onChange={(event) => setGradeDrafts((current) => ({ ...current, [item.id]: { grade: event.target.value as OgmuiGrade | '', comment: current[item.id]?.comment ?? '' } }))}><option value="">Select grade</option>{(Object.keys(gradeLabels) as OgmuiGrade[]).map((grade) => <option value={grade} key={grade}>{grade} · {gradeLabels[grade]}</option>)}</select></label><label>Instructor comment{unresolved && <b className="required-note">Required for U/I</b>}<textarea aria-label={`${item.code} instructor comment`} required={unresolved} value={gradeDrafts[item.id]?.comment ?? ''} onChange={(event) => setGradeDrafts((current) => ({ ...current, [item.id]: { grade: current[item.id]?.grade ?? '', comment: event.target.value } }))} /></label></div>})}</div>
+              <div className="debrief-editor portal-form"><div className="form-grid"><label>What worked<textarea value={whatWorked} onChange={(event) => setWhatWorked(event.target.value)} /></label><label>What did not work<textarea value={whatDidNotWork} onChange={(event) => setWhatDidNotWork(event.target.value)} /></label><label>Corrective action<textarea value={correctiveAction} onChange={(event) => setCorrectiveAction(event.target.value)} /></label><label>Next-lesson preparation<textarea value={nextPreparation} onChange={(event) => setNextPreparation(event.target.value)} /></label></div><div className="close-rule"><strong>Closing creates the permanent record.</strong><span>Every line item must be graded. U and I require comments; U automatically requires another attempt of this lesson.</span></div><div className="editor-actions"><button className="button button-outline" type="button" onClick={() => void submit('draft')}>Save open record</button><button className="button button-primary" type="button" onClick={() => void submit('published')}>Close lesson record <span>→</span></button></div></div>
+            </>}
           </> : <EmptyCollection label="This lesson has no ACS line items" detail="Open Courses, select this lesson, and attach the ACS items that should appear on its grade sheet." />}
         </> : <EmptyCollection label="No active enrollments" detail="Enroll a student before creating a grade sheet." />}
       </article>
     </div>
   </section>
+}
+
+function AuditView({ workspace }: { workspace: StaffWorkspace }) {
+  const [scope, setScope] = useState<'student' | 'course'>('student')
+  const [studentId, setStudentId] = useState(workspace.students[0]?.id ?? '')
+  const [courseId, setCourseId] = useState(workspace.courses[0]?.id ?? '')
+  const studentEvents = workspace.trainingAudit.filter((event) => !studentId || event.student_id === studentId)
+  const courseEvents = workspace.courseChanges.filter((event) => !courseId || event.course_id === courseId)
+  const actionLabel = (action: CourseChangeEvent['action'] | TrainingAuditEvent['action']) => action === 'baseline' ? 'Baseline' : action === 'created' ? 'Created' : action === 'updated' ? 'Updated' : 'Deleted'
+
+  return <section className="workspace-view">
+    <div className="view-heading"><div><p className="eyebrow dark">Append-only history</p><h1>Audit Log</h1><p>Course definitions and student training records are preserved here without crowding the working screens.</p></div></div>
+    <article className="panel audit-panel">
+      <div className="audit-controls">
+        <div className="audit-tabs" role="tablist" aria-label="Audit scope"><button className={scope === 'student' ? 'active' : ''} onClick={() => setScope('student')} role="tab">Student records</button><button className={scope === 'course' ? 'active' : ''} onClick={() => setScope('course')} role="tab">Course changes</button></div>
+        {scope === 'student' ? <label>Student<select value={studentId} onChange={(event) => setStudentId(event.target.value)}>{workspace.students.map((student) => <option value={student.id} key={student.id}>{student.full_name}</option>)}</select></label> : <label>Course<select value={courseId} onChange={(event) => setCourseId(event.target.value)}>{workspace.courses.map((course) => <option value={course.id} key={course.id}>{course.name}</option>)}</select></label>}
+      </div>
+      <div className="audit-summary"><strong>{scope === 'student' ? studentEvents.length : courseEvents.length} recorded event{(scope === 'student' ? studentEvents.length : courseEvents.length) === 1 ? '' : 's'}</strong><span>Open any entry to inspect its before-and-after values.</span></div>
+      {scope === 'course' ? courseEvents.length ? <div className="history-list audit-history">{courseEvents.map((event) => {
+        const actor = event.changed_by ? workspace.profiles.find((profile) => profile.id === event.changed_by)?.full_name ?? 'Portal staff' : 'System baseline'
+        return <details key={`course-${event.id}`}><summary><span className={`history-action ${event.action}`}>{actionLabel(event.action)}</span><div><strong>{historyEntityName(event, workspace)}</strong><small>{actor} · {formatDateTime(event.changed_at)}</small></div><b>View record</b></summary><AuditDiff action={event.action} details={historyDetails(event)} /></details>
+      })}</div> : <EmptyCollection label="No course history yet" detail="The audit migration will capture the current structure as its baseline." /> : studentEvents.length ? <div className="history-list audit-history">{studentEvents.map((event) => {
+        const actor = event.changed_by ? workspace.profiles.find((profile) => profile.id === event.changed_by)?.full_name ?? 'Portal staff' : 'System baseline'
+        return <details key={`training-${event.id}`}><summary><span className={`history-action ${event.action}`}>{actionLabel(event.action)}</span><div><strong>{trainingEntityName(event, workspace)}</strong><small>{actor} · {formatDateTime(event.changed_at)}</small></div><b>View record</b></summary><AuditDiff action={event.action} details={trainingHistoryDetails(event)} /></details>
+      })}</div> : <EmptyCollection label="No student history yet" detail="Opening, grading, closing, and carrying forward lessons will be recorded here." />}
+    </article>
+  </section>
+}
+
+function AuditDiff({ action, details }: { action: 'baseline' | 'created' | 'updated' | 'deleted'; details: Array<{ field: string; before: unknown; after: unknown }> }) {
+  return <div className="history-diff" role="table"><div className="history-diff-head" role="row"><span role="columnheader">Field</span><span role="columnheader">Before</span><span role="columnheader">After</span></div>{details.map(({ field, before, after }) => <div role="row" key={field}><strong role="cell">{historyFieldLabels[field] ?? field}</strong><span role="cell">{action === 'created' || action === 'baseline' ? '—' : historyValue(before, field)}</span><span role="cell">{action === 'deleted' ? '—' : historyValue(after, field)}</span></div>)}</div>
 }
 
 function LibraryView({ profile, workspace, run }: { profile: PortalProfile; workspace: StaffWorkspace; run: Runner }) {
@@ -597,11 +670,11 @@ export function StaffPortal({ profile, workspace, refresh }: { profile: PortalPr
     }
   }
 
-  const content = view === 'overview' ? <StaffOverview profile={profile} workspace={workspace} navigate={setView} /> : view === 'students' ? <StudentsView profile={profile} workspace={workspace} run={run} /> : view === 'courses' ? <CoursesView workspace={workspace} run={run} /> : view === 'grades' ? <GradeSheetsView profile={profile} workspace={workspace} run={run} /> : <LibraryView profile={profile} workspace={workspace} run={run} />
+  const content = view === 'overview' ? <StaffOverview profile={profile} workspace={workspace} navigate={setView} /> : view === 'students' ? <StudentsView profile={profile} workspace={workspace} run={run} /> : view === 'courses' ? <CoursesView workspace={workspace} run={run} /> : view === 'grades' ? <GradeSheetsView profile={profile} workspace={workspace} run={run} /> : view === 'audit' ? <AuditView workspace={workspace} /> : <LibraryView profile={profile} workspace={workspace} run={run} />
 
   return <div className={`portal-shell ${busy ? 'is-busy' : ''}`}>
     <aside className="sidebar"><Brand /><nav>{staffNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="course-chip"><span>Training model</span><strong>Course → Phase → Lesson</strong><small>ACS → OGMUI → Feedback</small></div><div className="account-chip"><span>{initials(profile.full_name)}</span><div><strong>{profile.full_name}</strong><small>{profile.role === 'owner' ? 'Owner' : 'Instructor'}</small></div><button aria-label="Sign out" title="Sign out" onClick={() => void supabase?.auth.signOut()}>↗</button></div></aside>
-    <main className="portal-main"><header className="mobile-header"><Brand /><button className="mobile-account" onClick={() => void supabase?.auth.signOut()} aria-label="Sign out">{initials(profile.full_name)}</button></header><nav className="mobile-nav">{staffNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="main-inner">{content}</div></main>
+    <main className="portal-main"><header className="mobile-header"><Brand /><button className="mobile-account" onClick={() => void supabase?.auth.signOut()} aria-label="Sign out">{initials(profile.full_name)}</button></header><nav className="mobile-nav staff-mobile-nav">{staffNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="main-inner">{content}</div></main>
     {notice && <div className={`save-status ${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'} aria-live="polite"><span className="save-status-mark" aria-hidden="true">{notice.kind === 'saving' ? '•••' : notice.kind === 'success' ? '✓' : '!'}</span><div><strong>{notice.title}</strong><small>{notice.text}</small></div>{notice.kind !== 'saving' && <button onClick={() => setNotice(null)} aria-label="Dismiss save status">×</button>}</div>}
   </div>
 }
@@ -616,40 +689,80 @@ const studentNavItems: Array<{ id: StudentView; label: string; short: string }> 
   { id: 'library', label: 'Documents & Videos', short: 'DV' },
 ]
 
+function latestStudentGrade(workspace: StudentWorkspace, acsItemId: string) {
+  const closedAttempts = workspace.attempts.filter((attempt) => attempt.status === 'published')
+  for (const attempt of closedAttempts) {
+    const grade = workspace.grades.find((entry) => entry.lesson_attempt_id === attempt.id && entry.acs_item_id === acsItemId)
+    if (grade) return { grade, attempt }
+  }
+  return undefined
+}
+
+function studentCourseItemIds(workspace: StudentWorkspace) {
+  return [...new Set(workspace.lessonAcsItems.map((mapping) => mapping.acs_item_id))]
+}
+
+function studentLessonComplete(workspace: StudentWorkspace, lessonId: string) {
+  const ids = workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === lessonId).map((mapping) => mapping.acs_item_id)
+  return ids.length > 0 && ids.every((id) => ['O', 'G', 'M'].includes(latestStudentGrade(workspace, id)?.grade.grade ?? ''))
+}
+
 function StudentDashboard({ profile, workspace, navigate }: { profile: PortalProfile; workspace: StudentWorkspace; navigate: (view: StudentView) => void }) {
-  const completed = new Set(workspace.attempts.map((attempt) => attempt.lesson_id))
   const phaseOrder = new Map(workspace.phases.map((phase) => [phase.id, phase.phase_number]))
   const lessons = [...workspace.lessons].sort((a, b) => (phaseOrder.get(a.phase_id) ?? 0) - (phaseOrder.get(b.phase_id) ?? 0) || a.lesson_number - b.lesson_number)
-  const nextLesson = lessons.find((lesson) => !completed.has(lesson.id))
-  const latest = workspace.attempts[0]
+  const closedAttempts = workspace.attempts.filter((attempt) => attempt.status === 'published')
+  const openAttempt = workspace.attempts.find((attempt) => attempt.status === 'draft')
+  const repeat = workspace.remediations.find((entry) => !entry.resolved_at && entry.reason === 'U')
+  const nextLesson = workspace.lessons.find((lesson) => lesson.id === (openAttempt?.lesson_id ?? repeat?.required_lesson_id)) ?? lessons.find((lesson) => !studentLessonComplete(workspace, lesson.id))
+  const latest = closedAttempts[0]
   const latestLesson = workspace.lessons.find((lesson) => lesson.id === latest?.lesson_id)
-  const progress = lessons.length ? Math.round((completed.size / lessons.length) * 100) : 0
+  const courseItems = studentCourseItemIds(workspace)
+  const completedItems = courseItems.filter((id) => ['O', 'G', 'M'].includes(latestStudentGrade(workspace, id)?.grade.grade ?? '')).length
+  const progress = courseItems.length ? Math.round((completedItems / courseItems.length) * 100) : 0
+  const unresolved = workspace.remediations.filter((entry) => !entry.resolved_at)
   const currentPhase = workspace.phases.find((phase) => phase.id === nextLesson?.phase_id)
+  const courseComplete = courseItems.length > 0 && completedItems === courseItems.length && !unresolved.length && !openAttempt
 
   return <>
-    <section className="welcome-row"><div><p className="eyebrow dark">Active course · Revision {workspace.version.revision}</p><h1>Welcome back, {profile.full_name.split(/\s+/)[0]}.</h1><p className="lede">Your syllabus, assigned preparation, ACS progress, and every published instructor comment stay together here.</p></div><div className="progress-ring" style={{ '--progress': `${progress * 3.6}deg` } as CSSProperties}><div><strong>{progress}%</strong><span>course</span></div></div></section>
+    <section className="welcome-row"><div><p className="eyebrow dark">Active course · Revision {workspace.version.revision}</p><h1>Welcome back, {profile.full_name.split(/\s+/)[0]}.</h1><p className="lede">Course completion is based on ACS line items. Unsatisfactory and Incomplete items remain open until they are completed.</p></div><div className="progress-ring" style={{ '--progress': `${progress * 3.6}deg` } as CSSProperties}><div><strong>{progress}%</strong><span>ACS items</span></div></div></section>
     <section className="dashboard-grid">
-      <article className="next-lesson panel panel-dark"><div className="panel-kicker"><span>{nextLesson ? 'Next lesson' : 'Course status'}</span><span>{currentPhase ? `Phase ${String(currentPhase.phase_number).padStart(2, '0')}` : 'Complete'}</span></div><p className="lesson-number">{nextLesson ? String(nextLesson.lesson_number).padStart(2, '0') : '✓'}</p><h2>{nextLesson?.title ?? 'All assigned lessons complete'}</h2><p>{nextLesson?.objective ?? 'Your instructor will review completion and next steps with you.'}</p>{nextLesson && <dl className="lesson-meta"><div><dt>Type</dt><dd>{nextLesson.kind}</dd></div><div><dt>Planned time</dt><dd>{nextLesson.planned_ground_minutes + nextLesson.planned_training_minutes} min</dd></div><div><dt>Preparation</dt><dd>{nextLesson.preparation ? 'Assigned' : 'None listed'}</dd></div></dl>}<button className="button button-light" onClick={() => navigate('course')}>Open course <span>→</span></button></article>
+      <article className="next-lesson panel panel-dark"><div className="panel-kicker"><span>{openAttempt ? 'Lesson open' : repeat ? 'Repeat required' : nextLesson ? 'Next lesson' : 'Course status'}</span><span>{currentPhase ? `Phase ${String(currentPhase.phase_number).padStart(2, '0')}` : courseComplete ? 'Complete' : 'Awaiting review'}</span></div><p className="lesson-number">{nextLesson ? String(nextLesson.lesson_number).padStart(2, '0') : courseComplete ? '✓' : '—'}</p><h2>{nextLesson?.title ?? (courseComplete ? 'All ACS requirements complete' : 'Instructor review required')}</h2><p>{openAttempt ? 'Review the objectives and line items below with your instructor before training begins.' : repeat ? 'A prior Unsatisfactory result requires another attempt of this lesson.' : nextLesson?.objective ?? 'Your instructor will review course completion and next steps.'}</p>{nextLesson && <dl className="lesson-meta"><div><dt>Type</dt><dd>{nextLesson.kind}</dd></div><div><dt>Planned time</dt><dd>{nextLesson.planned_ground_minutes + nextLesson.planned_training_minutes} min</dd></div><div><dt>Open items</dt><dd>{unresolved.length}</dd></div></dl>}<button className="button button-light" onClick={() => navigate('course')}>{openAttempt ? 'Review open lesson' : 'Open course'} <span>→</span></button></article>
       <article className="panel recent-debrief"><div className="panel-heading"><div><p className="eyebrow dark">Latest instructor debrief</p><h2>{latestLesson ? `Lesson ${latestLesson.lesson_number}` : 'No published record yet'}</h2></div>{latest && <span className="status-pill">Published</span>}</div>{latest ? <><p className="quote">“{latest.what_worked || 'Review the complete grade sheet for instructor feedback.'}”</p><div className="debrief-split"><div><span>What worked</span><p>{latest.what_worked || 'No comment entered.'}</p></div><div><span>What did not work</span><p>{latest.what_did_not_work || 'No comment entered.'}</p></div></div><button className="text-button" onClick={() => navigate('record')}>Read complete grade sheet <span>→</span></button></> : <EmptyCollection label="Your first debrief will appear here" detail="Published grade sheets remain available throughout your course." />}</article>
     </section>
-    <section className="lower-grid"><article className="panel phase-panel"><div className="panel-heading"><div><p className="eyebrow dark">Course position</p><h2>{workspace.course.name}</h2></div><strong>{completed.size} / {lessons.length}</strong></div><div className="phase-list">{workspace.phases.map((phase) => { const phaseLessons = workspace.lessons.filter((lesson) => lesson.phase_id === phase.id); const done = phaseLessons.filter((lesson) => completed.has(lesson.id)).length; return <div className={phase.id === currentPhase?.id ? 'active' : ''} key={phase.id}><span>{String(phase.phase_number).padStart(2, '0')}</span><strong>{phase.title}</strong><small>{done} of {phaseLessons.length}</small></div> })}</div></article><article className="panel attention-panel"><div className="panel-heading"><div><p className="eyebrow dark">Assigned resources</p><h2>Course library</h2></div><button className="quiet-link" onClick={() => navigate('library')}>View all</button></div>{workspace.resources.length ? <div className="attention-list">{workspace.resources.slice(0, 3).map((resource) => <div key={resource.id}><span className="resource-mini">{resource.kind === 'video' ? '▶' : 'DOC'}</span><div><strong>{resource.title}</strong><p>{resource.description || resource.kind}</p></div></div>)}</div> : <EmptyCollection label="No resources assigned" detail="Documents and videos from your instructor will appear here." />}</article></section>
+    {unresolved.length > 0 && <section className="carryover-strip panel"><div><p className="eyebrow dark">Must be completed</p><h2>{unresolved.length} open ACS line item{unresolved.length === 1 ? '' : 's'}</h2></div><div>{unresolved.slice(0, 4).map((entry) => { const item = workspace.acsItems.find((candidate) => candidate.id === entry.acs_item_id); return <span key={entry.id}><Grade value={entry.reason} /><b>{item?.code}</b>{entry.reason === 'U' ? 'Repeat lesson required' : 'Carries forward'}</span> })}</div></section>}
+    <section className="lower-grid"><article className="panel phase-panel"><div className="panel-heading"><div><p className="eyebrow dark">Course position</p><h2>{workspace.course.name}</h2></div><strong>{completedItems} / {courseItems.length} ACS</strong></div><div className="phase-list">{workspace.phases.map((phase) => { const phaseLessons = workspace.lessons.filter((lesson) => lesson.phase_id === phase.id); const done = phaseLessons.filter((lesson) => studentLessonComplete(workspace, lesson.id)).length; return <div className={phase.id === currentPhase?.id ? 'active' : ''} key={phase.id}><span>{String(phase.phase_number).padStart(2, '0')}</span><strong>{phase.title}</strong><small>{done} of {phaseLessons.length} lessons</small></div> })}</div></article><article className="panel attention-panel"><div className="panel-heading"><div><p className="eyebrow dark">Assigned resources</p><h2>Course library</h2></div><button className="quiet-link" onClick={() => navigate('library')}>View all</button></div>{workspace.resources.length ? <div className="attention-list">{workspace.resources.slice(0, 3).map((resource) => <div key={resource.id}><span className="resource-mini">{resource.kind === 'video' ? '▶' : 'DOC'}</span><div><strong>{resource.title}</strong><p>{resource.description || resource.kind}</p></div></div>)}</div> : <EmptyCollection label="No resources assigned" detail="Documents and videos from your instructor will appear here." />}</article></section>
   </>
 }
 
 function StudentCourse({ workspace }: { workspace: StudentWorkspace }) {
   const phaseOrder = new Map(workspace.phases.map((phase) => [phase.id, phase.phase_number]))
   const ordered = [...workspace.lessons].sort((a, b) => (phaseOrder.get(a.phase_id) ?? 0) - (phaseOrder.get(b.phase_id) ?? 0) || a.lesson_number - b.lesson_number)
-  const [lessonId, setLessonId] = useState(ordered[0]?.id ?? '')
+  const openAttempt = workspace.attempts.find((entry) => entry.status === 'draft')
+  const [lessonId, setLessonId] = useState(openAttempt?.lesson_id ?? ordered[0]?.id ?? '')
   const lesson = workspace.lessons.find((entry) => entry.id === lessonId) ?? ordered[0]
-  const attempt = workspace.attempts.find((entry) => entry.lesson_id === lesson?.id)
-  const items = workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === lesson?.id).map((mapping) => workspace.acsItems.find((item) => item.id === mapping.acs_item_id)).filter(Boolean) as AcsItem[]
-  const grades = workspace.grades.filter((grade) => grade.lesson_attempt_id === attempt?.id)
+  const lessonOpenAttempt = openAttempt?.lesson_id === lesson?.id ? openAttempt : undefined
+  const latestClosedAttempt = workspace.attempts.find((entry) => entry.lesson_id === lesson?.id && entry.status === 'published')
+  const displayItemRecords = lessonOpenAttempt ? workspace.attemptItems.filter((item) => item.lesson_attempt_id === lessonOpenAttempt.id).sort((a, b) => a.sort_order - b.sort_order) : workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === lesson?.id).map((mapping, index) => ({ id: `planned-${mapping.acs_item_id}`, lesson_attempt_id: '', acs_item_id: mapping.acs_item_id, source: 'planned' as const, remediation_requirement_id: null, sort_order: index, created_at: '' }))
+  const items = displayItemRecords.map((entry) => workspace.acsItems.find((item) => item.id === entry.acs_item_id)).filter(Boolean) as AcsItem[]
+  const grades = workspace.grades.filter((grade) => grade.lesson_attempt_id === latestClosedAttempt?.id)
+  const repeat = workspace.remediations.find((entry) => !entry.resolved_at && entry.reason === 'U' && entry.required_lesson_id === lesson?.id)
 
-  return <section className="workspace-view"><div className="view-heading"><div><p className="eyebrow dark">Active enrollment</p><h1>{workspace.course.name}</h1><p>{workspace.publication.code} · Course revision {workspace.version.revision}</p></div></div><div className="course-layout"><div className="lesson-sequence panel">{workspace.phases.map((phase) => <div className="student-phase" key={phase.id}><h2>Phase {String(phase.phase_number).padStart(2, '0')} · {phase.title}</h2>{ordered.filter((entry) => entry.phase_id === phase.id).map((entry) => { const complete = workspace.attempts.some((attemptEntry) => attemptEntry.lesson_id === entry.id); return <button className={`${complete ? 'complete' : ''} ${entry.id === lesson?.id ? 'selected' : ''}`} key={entry.id} onClick={() => setLessonId(entry.id)}><span>{complete ? '✓' : entry.lesson_number}</span><div><small>{entry.kind}</small><strong>{entry.title}</strong></div><b>→</b></button> })}</div>)}</div><article className="lesson-detail panel">{lesson ? <><div className="panel-kicker dark"><span>Lesson {lesson.lesson_number}</span><span>{attempt ? 'complete' : 'upcoming'}</span></div><h2>{lesson.title}</h2><p>{lesson.objective}</p><h3>Completion standard</h3><p>{lesson.completion_standard}</p><h3>Preparation</h3><p>{lesson.preparation || 'No preparation has been listed.'}</p><h3>ACS line items</h3>{items.length ? <div className="compact-grades">{items.map((item) => { const grade = grades.find((entry) => entry.acs_item_id === item.id); return <div key={item.id}>{grade ? <Grade value={grade.grade} /> : <span className="grade grade-i">—</span>}<div><code>{item.code}</code><strong>{item.description}</strong><p>{grade?.instructor_comment || 'Not yet evaluated.'}</p></div></div> })}</div> : <p className="empty-state">No ACS line items have been assigned.</p>}</> : <EmptyCollection label="No lessons yet" detail="Your instructor is still building this course." />}</article></div></section>
+  useEffect(() => { if (openAttempt?.lesson_id) setLessonId(openAttempt.lesson_id) }, [openAttempt?.lesson_id])
+
+  return <section className="workspace-view"><div className="view-heading"><div><p className="eyebrow dark">Active enrollment</p><h1>{workspace.course.name}</h1><p>{workspace.publication.code} · Course revision {workspace.version.revision}</p></div></div><div className="course-layout"><div className="lesson-sequence panel">{workspace.phases.map((phase) => <div className="student-phase" key={phase.id}><h2>Phase {String(phase.phase_number).padStart(2, '0')} · {phase.title}</h2>{ordered.filter((entry) => entry.phase_id === phase.id).map((entry) => { const complete = studentLessonComplete(workspace, entry.id); const isOpen = openAttempt?.lesson_id === entry.id; const mustRepeat = workspace.remediations.some((requirement) => !requirement.resolved_at && requirement.reason === 'U' && requirement.required_lesson_id === entry.id); return <button className={`${complete ? 'complete' : ''} ${isOpen ? 'open' : ''} ${mustRepeat ? 'repeat' : ''} ${entry.id === lesson?.id ? 'selected' : ''}`} key={entry.id} onClick={() => setLessonId(entry.id)}><span>{complete ? '✓' : isOpen ? '•' : entry.lesson_number}</span><div><small>{isOpen ? 'open now' : mustRepeat ? 'repeat required' : entry.kind}</small><strong>{entry.title}</strong></div><b>→</b></button> })}</div>)}</div><article className="lesson-detail panel">{lesson ? <><div className="panel-kicker dark"><span>Lesson {lesson.lesson_number}</span><span>{lessonOpenAttempt ? 'open' : repeat ? 'repeat required' : studentLessonComplete(workspace, lesson.id) ? 'complete' : 'upcoming'}</span></div><h2>{lesson.title}</h2>{lessonOpenAttempt && <div className="student-open-banner"><strong>Lesson record opened {formatDateTime(lessonOpenAttempt.opened_at ?? lessonOpenAttempt.created_at)}</strong><span>Review the objective, completion standard, and every line item with your instructor.</span></div>}<p>{lesson.objective}</p><h3>Completion standard</h3><p>{lesson.completion_standard}</p><h3>Preparation</h3><p>{lesson.preparation || 'No preparation has been listed.'}</p><h3>{lessonOpenAttempt ? 'Items open for this attempt' : 'ACS line items'}</h3>{items.length ? <div className="compact-grades">{items.map((item, index) => { const grade = grades.find((entry) => entry.acs_item_id === item.id); const source = displayItemRecords[index]?.source; return <div key={item.id}>{!lessonOpenAttempt && grade ? <Grade value={grade.grade} /> : <span className="grade grade-i">{source === 'repeat_unsatisfactory' ? 'U' : source === 'carryover_incomplete' ? 'I' : '—'}</span>}<div><code>{item.code}</code><strong>{item.description}</strong><p>{lessonOpenAttempt ? source === 'repeat_unsatisfactory' ? 'Repeat item from an Unsatisfactory result.' : source === 'carryover_incomplete' ? 'Incomplete item carried forward from a prior lesson.' : 'Planned for this lesson.' : grade?.instructor_comment || 'Not yet evaluated.'}</p></div></div> })}</div> : <p className="empty-state">No ACS line items have been assigned.</p>}</> : <EmptyCollection label="No lessons yet" detail="Your instructor is still building this course." />}</article></div></section>
 }
 
 function StudentRecord({ workspace }: { workspace: StudentWorkspace }) {
-  return <section className="workspace-view"><div className="view-heading"><div><p className="eyebrow dark">Permanent history</p><h1>Training Record</h1><p>Every published attempt, OGMUI grade, and instructor comment remains available here.</p></div></div><div className="record-list">{workspace.attempts.length ? workspace.attempts.map((attempt) => { const lesson = workspace.lessons.find((entry) => entry.id === attempt.lesson_id); const grades = workspace.grades.filter((entry) => entry.lesson_attempt_id === attempt.id); return <article className="panel" key={attempt.id}><div className="record-head"><div><small>{formatDate(attempt.conducted_at)} · Lesson {lesson?.lesson_number} · Attempt {attempt.attempt_number}</small><h2>{lesson?.title}</h2></div><span className="status-pill">Published</span></div><div className="record-debrief"><div><span>What worked</span><p>{attempt.what_worked || 'No comment entered.'}</p></div><div><span>What did not work</span><p>{attempt.what_did_not_work || 'No comment entered.'}</p></div><div><span>Corrective action</span><p>{attempt.corrective_action || 'No corrective action entered.'}</p></div><div><span>Next preparation</span><p>{attempt.next_lesson_preparation || 'No preparation entered.'}</p></div></div><div className="compact-grades">{grades.map((grade) => { const item = workspace.acsItems.find((entry) => entry.id === grade.acs_item_id); return <div key={grade.id}><Grade value={grade.grade} /><div><code>{item?.code}</code><strong>{item?.description}</strong><p>{grade.instructor_comment || 'No line-item comment entered.'}</p></div></div> })}</div><footer>Instructor · {workspace.instructor?.full_name ?? 'Pilot Consciousness'}<span>{attempt.ground_minutes} ground · {attempt.training_minutes} training min</span></footer></article> }) : <EmptyCollection label="No published grade sheets" detail="Your instructor’s comments will remain here after the first lesson is published." />}</div></section>
+  const openAttempt = workspace.attempts.find((attempt) => attempt.status === 'draft')
+  const openLesson = workspace.lessons.find((lesson) => lesson.id === openAttempt?.lesson_id)
+  const closedAttempts = workspace.attempts.filter((attempt) => attempt.status === 'published')
+  const openItems = openAttempt ? workspace.attemptItems.filter((item) => item.lesson_attempt_id === openAttempt.id) : []
+  const unresolved = workspace.remediations.filter((entry) => !entry.resolved_at)
+  return <section className="workspace-view"><div className="view-heading"><div><p className="eyebrow dark">Permanent history</p><h1>Training Record</h1><p>Every closed attempt, time entry, OGMUI grade, and instructor comment remains available here.</p></div></div>
+    {openAttempt && <article className="panel open-record-card"><div><p className="eyebrow dark">Currently open</p><h2>Lesson {openLesson?.lesson_number} · {openLesson?.title}</h2><span>Opened {formatDateTime(openAttempt.opened_at ?? openAttempt.created_at)} · {openItems.length} line items</span></div><b>Not yet closed or graded</b></article>}
+    {unresolved.length > 0 && <div className="record-requirements panel"><strong>{unresolved.length} requirement{unresolved.length === 1 ? '' : 's'} remain open</strong><span>{unresolved.filter((entry) => entry.reason === 'U').length} repeat-required · {unresolved.filter((entry) => entry.reason === 'I').length} incomplete carryover</span></div>}
+    <div className="record-list">{closedAttempts.length ? closedAttempts.map((attempt) => { const lesson = workspace.lessons.find((entry) => entry.id === attempt.lesson_id); const grades = workspace.grades.filter((entry) => entry.lesson_attempt_id === attempt.id); return <article className="panel" key={attempt.id}><div className="record-head"><div><small>{formatDate(attempt.conducted_at)} · Lesson {lesson?.lesson_number} · Attempt {attempt.attempt_number}</small><h2>{lesson?.title}</h2></div><span className="status-pill">Closed</span></div><div className="record-debrief"><div><span>What worked</span><p>{attempt.what_worked || 'No comment entered.'}</p></div><div><span>What did not work</span><p>{attempt.what_did_not_work || 'No comment entered.'}</p></div><div><span>Corrective action</span><p>{attempt.corrective_action || 'No corrective action entered.'}</p></div><div><span>Next preparation</span><p>{attempt.next_lesson_preparation || 'No preparation entered.'}</p></div></div><div className="compact-grades">{grades.map((grade) => { const item = workspace.acsItems.find((entry) => entry.id === grade.acs_item_id); return <div key={grade.id}><Grade value={grade.grade} /><div><code>{item?.code}</code><strong>{item?.description}</strong><p>{grade.instructor_comment || 'No line-item comment entered.'}</p></div></div> })}</div><footer>Instructor · {workspace.instructor?.full_name ?? 'Pilot Consciousness'}<span>{attempt.ground_minutes ?? 0} ground · {attempt.flight_minutes ?? attempt.training_minutes ?? 0} flight · {attempt.simulator_minutes ?? 0} simulator min</span></footer></article> }) : <EmptyCollection label="No closed lesson records" detail="The first permanent grade sheet will appear after your instructor closes a lesson." />}</div>
+  </section>
 }
 
 function StudentAcs({ workspace }: { workspace: StudentWorkspace }) {
@@ -671,8 +784,10 @@ function StudentLibrary({ workspace }: { workspace: StudentWorkspace }) {
 export function StudentPortal({ profile, workspace }: { profile: PortalProfile; workspace: StudentWorkspace }) {
   const [view, setView] = useState<StudentView>('dashboard')
   const content = view === 'dashboard' ? <StudentDashboard profile={profile} workspace={workspace} navigate={setView} /> : view === 'course' ? <StudentCourse workspace={workspace} /> : view === 'record' ? <StudentRecord workspace={workspace} /> : view === 'acs' ? <StudentAcs workspace={workspace} /> : <StudentLibrary workspace={workspace} />
-  const nextLesson = workspace.lessons.find((lesson) => !workspace.attempts.some((attempt) => attempt.lesson_id === lesson.id))
-  return <div className="portal-shell"><aside className="sidebar"><Brand /><nav>{studentNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="course-chip"><span>Active course</span><strong>{workspace.course.short_name}</strong><small>{nextLesson ? `Next · Lesson ${nextLesson.lesson_number}` : 'Course lessons complete'}</small></div><div className="account-chip"><span>{initials(profile.full_name)}</span><div><strong>{profile.full_name}</strong><small>Student</small></div><button aria-label="Sign out" title="Sign out" onClick={() => void supabase?.auth.signOut()}>↗</button></div></aside><main className="portal-main"><header className="mobile-header"><Brand /><button className="mobile-account" onClick={() => void supabase?.auth.signOut()} aria-label="Sign out">{initials(profile.full_name)}</button></header><nav className="mobile-nav">{studentNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="main-inner">{content}</div></main></div>
+  const openAttempt = workspace.attempts.find((attempt) => attempt.status === 'draft')
+  const repeat = workspace.remediations.find((entry) => !entry.resolved_at && entry.reason === 'U')
+  const nextLesson = workspace.lessons.find((lesson) => lesson.id === (openAttempt?.lesson_id ?? repeat?.required_lesson_id)) ?? workspace.lessons.find((lesson) => !studentLessonComplete(workspace, lesson.id))
+  return <div className="portal-shell"><aside className="sidebar"><Brand /><nav>{studentNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="course-chip"><span>{openAttempt ? 'Lesson open' : repeat ? 'Repeat required' : 'Active course'}</span><strong>{workspace.course.short_name}</strong><small>{nextLesson ? `Lesson ${nextLesson.lesson_number} · ${nextLesson.title}` : 'All ACS items complete'}</small></div><div className="account-chip"><span>{initials(profile.full_name)}</span><div><strong>{profile.full_name}</strong><small>Student</small></div><button aria-label="Sign out" title="Sign out" onClick={() => void supabase?.auth.signOut()}>↗</button></div></aside><main className="portal-main"><header className="mobile-header"><Brand /><button className="mobile-account" onClick={() => void supabase?.auth.signOut()} aria-label="Sign out">{initials(profile.full_name)}</button></header><nav className="mobile-nav">{studentNavItems.map((item) => <button className={view === item.id ? 'active' : ''} key={item.id} onClick={() => setView(item.id)}><span>{item.short}</span>{item.label}</button>)}</nav><div className="main-inner">{content}</div></main></div>
 }
 
 export function StudentWaitingRoom({ profile }: { profile: PortalProfile }) {
