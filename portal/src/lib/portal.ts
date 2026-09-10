@@ -546,7 +546,7 @@ export async function openLessonAttempt(input: { enrollmentId: string; lessonId:
   return attemptId
 }
 
-export async function saveGradeSheet(input: { attemptId: string; conductedAt: string; groundMinutes: number; flightMinutes: number; simulatorMinutes: number; whatWorked: string; whatDidNotWork: string; correctiveAction: string; nextPreparation: string; status: 'draft' | 'published'; grades: Array<{ acsItemId: string; grade: OgmuiGrade | ''; comment: string }> }) {
+export async function saveGradeSheet(input: { attemptId: string; conductedAt: string; groundMinutes: number; flightMinutes: number; simulatorMinutes: number; remarks: string; status: 'draft' | 'published'; grades: Array<{ acsItemId: string; grade: OgmuiGrade | ''; comment: string }> }) {
   const db = client()
   const selectedGrades = input.grades.filter((grade): grade is { acsItemId: string; grade: OgmuiGrade; comment: string } => Boolean(grade.grade))
   if (input.status === 'published' && selectedGrades.length !== input.grades.length) throw new Error('Grade every ACS line item before closing the lesson.')
@@ -566,10 +566,7 @@ export async function saveGradeSheet(input: { attemptId: string; conductedAt: st
     flight_minutes: input.flightMinutes,
     simulator_minutes: input.simulatorMinutes,
     training_minutes: input.flightMinutes + input.simulatorMinutes,
-    what_worked: input.whatWorked.trim() || null,
-    what_did_not_work: input.whatDidNotWork.trim() || null,
-    corrective_action: input.correctiveAction.trim() || null,
-    next_lesson_preparation: input.nextPreparation.trim() || null,
+    what_worked: input.remarks.trim() || null,
     status: input.status,
     closed_at: closedAt,
     published_at: closedAt,
