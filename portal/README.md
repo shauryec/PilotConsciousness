@@ -30,7 +30,7 @@ npm run dev
 5. Promote only the business owner and approved instructors to their corresponding roles.
 6. Copy `.env.example` to `.env.local` and provide the project URL and publishable anonymous key.
 
-The login screen uses passwordless email links and explicitly prevents uninvited addresses from creating accounts.
+The login screen uses standard email-and-password authentication. Invitations and password recovery use a one-time email link, after which the user chooses a password for routine sign-in. Public account registration is not exposed.
 
 ## Security boundaries
 

@@ -177,10 +177,15 @@ p { line-height: 1.65; }
 .login-panel h1 { font-size: 3.2rem; }
 .login-panel > div > p:last-child { color: rgba(255,255,255,.62); }
 .login-panel label { display: block; margin-bottom: 8px; color: rgba(255,255,255,.55); font-size: .67rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.login-panel label:not(:first-child) { margin-top: 16px; }
 .login-panel input { width: 100%; height: 52px; padding: 0 14px; color: #fff; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.25); }
-.login-panel form .button { width: 100%; justify-content: space-between; margin-top: 12px; border: 0; }
+.login-panel input:focus { outline: 2px solid #8eb1c4; outline-offset: 2px; }
+.login-panel form .button { width: 100%; justify-content: space-between; margin-top: 18px; border: 0; }
+.login-panel form .button:disabled { cursor: wait; opacity: .68; }
 .login-panel > small { color: rgba(255,255,255,.38); line-height: 1.6; }
 .form-message { margin: 12px 0 0; color: #d9e8ef; font-size: .76rem; }
+.login-link { display: block; margin: 17px auto 0; padding: 4px; color: #b7d1de; background: transparent; border: 0; font-size: .75rem; text-decoration: underline; text-underline-offset: 3px; }
+.password-panel { min-height: 660px; }
 
 .staff-welcome { display: flex; align-items: flex-start; justify-content: space-between; gap: 35px; margin-bottom: 30px; }
 .staff-welcome .lede { max-width: 680px; margin: 0; color: var(--muted); }
