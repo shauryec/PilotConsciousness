@@ -52,6 +52,21 @@ function localDateTimeValue(value = new Date()) {
   return new Date(value.getTime() - offset * 60_000).toISOString().slice(0, 16)
 }
 
+function hoursFromMinutes(minutes: number) {
+  return Number(((minutes ?? 0) / 60).toFixed(1))
+}
+
+function minutesFromHours(hours: number) {
+  return Math.round(Math.max(0, hours || 0) * 60)
+}
+
+function elapsedTenths(openedAt: string, closedAt?: string | null, now = Date.now()) {
+  const start = new Date(openedAt).getTime()
+  const end = closedAt ? new Date(closedAt).getTime() : now
+  if (!Number.isFinite(start) || !Number.isFinite(end)) return 0
+  return Math.max(0, Math.round((end - start) / (6 * 60_000)) / 10)
+}
+
 function Grade({ value }: { value: OgmuiGrade }) {
   return <span className={`grade grade-${value.toLowerCase()}`} title={gradeLabels[value]}>{value}</span>
 }
@@ -123,6 +138,7 @@ function historyValue(value: unknown, field: string) {
   if (value === null || value === undefined || value === '') return 'Not set'
   if (typeof value === 'boolean') return value ? 'Yes' : 'No'
   if (field.endsWith('_at') && typeof value === 'string') return formatDateTime(value)
+  if (['ground_minutes', 'flight_minutes', 'simulator_minutes'].includes(field) && typeof value === 'number') return `${hoursFromMinutes(value).toFixed(1)} hr`
   return String(value)
 }
 
@@ -160,10 +176,10 @@ Object.assign(historyFieldLabels, {
   opened_at: 'Opened',
   conducted_at: 'Conducted',
   closed_at: 'Closed',
-  ground_minutes: 'Ground minutes',
-  flight_minutes: 'Flight minutes',
-  simulator_minutes: 'Simulator minutes',
-  what_worked: 'What worked',
+  ground_minutes: 'Ground hours',
+  flight_minutes: 'Flight hours',
+  simulator_minutes: 'Simulator hours',
+  what_worked: 'Remarks',
   what_did_not_work: 'What did not work',
   corrective_action: 'Corrective action',
   next_lesson_preparation: 'Next preparation',
@@ -480,14 +496,13 @@ function GradeSheetsView({ profile, workspace, run }: { profile: PortalProfile; 
   const displayItems: LessonAttemptItem[] = openAttempt ? currentAttemptItems : plannedMappings.map((mapping, index) => ({ id: `planned-${mapping.acs_item_id}`, lesson_attempt_id: '', acs_item_id: mapping.acs_item_id, source: 'planned', remediation_requirement_id: null, sort_order: index, created_at: '' }))
   const items = displayItems.map((entry) => workspace.acsItems.find((item) => item.id === entry.acs_item_id)).filter(Boolean) as AcsItem[]
   const [conductedAt, setConductedAt] = useState(localDateTimeValue())
-  const [groundMinutes, setGroundMinutes] = useState(0)
-  const [flightMinutes, setFlightMinutes] = useState(0)
-  const [simulatorMinutes, setSimulatorMinutes] = useState(0)
-  const [whatWorked, setWhatWorked] = useState('')
-  const [whatDidNotWork, setWhatDidNotWork] = useState('')
-  const [correctiveAction, setCorrectiveAction] = useState('')
-  const [nextPreparation, setNextPreparation] = useState('')
+  const [groundHours, setGroundHours] = useState(0)
+  const [flightHours, setFlightHours] = useState(0)
+  const [simulatorHours, setSimulatorHours] = useState(0)
+  const [remarks, setRemarks] = useState('')
   const [gradeDrafts, setGradeDrafts] = useState<Record<string, GradeDraft>>({})
+  const [expandedRemarks, setExpandedRemarks] = useState<Set<string>>(new Set())
+  const [clockNow, setClockNow] = useState(Date.now())
 
   useEffect(() => {
     if (!enrollmentId && workspace.enrollments[0]) setEnrollmentId(workspace.enrollments[0].id)
@@ -498,28 +513,31 @@ function GradeSheetsView({ profile, workspace, run }: { profile: PortalProfile; 
   useEffect(() => {
     if (!openAttempt) {
       setConductedAt(localDateTimeValue())
-      setGroundMinutes(0)
-      setFlightMinutes(0)
-      setSimulatorMinutes(0)
-      setWhatWorked('')
-      setWhatDidNotWork('')
-      setCorrectiveAction('')
-      setNextPreparation('')
+      setGroundHours(0)
+      setFlightHours(0)
+      setSimulatorHours(0)
+      setRemarks('')
       setGradeDrafts({})
+      setExpandedRemarks(new Set())
       return
     }
     setLessonId(openAttempt.lesson_id)
     setConductedAt(localDateTimeValue(new Date(openAttempt.conducted_at)))
-    setGroundMinutes(openAttempt.ground_minutes ?? 0)
-    setFlightMinutes(openAttempt.flight_minutes ?? openAttempt.training_minutes ?? 0)
-    setSimulatorMinutes(openAttempt.simulator_minutes ?? 0)
-    setWhatWorked(openAttempt.what_worked ?? '')
-    setWhatDidNotWork(openAttempt.what_did_not_work ?? '')
-    setCorrectiveAction(openAttempt.corrective_action ?? '')
-    setNextPreparation(openAttempt.next_lesson_preparation ?? '')
+    setGroundHours(hoursFromMinutes(openAttempt.ground_minutes ?? 0))
+    setFlightHours(hoursFromMinutes(openAttempt.flight_minutes ?? openAttempt.training_minutes ?? 0))
+    setSimulatorHours(hoursFromMinutes(openAttempt.simulator_minutes ?? 0))
+    setRemarks(openAttempt.what_worked ?? '')
     const draft: Record<string, GradeDraft> = {}
     workspace.grades.filter((grade) => grade.lesson_attempt_id === openAttempt.id).forEach((grade) => { draft[grade.acs_item_id] = { grade: grade.grade, comment: grade.instructor_comment ?? '' } })
     setGradeDrafts(draft)
+    setExpandedRemarks(new Set(Object.entries(draft).filter(([, value]) => ['U', 'I'].includes(value.grade) || Boolean(value.comment)).map(([id]) => id)))
+  }, [openAttempt?.id])
+
+  useEffect(() => {
+    if (!openAttempt) return
+    setClockNow(Date.now())
+    const timer = window.setInterval(() => setClockNow(Date.now()), 30_000)
+    return () => window.clearInterval(timer)
   }, [openAttempt?.id])
 
   async function openLesson() {
@@ -529,16 +547,22 @@ function GradeSheetsView({ profile, workspace, run }: { profile: PortalProfile; 
 
   async function submit(status: 'draft' | 'published') {
     if (!openAttempt || !selectedLesson || !items.length) return
+    let savedGroundHours = groundHours
+    let savedFlightHours = flightHours
+    let savedSimulatorHours = simulatorHours
+    if (status === 'published' && savedGroundHours + savedFlightHours + savedSimulatorHours === 0) {
+      const automaticHours = elapsedTenths(openAttempt.opened_at ?? openAttempt.created_at)
+      if (selectedLesson.kind === 'flight') savedFlightHours = automaticHours
+      else if (selectedLesson.kind === 'simulator') savedSimulatorHours = automaticHours
+      else savedGroundHours = automaticHours
+    }
     await run(() => saveGradeSheet({
       attemptId: openAttempt.id,
       conductedAt,
-      groundMinutes,
-      flightMinutes,
-      simulatorMinutes,
-      whatWorked,
-      whatDidNotWork,
-      correctiveAction,
-      nextPreparation,
+      groundMinutes: minutesFromHours(savedGroundHours),
+      flightMinutes: minutesFromHours(savedFlightHours),
+      simulatorMinutes: minutesFromHours(savedSimulatorHours),
+      remarks,
       status,
       grades: items.map((item) => ({ acsItemId: item.id, grade: gradeDrafts[item.id]?.grade ?? '', comment: gradeDrafts[item.id]?.comment ?? '' })),
     }), status === 'published' ? 'Lesson closed. The permanent grade sheet is now visible to the student.' : 'Open lesson record saved.')
@@ -561,9 +585,19 @@ function GradeSheetsView({ profile, workspace, run }: { profile: PortalProfile; 
               <div className="opening-items">{items.map((item) => <div key={item.id}><code>{item.code}</code><strong>{item.description}</strong></div>)}</div>
               <button className="button button-primary open-lesson-button" type="button" onClick={() => void openLesson()}>Open lesson with student <span>→</span></button>
             </> : <>
-              <div className="time-entry portal-form"><label>Lesson date & time<input type="datetime-local" value={conductedAt} onChange={(event) => setConductedAt(event.target.value)} /></label><label>Ground minutes<input type="number" min="0" value={groundMinutes} onChange={(event) => setGroundMinutes(Number(event.target.value))} /></label><label>Flight minutes<input type="number" min="0" value={flightMinutes} onChange={(event) => setFlightMinutes(Number(event.target.value))} /></label><label>Simulator minutes<input type="number" min="0" value={simulatorMinutes} onChange={(event) => setSimulatorMinutes(Number(event.target.value))} /></label></div>
-              <div className="grade-lines">{items.map((item, index) => { const attemptItem = displayItems[index]; const unresolved = ['U', 'I'].includes(gradeDrafts[item.id]?.grade ?? ''); return <div key={item.id}><div><code>{item.code}</code><strong>{item.description}</strong><small>{attemptItem.source === 'planned' ? item.element_type.replace('_', ' ') : attemptItem.source === 'repeat_unsatisfactory' ? 'repeat required · prior unsatisfactory' : 'carryover · prior incomplete'}</small></div><label>OGMUI<select aria-label={`${item.code} grade`} value={gradeDrafts[item.id]?.grade ?? ''} onChange={(event) => setGradeDrafts((current) => ({ ...current, [item.id]: { grade: event.target.value as OgmuiGrade | '', comment: current[item.id]?.comment ?? '' } }))}><option value="">Select grade</option>{(Object.keys(gradeLabels) as OgmuiGrade[]).map((grade) => <option value={grade} key={grade}>{grade} · {gradeLabels[grade]}</option>)}</select></label><label>Instructor comment{unresolved && <b className="required-note">Required for U/I</b>}<textarea aria-label={`${item.code} instructor comment`} required={unresolved} value={gradeDrafts[item.id]?.comment ?? ''} onChange={(event) => setGradeDrafts((current) => ({ ...current, [item.id]: { grade: current[item.id]?.grade ?? '', comment: event.target.value } }))} /></label></div>})}</div>
-              <div className="debrief-editor portal-form"><div className="form-grid"><label>What worked<textarea value={whatWorked} onChange={(event) => setWhatWorked(event.target.value)} /></label><label>What did not work<textarea value={whatDidNotWork} onChange={(event) => setWhatDidNotWork(event.target.value)} /></label><label>Corrective action<textarea value={correctiveAction} onChange={(event) => setCorrectiveAction(event.target.value)} /></label><label>Next-lesson preparation<textarea value={nextPreparation} onChange={(event) => setNextPreparation(event.target.value)} /></label></div><div className="close-rule"><strong>Closing creates the permanent record.</strong><span>Every line item must be graded. U and I require comments; U automatically requires another attempt of this lesson.</span></div><div className="editor-actions"><button className="button button-outline" type="button" onClick={() => void submit('draft')}>Save open record</button><button className="button button-primary" type="button" onClick={() => void submit('published')}>Close lesson record <span>→</span></button></div></div>
+              <div className="time-entry portal-form"><label>Lesson date & time<input type="datetime-local" value={conductedAt} onChange={(event) => setConductedAt(event.target.value)} /></label><label>Ground hours<input type="number" min="0" step="0.1" value={groundHours} onChange={(event) => setGroundHours(Number(event.target.value))} /></label><label>Flight hours<input type="number" min="0" step="0.1" value={flightHours} onChange={(event) => setFlightHours(Number(event.target.value))} /></label><label>Simulator hours<input type="number" min="0" step="0.1" value={simulatorHours} onChange={(event) => setSimulatorHours(Number(event.target.value))} /></label><div className="elapsed-time"><span>Elapsed lesson time</span><strong>{elapsedTenths(openAttempt.opened_at ?? openAttempt.created_at, null, clockNow).toFixed(1)} hr</strong><small>Counted automatically from Open to Close; if the time fields remain blank, it records under the lesson type.</small></div></div>
+              <div className="grade-lines">{items.map((item, index) => {
+                const attemptItem = displayItems[index]
+                const selectedGrade = gradeDrafts[item.id]?.grade ?? ''
+                const unresolved = ['U', 'I'].includes(selectedGrade)
+                const isExpanded = expandedRemarks.has(item.id)
+                const setGrade = (grade: OgmuiGrade) => {
+                  setGradeDrafts((current) => ({ ...current, [item.id]: { grade, comment: current[item.id]?.comment ?? '' } }))
+                  if (grade === 'U' || grade === 'I') setExpandedRemarks((current) => new Set(current).add(item.id))
+                }
+                return <div className="grade-line" key={item.id}><div className="grade-line-item"><code>{item.code}</code><strong>{item.description}</strong><small>{attemptItem.source === 'planned' ? item.element_type.replace('_', ' ') : attemptItem.source === 'repeat_unsatisfactory' ? 'repeat required · prior unsatisfactory' : 'carryover · prior incomplete'}</small></div><div className="quick-grade" role="group" aria-label={`${item.code} OGMUI grade`}>{(Object.keys(gradeLabels) as OgmuiGrade[]).map((grade) => <button className={`quick-grade-${grade.toLowerCase()} ${selectedGrade === grade ? 'selected' : ''}`} type="button" aria-label={`${grade} · ${gradeLabels[grade]}`} aria-pressed={selectedGrade === grade} title={gradeLabels[grade]} onClick={() => setGrade(grade)} key={grade}>{grade}</button>)}</div><button className={`remarks-toggle ${unresolved ? 'required' : ''} ${isExpanded ? 'open' : ''}`} type="button" aria-expanded={isExpanded} onClick={() => setExpandedRemarks((current) => { const next = new Set(current); if (next.has(item.id)) next.delete(item.id); else next.add(item.id); return next })}>{unresolved ? 'Remarks required' : gradeDrafts[item.id]?.comment ? 'Remarks added' : 'Add remarks'} <span>{isExpanded ? '−' : '+'}</span></button>{isExpanded && <label className="line-comment">Remarks{unresolved && <b className="required-note">Required for U/I</b>}<textarea aria-label={`${item.code} remarks`} required={unresolved} placeholder="Add detailed remarks for this ACS item…" value={gradeDrafts[item.id]?.comment ?? ''} onChange={(event) => setGradeDrafts((current) => ({ ...current, [item.id]: { grade: current[item.id]?.grade ?? '', comment: event.target.value } }))} /></label>}</div>
+              })}</div>
+              <div className="debrief-editor portal-form"><label>Lesson remarks<textarea value={remarks} placeholder="Overall lesson remarks…" onChange={(event) => setRemarks(event.target.value)} /></label><div className="close-rule"><strong>Closing creates the permanent record and stops the lesson clock.</strong><span>Every line item must be graded. U and I require remarks; U automatically requires another attempt of this lesson.</span></div><div className="editor-actions"><button className="button button-outline" type="button" onClick={() => void submit('draft')}>Save open record</button><button className="button button-primary" type="button" onClick={() => void submit('published')}>Close lesson record <span>→</span></button></div></div>
             </>}
           </> : <EmptyCollection label="This lesson has no ACS line items" detail="Open Courses, select this lesson, and attach the ACS items that should appear on its grade sheet." />}
         </> : <EmptyCollection label="No active enrollments" detail="Enroll a student before creating a grade sheet." />}
@@ -727,7 +761,7 @@ function StudentDashboard({ profile, workspace, navigate }: { profile: PortalPro
     <section className="welcome-row"><div><p className="eyebrow dark">Active course · Revision {workspace.version.revision}</p><h1>Welcome back, {profile.full_name.split(/\s+/)[0]}.</h1><p className="lede">Course completion is based on ACS line items. Unsatisfactory and Incomplete items remain open until they are completed.</p></div><div className="progress-ring" style={{ '--progress': `${progress * 3.6}deg` } as CSSProperties}><div><strong>{progress}%</strong><span>ACS items</span></div></div></section>
     <section className="dashboard-grid">
       <article className="next-lesson panel panel-dark"><div className="panel-kicker"><span>{openAttempt ? 'Lesson open' : repeat ? 'Repeat required' : nextLesson ? 'Next lesson' : 'Course status'}</span><span>{currentPhase ? `Phase ${String(currentPhase.phase_number).padStart(2, '0')}` : courseComplete ? 'Complete' : 'Awaiting review'}</span></div><p className="lesson-number">{nextLesson ? String(nextLesson.lesson_number).padStart(2, '0') : courseComplete ? '✓' : '—'}</p><h2>{nextLesson?.title ?? (courseComplete ? 'All ACS requirements complete' : 'Instructor review required')}</h2><p>{openAttempt ? 'Review the objectives and line items below with your instructor before training begins.' : repeat ? 'A prior Unsatisfactory result requires another attempt of this lesson.' : nextLesson?.objective ?? 'Your instructor will review course completion and next steps.'}</p>{nextLesson && <dl className="lesson-meta"><div><dt>Type</dt><dd>{nextLesson.kind}</dd></div><div><dt>Planned time</dt><dd>{nextLesson.planned_ground_minutes + nextLesson.planned_training_minutes} min</dd></div><div><dt>Open items</dt><dd>{unresolved.length}</dd></div></dl>}<button className="button button-light" onClick={() => navigate('course')}>{openAttempt ? 'Review open lesson' : 'Open course'} <span>→</span></button></article>
-      <article className="panel recent-debrief"><div className="panel-heading"><div><p className="eyebrow dark">Latest instructor debrief</p><h2>{latestLesson ? `Lesson ${latestLesson.lesson_number}` : 'No published record yet'}</h2></div>{latest && <span className="status-pill">Published</span>}</div>{latest ? <><p className="quote">“{latest.what_worked || 'Review the complete grade sheet for instructor feedback.'}”</p><div className="debrief-split"><div><span>What worked</span><p>{latest.what_worked || 'No comment entered.'}</p></div><div><span>What did not work</span><p>{latest.what_did_not_work || 'No comment entered.'}</p></div></div><button className="text-button" onClick={() => navigate('record')}>Read complete grade sheet <span>→</span></button></> : <EmptyCollection label="Your first debrief will appear here" detail="Published grade sheets remain available throughout your course." />}</article>
+      <article className="panel recent-debrief"><div className="panel-heading"><div><p className="eyebrow dark">Latest instructor remarks</p><h2>{latestLesson ? `Lesson ${latestLesson.lesson_number}` : 'No published record yet'}</h2></div>{latest && <span className="status-pill">Published</span>}</div>{latest ? <><p className="quote">“{latest.what_worked || 'Review the complete grade sheet for line-item remarks.'}”</p><button className="text-button" onClick={() => navigate('record')}>Read complete grade sheet <span>→</span></button></> : <EmptyCollection label="Your first remarks will appear here" detail="Published grade sheets remain available throughout your course." />}</article>
     </section>
     {unresolved.length > 0 && <section className="carryover-strip panel"><div><p className="eyebrow dark">Must be completed</p><h2>{unresolved.length} open ACS line item{unresolved.length === 1 ? '' : 's'}</h2></div><div>{unresolved.slice(0, 4).map((entry) => { const item = workspace.acsItems.find((candidate) => candidate.id === entry.acs_item_id); return <span key={entry.id}><Grade value={entry.reason} /><b>{item?.code}</b>{entry.reason === 'U' ? 'Repeat lesson required' : 'Carries forward'}</span> })}</div></section>}
     <section className="lower-grid"><article className="panel phase-panel"><div className="panel-heading"><div><p className="eyebrow dark">Course position</p><h2>{workspace.course.name}</h2></div><strong>{completedItems} / {courseItems.length} ACS</strong></div><div className="phase-list">{workspace.phases.map((phase) => { const phaseLessons = workspace.lessons.filter((lesson) => lesson.phase_id === phase.id); const done = phaseLessons.filter((lesson) => studentLessonComplete(workspace, lesson.id)).length; return <div className={phase.id === currentPhase?.id ? 'active' : ''} key={phase.id}><span>{String(phase.phase_number).padStart(2, '0')}</span><strong>{phase.title}</strong><small>{done} of {phaseLessons.length} lessons</small></div> })}</div></article><article className="panel attention-panel"><div className="panel-heading"><div><p className="eyebrow dark">Assigned resources</p><h2>Course library</h2></div><button className="quiet-link" onClick={() => navigate('library')}>View all</button></div>{workspace.resources.length ? <div className="attention-list">{workspace.resources.slice(0, 3).map((resource) => <div key={resource.id}><span className="resource-mini">{resource.kind === 'video' ? '▶' : 'DOC'}</span><div><strong>{resource.title}</strong><p>{resource.description || resource.kind}</p></div></div>)}</div> : <EmptyCollection label="No resources assigned" detail="Documents and videos from your instructor will appear here." />}</article></section>
@@ -761,7 +795,7 @@ function StudentRecord({ workspace }: { workspace: StudentWorkspace }) {
   return <section className="workspace-view"><div className="view-heading"><div><p className="eyebrow dark">Permanent history</p><h1>Training Record</h1><p>Every closed attempt, time entry, OGMUI grade, and instructor comment remains available here.</p></div></div>
     {openAttempt && <article className="panel open-record-card"><div><p className="eyebrow dark">Currently open</p><h2>Lesson {openLesson?.lesson_number} · {openLesson?.title}</h2><span>Opened {formatDateTime(openAttempt.opened_at ?? openAttempt.created_at)} · {openItems.length} line items</span></div><b>Not yet closed or graded</b></article>}
     {unresolved.length > 0 && <div className="record-requirements panel"><strong>{unresolved.length} requirement{unresolved.length === 1 ? '' : 's'} remain open</strong><span>{unresolved.filter((entry) => entry.reason === 'U').length} repeat-required · {unresolved.filter((entry) => entry.reason === 'I').length} incomplete carryover</span></div>}
-    <div className="record-list">{closedAttempts.length ? closedAttempts.map((attempt) => { const lesson = workspace.lessons.find((entry) => entry.id === attempt.lesson_id); const grades = workspace.grades.filter((entry) => entry.lesson_attempt_id === attempt.id); return <article className="panel" key={attempt.id}><div className="record-head"><div><small>{formatDate(attempt.conducted_at)} · Lesson {lesson?.lesson_number} · Attempt {attempt.attempt_number}</small><h2>{lesson?.title}</h2></div><span className="status-pill">Closed</span></div><div className="record-debrief"><div><span>What worked</span><p>{attempt.what_worked || 'No comment entered.'}</p></div><div><span>What did not work</span><p>{attempt.what_did_not_work || 'No comment entered.'}</p></div><div><span>Corrective action</span><p>{attempt.corrective_action || 'No corrective action entered.'}</p></div><div><span>Next preparation</span><p>{attempt.next_lesson_preparation || 'No preparation entered.'}</p></div></div><div className="compact-grades">{grades.map((grade) => { const item = workspace.acsItems.find((entry) => entry.id === grade.acs_item_id); return <div key={grade.id}><Grade value={grade.grade} /><div><code>{item?.code}</code><strong>{item?.description}</strong><p>{grade.instructor_comment || 'No line-item comment entered.'}</p></div></div> })}</div><footer>Instructor · {workspace.instructor?.full_name ?? 'Pilot Consciousness'}<span>{attempt.ground_minutes ?? 0} ground · {attempt.flight_minutes ?? attempt.training_minutes ?? 0} flight · {attempt.simulator_minutes ?? 0} simulator min</span></footer></article> }) : <EmptyCollection label="No closed lesson records" detail="The first permanent grade sheet will appear after your instructor closes a lesson." />}</div>
+    <div className="record-list">{closedAttempts.length ? closedAttempts.map((attempt) => { const lesson = workspace.lessons.find((entry) => entry.id === attempt.lesson_id); const grades = workspace.grades.filter((entry) => entry.lesson_attempt_id === attempt.id); return <article className="panel" key={attempt.id}><div className="record-head"><div><small>{formatDate(attempt.conducted_at)} · Lesson {lesson?.lesson_number} · Attempt {attempt.attempt_number}</small><h2>{lesson?.title}</h2></div><span className="status-pill">Closed</span></div>{attempt.what_worked && <div className="record-debrief"><div><span>Remarks</span><p>{attempt.what_worked}</p></div></div>}<div className="compact-grades">{grades.map((grade) => { const item = workspace.acsItems.find((entry) => entry.id === grade.acs_item_id); return <div key={grade.id}><Grade value={grade.grade} /><div><code>{item?.code}</code><strong>{item?.description}</strong><p>{grade.instructor_comment || 'No line-item remarks entered.'}</p></div></div> })}</div><footer>Instructor · {workspace.instructor?.full_name ?? 'Pilot Consciousness'}<span>{elapsedTenths(attempt.opened_at ?? attempt.created_at, attempt.closed_at).toFixed(1)} elapsed · {hoursFromMinutes(attempt.ground_minutes ?? 0).toFixed(1)} ground · {hoursFromMinutes(attempt.flight_minutes ?? attempt.training_minutes ?? 0).toFixed(1)} flight · {hoursFromMinutes(attempt.simulator_minutes ?? 0).toFixed(1)} simulator hr</span></footer></article> }) : <EmptyCollection label="No closed lesson records" detail="The first permanent grade sheet will appear after your instructor closes a lesson." />}</div>
   </section>
 }
 
