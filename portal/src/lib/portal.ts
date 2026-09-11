@@ -3,7 +3,7 @@ import { supabase } from './supabase'
 
 export type PortalRole = 'owner' | 'instructor' | 'student'
 export type OgmuiGrade = 'O' | 'G' | 'M' | 'U' | 'I'
-export type LessonKind = 'flight' | 'ground' | 'simulator' | 'review'
+export type LessonKind = 'flight' | 'ground' | 'simulator' | 'solo' | 'review'
 export type ResourceKind = 'document' | 'video' | 'link'
 
 export interface PortalProfile {
