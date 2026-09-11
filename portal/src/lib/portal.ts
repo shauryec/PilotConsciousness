@@ -372,7 +372,7 @@ export async function loadStudentWorkspace(studentId: string): Promise<StudentWo
   const phaseIds = phases.map((phase) => phase.id)
   const lessonsResult = phaseIds.length ? await db.from('lessons').select('*').in('phase_id', phaseIds).order('lesson_number') : { data: [], error: null }
   throwIfError(lessonsResult.error)
-  const lessons = (lessonsResult.data ?? []) as PortalLesson[]
+  const lessons = ((lessonsResult.data ?? []) as PortalLesson[]).map((lesson) => ({ ...lesson, title: `Lesson ${lesson.lesson_number}` }))
   const lessonIds = lessons.map((lesson) => lesson.id)
   const attempts = (attemptsResult.data ?? []) as LessonAttempt[]
   const attemptIds = attempts.map((attempt) => attempt.id)
