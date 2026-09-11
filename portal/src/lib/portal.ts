@@ -45,6 +45,21 @@ export interface AcsItem {
   sort_order: number
 }
 
+export interface AcsTaskSet {
+  id: string
+  publication_id: string
+  code: string
+  name: string
+  description: string | null
+  created_at: string
+}
+
+export interface AcsTaskSetItem {
+  task_set_id: string
+  acs_item_id: string
+  sort_order: number
+}
+
 export interface PortalCourse {
   id: string
   name: string
@@ -57,6 +72,7 @@ export interface CourseVersion {
   id: string
   course_id: string
   acs_publication_id: string
+  acs_task_set_id: string | null
   revision: number
   status: 'draft' | 'published' | 'retired'
   published_at: string | null
@@ -213,6 +229,8 @@ export interface StaffWorkspace {
   phases: PortalPhase[]
   lessons: PortalLesson[]
   acsItems: AcsItem[]
+  taskSets: AcsTaskSet[]
+  taskSetItems: AcsTaskSetItem[]
   lessonAcsItems: LessonAcsItem[]
   enrollments: PortalEnrollment[]
   attempts: LessonAttempt[]
@@ -285,6 +303,8 @@ export async function loadStaffWorkspace(): Promise<StaffWorkspace> {
     db.from('lesson_attempt_items').select('*').order('sort_order'),
     db.from('remediation_requirements').select('*').order('opened_at', { ascending: false }),
     db.from('training_audit_log').select('*').order('changed_at', { ascending: false }).limit(500),
+    db.from('acs_task_sets').select('*').order('name'),
+    db.from('acs_task_set_items').select('*').order('sort_order'),
   ])
 
   results.slice(0, 13).forEach((result) => throwIfError(result.error))
@@ -305,6 +325,8 @@ export async function loadStaffWorkspace(): Promise<StaffWorkspace> {
     phases: (results[4].data ?? []) as PortalPhase[],
     lessons: (results[5].data ?? []) as PortalLesson[],
     acsItems: (results[6].data ?? []) as AcsItem[],
+    taskSets: results[17].error ? [] : (results[17].data ?? []) as AcsTaskSet[],
+    taskSetItems: results[18].error ? [] : (results[18].data ?? []) as AcsTaskSetItem[],
     lessonAcsItems: (results[7].data ?? []) as LessonAcsItem[],
     enrollments,
     attempts,
@@ -400,33 +422,50 @@ export async function loadStudentWorkspace(studentId: string): Promise<StudentWo
   }
 }
 
-export async function createCourseWithVersion(input: { name: string; shortName: string; acsCode: string; acsTitle: string; acsRevision: string }) {
+export async function createCourseWithVersion(input: { name: string; shortName: string; acsCode: string; acsTitle: string; acsRevision: string; acsTaskSetId: string }) {
   const db = client()
   const code = input.acsCode.trim()
-  const existing = await db.from('acs_publications').select('*')
-  throwIfError(existing.error)
-  let publication = ((existing.data ?? []) as AcsPublication[]).find((entry) => entry.code.trim().toLocaleLowerCase() === code.toLocaleLowerCase()) ?? null
-  if (!publication) {
-    const inserted = await db.from('acs_publications').insert({ code, title: input.acsTitle.trim(), revision: input.acsRevision.trim() }).select('*').single()
-    throwIfError(inserted.error)
-    publication = inserted.data as AcsPublication
+  const taskSetId = input.acsTaskSetId.trim() || null
+  let publication: AcsPublication | null = null
+  if (taskSetId) {
+    const taskSet = await db.from('acs_task_sets').select('publication_id').eq('id', taskSetId).single()
+    throwIfError(taskSet.error)
+    if (!taskSet.data) throw new Error('The selected Task set could not be found.')
+    const selectedPublication = await db.from('acs_publications').select('*').eq('id', taskSet.data.publication_id).single()
+    throwIfError(selectedPublication.error)
+    publication = selectedPublication.data as AcsPublication
+  } else {
+    const existing = await db.from('acs_publications').select('*')
+    throwIfError(existing.error)
+    publication = ((existing.data ?? []) as AcsPublication[]).find((entry) => entry.code.trim().toLocaleLowerCase() === code.toLocaleLowerCase()) ?? null
+    if (!publication) {
+      const inserted = await db.from('acs_publications').insert({ code, title: input.acsTitle.trim(), revision: input.acsRevision.trim() }).select('*').single()
+      throwIfError(inserted.error)
+      publication = inserted.data as AcsPublication
+    }
   }
   const courseResult = await db.from('courses').insert({ name: input.name.trim(), short_name: input.shortName.trim() }).select('*').single()
   throwIfError(courseResult.error)
   const course = courseResult.data as PortalCourse
-  const versionResult = await db.from('course_versions').insert({ course_id: course.id, acs_publication_id: publication.id, revision: 1, status: 'draft' }).select('*').single()
+  const versionResult = await db.from('course_versions').insert({ course_id: course.id, acs_publication_id: publication.id, acs_task_set_id: taskSetId, revision: 1, status: 'draft' }).select('*').single()
   throwIfError(versionResult.error)
   return { course, version: versionResult.data as CourseVersion, publication }
 }
 
-export async function updateCourseDraft(input: { courseId: string; courseVersionId: string; publicationId: string; name: string; shortName: string; active: boolean; versionStatus: CourseVersion['status']; acsCode: string; acsTitle: string; acsRevision: string }) {
+export async function updateCourseDraft(input: { courseId: string; courseVersionId: string; publicationId: string; taskSetId: string; name: string; shortName: string; active: boolean; versionStatus: CourseVersion['status']; acsCode: string; acsTitle: string; acsRevision: string }) {
   const db = client()
   const currentVersion = await db.from('course_versions').select('status, published_at').eq('id', input.courseVersionId).eq('course_id', input.courseId).single()
   throwIfError(currentVersion.error)
   const publication = await db.from('acs_publications').update({ code: input.acsCode.trim(), title: input.acsTitle.trim(), revision: input.acsRevision.trim() }).eq('id', input.publicationId)
   throwIfError(publication.error)
+  const taskSetId = input.taskSetId.trim() || null
+  if (taskSetId) {
+    const taskSet = await db.from('acs_task_sets').select('publication_id').eq('id', taskSetId).single()
+    throwIfError(taskSet.error)
+    if (!taskSet.data || taskSet.data.publication_id !== input.publicationId) throw new Error('Choose a Task set that belongs to this ACS publication.')
+  }
   const publishedAt = input.versionStatus === 'published' ? currentVersion.data?.published_at ?? new Date().toISOString() : null
-  const version = await db.from('course_versions').update({ status: input.versionStatus, published_at: publishedAt }).eq('id', input.courseVersionId).eq('course_id', input.courseId)
+  const version = await db.from('course_versions').update({ status: input.versionStatus, published_at: publishedAt, acs_task_set_id: taskSetId }).eq('id', input.courseVersionId).eq('course_id', input.courseId)
   throwIfError(version.error)
   const result = await db.from('courses').update({ name: input.name.trim(), short_name: input.shortName.trim(), active: input.active }).eq('id', input.courseId).select('*').single()
   throwIfError(result.error)
@@ -469,6 +508,59 @@ export async function addLesson(input: { phaseId: string; lessonNumber: number; 
   const result = await client().from('lessons').insert({ phase_id: input.phaseId, lesson_number: input.lessonNumber, title: input.title.trim(), kind: input.kind, objective: input.objective.trim(), completion_standard: input.completionStandard.trim(), planned_ground_minutes: input.plannedGroundMinutes, planned_training_minutes: input.plannedTrainingMinutes, preparation: input.preparation.trim() || null }).select('*').single()
   throwIfError(result.error)
   return result.data as PortalLesson
+}
+
+export async function duplicateLesson(input: { lessonId: string; phaseId: string }) {
+  const db = client()
+  const [lessonResult, lastLessonResult, mappingsResult, assignmentsResult] = await Promise.all([
+    db.from('lessons').select('*').eq('id', input.lessonId).eq('phase_id', input.phaseId).single(),
+    db.from('lessons').select('lesson_number').eq('phase_id', input.phaseId).order('lesson_number', { ascending: false }).limit(1).maybeSingle(),
+    db.from('lesson_acs_items').select('acs_item_id, sort_order').eq('lesson_id', input.lessonId).order('sort_order'),
+    db.from('resource_assignments').select('resource_id, required').eq('lesson_id', input.lessonId),
+  ])
+  ;[lessonResult.error, lastLessonResult.error, mappingsResult.error, assignmentsResult.error].forEach(throwIfError)
+
+  const source = lessonResult.data as PortalLesson
+  const inserted = await db.from('lessons').insert({
+    phase_id: source.phase_id,
+    lesson_number: (lastLessonResult.data?.lesson_number ?? 0) + 1,
+    title: `${source.title} (Copy)`,
+    kind: source.kind,
+    objective: source.objective,
+    completion_standard: source.completion_standard,
+    planned_ground_minutes: source.planned_ground_minutes,
+    planned_training_minutes: source.planned_training_minutes,
+    preparation: source.preparation,
+  }).select('*').single()
+  throwIfError(inserted.error)
+  const copy = inserted.data as PortalLesson
+
+  try {
+    const mappings = (mappingsResult.data ?? []).map((mapping) => ({
+      lesson_id: copy.id,
+      acs_item_id: mapping.acs_item_id,
+      sort_order: mapping.sort_order,
+    }))
+    if (mappings.length) {
+      const result = await db.from('lesson_acs_items').insert(mappings)
+      throwIfError(result.error)
+    }
+
+    const assignments = (assignmentsResult.data ?? []).map((assignment) => ({
+      resource_id: assignment.resource_id,
+      lesson_id: copy.id,
+      required: assignment.required,
+    }))
+    if (assignments.length) {
+      const result = await db.from('resource_assignments').insert(assignments)
+      throwIfError(result.error)
+    }
+  } catch (error) {
+    await db.from('lessons').delete().eq('id', copy.id)
+    throw error
+  }
+
+  return copy
 }
 
 export async function addAcsItemToLesson(input: { publicationId: string; lessonId: string; areaOfOperation: string; task: string }) {

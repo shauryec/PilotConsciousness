@@ -5,6 +5,7 @@ import {
   addPhase,
   createCourseWithVersion,
   createLinkedResource,
+  duplicateLesson,
   enrollStudent,
   getProfilePhotoUrl,
   getResourceUrl,
@@ -540,6 +541,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
   const selectedCourse = workspace.courses.find((course) => course.id === courseId) ?? workspace.courses[0]
   const version = workspace.versions.find((entry) => entry.course_id === selectedCourse?.id)
   const publication = workspace.publications.find((entry) => entry.id === version?.acs_publication_id)
+  const taskSet = workspace.taskSets.find((entry) => entry.id === version?.acs_task_set_id)
   const phases = workspace.phases.filter((phase) => phase.course_version_id === version?.id).sort((a, b) => a.phase_number - b.phase_number)
   const [phaseId, setPhaseId] = useState(phases[0]?.id ?? '')
   const currentPhase = phases.find((phase) => phase.id === phaseId) ?? phases[0]
@@ -549,7 +551,8 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
   const selectedLesson = workspace.lessons.find((lesson) => lesson.id === lessonId) ?? phaseLessons[0]
   const selectedMappings = workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === selectedLesson?.id)
   const selectedItems = selectedMappings.map((mapping) => workspace.acsItems.find((item) => item.id === mapping.acs_item_id)).filter(Boolean) as AcsItem[]
-  const publicationItems = workspace.acsItems.filter((item) => item.publication_id === publication?.id)
+  const taskSetItemIds = new Set(workspace.taskSetItems.filter((item) => item.task_set_id === taskSet?.id).map((item) => item.acs_item_id))
+  const publicationItems = workspace.acsItems.filter((item) => item.publication_id === publication?.id && (!taskSet || taskSetItemIds.has(item.id)))
   const editable = Boolean(version)
 
   useEffect(() => {
@@ -568,6 +571,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
       acsCode: String(data.get('acsCode')),
       acsTitle: String(data.get('acsTitle')),
       acsRevision: String(data.get('acsRevision')),
+      acsTaskSetId: String(data.get('acsTaskSetId')),
     }), 'Course revision created. Add its first phase and lesson.')
     if (created) { setCourseId(created.course.id); form.reset() }
   }
@@ -625,6 +629,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
       acsCode: String(data.get('acsCode')),
       acsTitle: String(data.get('acsTitle')),
       acsRevision: String(data.get('acsRevision')),
+      taskSetId: String(data.get('acsTaskSetId')),
     }), 'Course details saved.')
   }
 
@@ -661,6 +666,15 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
     }), `Lesson ${Number(data.get('lessonNumber'))} saved.`)
   }
 
+  async function duplicateSelectedLesson() {
+    if (!selectedLesson || !currentPhase) return
+    const copy = await run(
+      () => duplicateLesson({ lessonId: selectedLesson.id, phaseId: currentPhase.id }),
+      `Lesson ${selectedLesson.lesson_number} duplicated with its ACS Tasks and resources.`,
+    )
+    if (copy) setLessonId(copy.id)
+  }
+
   async function editAcsItem(event: FormEvent<HTMLFormElement>, item: AcsItem) {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
@@ -677,13 +691,14 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
         <SuggestedInput label="ACS document code" name="acsCode" values={workspace.publications.map((entry) => entry.code)} defaultValue="FAA-S-ACS-6C" required />
         <SuggestedInput label="ACS revision" name="acsRevision" values={workspace.publications.map((entry) => entry.revision)} defaultValue="6C" required />
         <div className="wide"><SuggestedInput label="ACS publication title" name="acsTitle" values={workspace.publications.map((entry) => entry.title)} defaultValue="Private Pilot for Airplane Category Airman Certification Standards" required /></div>
+        <label className="wide">Course Task set<select name="acsTaskSetId" defaultValue=""><option value="">All Tasks in the publication</option>{workspace.taskSets.map((entry) => { const source = workspace.publications.find((publication) => publication.id === entry.publication_id); return <option value={entry.id} key={entry.id}>{source?.code} · {entry.name}</option> })}</select><small>Use a defined set when one FAA publication supports multiple courses or added ratings.</small></label>
         <button className="button button-primary" type="submit">Create course <span>→</span></button>
       </form>
     </details>
     {workspace.courses.length ? <div className="builder-layout">
       <aside className="panel course-catalog"><p className="eyebrow dark">Course catalog</p>{workspace.courses.map((course) => <button className={course.id === selectedCourse?.id ? 'active' : ''} onClick={() => { setCourseId(course.id); setPhaseId(''); setLessonId('') }} key={course.id}><span>{course.short_name.slice(0, 2).toUpperCase()}</span><div><strong>{course.name}</strong><small>{workspace.versions.filter((entry) => entry.course_id === course.id).length} revision</small></div></button>)}</aside>
       <div className="builder-main">
-        <article className="panel builder-header"><div><p className="eyebrow dark">{publication?.code ?? 'ACS publication'}</p><h2>{selectedCourse?.name}</h2><p>{publication?.title} · Revision {version?.revision} · {version?.status}</p></div><span>{phases.length} phases · {lessons.length} lessons</span></article>
+        <article className="panel builder-header"><div><p className="eyebrow dark">{publication?.code ?? 'ACS publication'}</p><h2>{selectedCourse?.name}</h2><p>{publication?.title} · {taskSet?.name ?? 'All publication Tasks'} · Revision {version?.revision} · {version?.status}</p></div><span>{phases.length} phases · {lessons.length} lessons</span></article>
         {selectedCourse && version && editable && <details className="panel edit-drawer" key={`${selectedCourse.id}-${selectedCourse.name}-${selectedCourse.short_name}`}>
           <summary>Edit course details</summary>
           <form className="portal-form form-grid" onSubmit={editCourse}>
@@ -694,6 +709,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
             <SuggestedInput label="ACS document code" name="acsCode" values={workspace.publications.map((entry) => entry.code)} defaultValue={publication?.code ?? ''} required />
             <SuggestedInput label="ACS revision" name="acsRevision" values={workspace.publications.map((entry) => entry.revision)} defaultValue={publication?.revision ?? ''} required />
             <div className="wide"><SuggestedInput label="ACS publication title" name="acsTitle" values={workspace.publications.map((entry) => entry.title)} defaultValue={publication?.title ?? ''} required /></div>
+            <label className="wide">Course Task set<select name="acsTaskSetId" defaultValue={taskSet?.id ?? ''}><option value="">All Tasks in the publication</option>{workspace.taskSets.filter((entry) => entry.publication_id === publication?.id).map((entry) => <option value={entry.id} key={entry.id}>{entry.name}</option>)}</select><small>Controls which reusable ACS headings are recommended inside this course.</small></label>
             <button className="button button-primary" type="submit">Save course changes</button>
           </form>
         </details>}
@@ -728,6 +744,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
             <div className="panel-heading"><div><p className="eyebrow dark">Grading standard</p><h2>{selectedLesson ? `Lesson ${selectedLesson.lesson_number} ACS Tasks` : 'ACS Tasks'}</h2></div><span className="count-badge">{selectedItems.length}</span></div>
             {selectedLesson ? <>
               <div className="lesson-summary"><span>{selectedLesson.kind}</span><strong>{selectedLesson.title}</strong><p>{selectedLesson.objective}</p><small>{selectedLesson.planned_ground_minutes} ground · {selectedLesson.planned_training_minutes} training min</small></div>
+              {editable && currentPhase && <div className="lesson-template-actions"><button className="button button-outline" type="button" onClick={() => void duplicateSelectedLesson()}>Duplicate lesson</button></div>}
               {editable && currentPhase && version && <details className="inline-create edit-entity" key={`${selectedLesson.id}-${selectedLesson.title}-${selectedLesson.lesson_number}`}>
                 <summary>Edit lesson {selectedLesson.lesson_number}</summary>
                 <form className="portal-form" onSubmit={editLesson}>

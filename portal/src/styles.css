@@ -383,6 +383,8 @@ select, textarea, input { border-radius: 0; }
 .lesson-summary strong { font-size: .9rem; }
 .lesson-summary p { margin: 0; color: var(--muted); font-size: .8rem; line-height: 1.5; }
 .lesson-summary small { color: var(--muted); font-size: .7rem; }
+.lesson-template-actions { display: flex; justify-content: flex-end; margin: 10px 0 4px; }
+.lesson-template-actions .button { min-height: 38px; padding-inline: 14px; }
 .acs-builder-list { margin-top: 18px; }
 .acs-builder-list > div { padding: 15px 0; border-top: 1px solid var(--line); }
 .acs-builder-list code, .acs-builder-list strong, .acs-builder-list small { display: block; }
