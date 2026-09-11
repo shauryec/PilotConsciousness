@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from 'react'
+import { useEffect, useId, useMemo, useState, type CSSProperties, type FormEvent, type InputHTMLAttributes } from 'react'
 import {
   addAcsItemToLesson,
   addLesson,
@@ -109,6 +109,12 @@ function Brand() {
 
 function EmptyCollection({ label, detail }: { label: string; detail: string }) {
   return <div className="collection-empty"><span>—</span><div><strong>{label}</strong><p>{detail}</p></div></div>
+}
+
+function SuggestedInput({ label, values, ...inputProps }: { label: string; values: Array<string | null | undefined> } & InputHTMLAttributes<HTMLInputElement>) {
+  const listId = `suggestions-${useId().replace(/:/g, '')}`
+  const suggestions = [...new Set(values.map((value) => value?.trim()).filter(Boolean) as string[])].sort((a, b) => a.localeCompare(b))
+  return <label>{label}<input {...inputProps} list={suggestions.length ? listId : undefined} />{suggestions.length > 0 && <datalist id={listId}>{suggestions.map((value) => <option value={value} key={value} />)}</datalist>}</label>
 }
 
 type Runner = <T>(action: () => Promise<T>, success: string) => Promise<T | undefined>
@@ -461,6 +467,40 @@ function StaffStudentProfile({ student, onSave }: { student: PortalProfile; onSa
   </article>
 }
 
+function normalizedTaskKey(area: string, task: string) {
+  return `${area.trim().toLocaleLowerCase()}::${task.trim().toLocaleLowerCase()}`
+}
+
+function AcsTaskLibrary({ items, attachedItems, onAttach, onCreate }: { items: AcsItem[]; attachedItems: AcsItem[]; onAttach: (item: AcsItem) => Promise<void>; onCreate: (area: string, task: string) => Promise<boolean> }) {
+  const [area, setArea] = useState('')
+  const [task, setTask] = useState('')
+  const library = useMemo(() => {
+    const unique = new Map<string, AcsItem>()
+    items.forEach((item) => { const key = normalizedTaskKey(item.area_of_operation, item.task); if (!unique.has(key)) unique.set(key, item) })
+    const grouped = new Map<string, AcsItem[]>()
+    ;[...unique.values()].sort((a, b) => a.sort_order - b.sort_order || a.task.localeCompare(b.task)).forEach((item) => grouped.set(item.area_of_operation, [...(grouped.get(item.area_of_operation) ?? []), item]))
+    return [...grouped.entries()].map(([areaName, tasks]) => ({ area: areaName, tasks }))
+  }, [items])
+  const attached = new Set(attachedItems.map((item) => normalizedTaskKey(item.area_of_operation, item.task)))
+  const taskSuggestions = library.find((group) => group.area.toLocaleLowerCase() === area.trim().toLocaleLowerCase())?.tasks.map((item) => item.task) ?? []
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (await onCreate(area, task)) { setArea(''); setTask('') }
+  }
+
+  return <div className="acs-library-shell">
+    <div className="acs-library-heading"><div><p className="eyebrow dark">Saved ACS library</p><h3>Area of Operation → Task</h3></div><span>{library.reduce((count, group) => count + group.tasks.length, 0)} Tasks</span></div>
+    {library.length > 0 ? <div className="acs-library-tree">{library.map((group) => <details key={group.area}><summary><span>{group.area}</span><b>{group.tasks.length} Task{group.tasks.length === 1 ? '' : 's'}</b></summary><div>{group.tasks.map((item) => { const isAttached = attached.has(normalizedTaskKey(item.area_of_operation, item.task)); return <button type="button" disabled={isAttached} onClick={() => void onAttach(item)} key={item.id}><span>{item.task}</span><b>{isAttached ? 'Attached' : 'Attach'}</b></button> })}</div></details>)}</div> : <EmptyCollection label="No saved ACS Tasks" detail="Add the first Area of Operation and Task below. It will remain available for future lessons." />}
+    <details className="inline-create acs-new-task" open={!library.length}><summary>Add or find a Task</summary><form className="portal-form" onSubmit={submit}>
+      <SuggestedInput label="Area of Operation" name="area" value={area} values={library.map((group) => group.area)} placeholder="Start typing an Area of Operation" onChange={(event) => { setArea(event.target.value); setTask('') }} required />
+      <SuggestedInput label="Task" name="task" value={task} values={taskSuggestions} placeholder={area ? 'Start typing a Task' : 'Choose an Area of Operation first'} onChange={(event) => setTask(event.target.value)} disabled={!area.trim()} required />
+      <small className="recommendation-note">Matching saved values appear as you type. If the combination is new, it will be added to this ACS library.</small>
+      <button className="button button-primary" type="submit">Attach ACS Task</button>
+    </form></details>
+  </div>
+}
+
 function StudentsView({ profile, workspace, run }: { profile: PortalProfile; workspace: StaffWorkspace; run: Runner }) {
   const [studentId, setStudentId] = useState(workspace.students[0]?.id ?? '')
   const [versionId, setVersionId] = useState(workspace.versions[0]?.id ?? '')
@@ -509,6 +549,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
   const selectedLesson = workspace.lessons.find((lesson) => lesson.id === lessonId) ?? phaseLessons[0]
   const selectedMappings = workspace.lessonAcsItems.filter((mapping) => mapping.lesson_id === selectedLesson?.id)
   const selectedItems = selectedMappings.map((mapping) => workspace.acsItems.find((item) => item.id === mapping.acs_item_id)).filter(Boolean) as AcsItem[]
+  const publicationItems = workspace.acsItems.filter((item) => item.publication_id === publication?.id)
   const editable = Boolean(version)
 
   useEffect(() => {
@@ -559,13 +600,14 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
     if (created) { setLessonId(created.id); form.reset() }
   }
 
-  async function createAcsItem(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (!publication || !selectedLesson) return
-    const form = event.currentTarget
-    const data = new FormData(form)
-    await run(() => addAcsItemToLesson({ publicationId: publication.id, lessonId: selectedLesson.id, areaOfOperation: String(data.get('area')), task: String(data.get('task')) }), 'ACS Task attached to the lesson.')
-    form.reset()
+  async function attachAcsTask(areaOfOperation: string, task: string) {
+    if (!publication || !selectedLesson) return false
+    const attached = await run(() => addAcsItemToLesson({ publicationId: publication.id, lessonId: selectedLesson.id, areaOfOperation, task }), 'ACS Task attached to the lesson.')
+    return Boolean(attached)
+  }
+
+  async function attachExistingAcsTask(item: AcsItem) {
+    await attachAcsTask(item.area_of_operation, item.task)
   }
 
   async function editCourse(event: FormEvent<HTMLFormElement>) {
@@ -630,11 +672,11 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
     <details className="panel create-drawer" open={!workspace.courses.length}>
       <summary>Create a new course</summary>
       <form className="portal-form form-grid" onSubmit={createCourse}>
-        <label>Course name<input name="name" placeholder="Private Pilot — Airplane" required /></label>
-        <label>Short name<input name="shortName" placeholder="Private Pilot" required /></label>
-        <label>ACS document code<input name="acsCode" defaultValue="FAA-S-ACS-6C" required /></label>
-        <label>ACS revision<input name="acsRevision" defaultValue="6C" required /></label>
-        <label className="wide">ACS publication title<input name="acsTitle" defaultValue="Private Pilot for Airplane Category Airman Certification Standards" required /></label>
+        <SuggestedInput label="Course name" name="name" values={workspace.courses.map((course) => course.name)} placeholder="Private Pilot — Airplane" required />
+        <SuggestedInput label="Short name" name="shortName" values={workspace.courses.map((course) => course.short_name)} placeholder="Private Pilot" required />
+        <SuggestedInput label="ACS document code" name="acsCode" values={workspace.publications.map((entry) => entry.code)} defaultValue="FAA-S-ACS-6C" required />
+        <SuggestedInput label="ACS revision" name="acsRevision" values={workspace.publications.map((entry) => entry.revision)} defaultValue="6C" required />
+        <div className="wide"><SuggestedInput label="ACS publication title" name="acsTitle" values={workspace.publications.map((entry) => entry.title)} defaultValue="Private Pilot for Airplane Category Airman Certification Standards" required /></div>
         <button className="button button-primary" type="submit">Create course <span>→</span></button>
       </form>
     </details>
@@ -645,13 +687,13 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
         {selectedCourse && version && editable && <details className="panel edit-drawer" key={`${selectedCourse.id}-${selectedCourse.name}-${selectedCourse.short_name}`}>
           <summary>Edit course details</summary>
           <form className="portal-form form-grid" onSubmit={editCourse}>
-            <label>Course name<input name="name" defaultValue={selectedCourse.name} required /></label>
-            <label>Short name<input name="shortName" defaultValue={selectedCourse.short_name} required /></label>
+            <SuggestedInput label="Course name" name="name" values={workspace.courses.map((course) => course.name)} defaultValue={selectedCourse.name} required />
+            <SuggestedInput label="Short name" name="shortName" values={workspace.courses.map((course) => course.short_name)} defaultValue={selectedCourse.short_name} required />
             <label>Course status<select name="versionStatus" defaultValue={version.status}><option value="draft">Draft</option><option value="published">Published</option><option value="retired">Retired</option></select></label>
             <label className="check-field"><input name="active" type="checkbox" defaultChecked={selectedCourse.active} />Course active</label>
-            <label>ACS document code<input name="acsCode" defaultValue={publication?.code ?? ''} required /></label>
-            <label>ACS revision<input name="acsRevision" defaultValue={publication?.revision ?? ''} required /></label>
-            <label className="wide">ACS publication title<input name="acsTitle" defaultValue={publication?.title ?? ''} required /></label>
+            <SuggestedInput label="ACS document code" name="acsCode" values={workspace.publications.map((entry) => entry.code)} defaultValue={publication?.code ?? ''} required />
+            <SuggestedInput label="ACS revision" name="acsRevision" values={workspace.publications.map((entry) => entry.revision)} defaultValue={publication?.revision ?? ''} required />
+            <div className="wide"><SuggestedInput label="ACS publication title" name="acsTitle" values={workspace.publications.map((entry) => entry.title)} defaultValue={publication?.title ?? ''} required /></div>
             <button className="button button-primary" type="submit">Save course changes</button>
           </form>
         </details>}
@@ -664,7 +706,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
               {editable && <details className="inline-create edit-entity" key={`${currentPhase.id}-${currentPhase.title}-${currentPhase.phase_number}`}>
                 <summary>Edit phase {currentPhase.phase_number}</summary>
                 <form className="portal-form" onSubmit={editPhase}>
-                  <div className="form-grid"><label>Phase number<input name="phaseNumber" type="number" min="1" defaultValue={currentPhase.phase_number} required /></label><label>Phase title<input name="title" defaultValue={currentPhase.title} required /></label></div>
+                  <div className="form-grid"><label>Phase number<input name="phaseNumber" type="number" min="1" defaultValue={currentPhase.phase_number} required /></label><SuggestedInput label="Phase title" name="title" values={workspace.phases.map((phase) => phase.title)} defaultValue={currentPhase.title} required /></div>
                   <label>Objective<textarea name="objective" defaultValue={currentPhase.objective ?? ''} /></label>
                   <label>Completion standard<textarea name="completionStandard" defaultValue={currentPhase.completion_standard ?? ''} /></label>
                   <button className="button button-primary" type="submit">Save phase changes</button>
@@ -673,13 +715,13 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
               <div className="lesson-builder-list">{phaseLessons.map((lesson) => <button className={lesson.id === selectedLesson?.id ? 'active' : ''} onClick={() => setLessonId(lesson.id)} key={lesson.id}><span>{lesson.lesson_number}</span><div><strong>{lesson.title}</strong><small>{lesson.kind} · {lesson.planned_ground_minutes + lesson.planned_training_minutes} planned min</small></div><b>→</b></button>)}</div>
               {editable && <details className="inline-create"><summary>Add lesson</summary><form className="portal-form" onSubmit={createLesson}>
                 <div className="form-grid"><label>Lesson number<input name="lessonNumber" type="number" min="1" defaultValue={(phaseLessons.at(-1)?.lesson_number ?? 0) + 1} required /></label><label>Lesson type<select name="kind" defaultValue="flight"><option value="flight">Flight</option><option value="ground">Ground</option><option value="simulator">Simulator</option><option value="review">Review</option></select></label></div>
-                <label>Lesson title<input name="title" required /></label><label>Objective<textarea name="objective" required /></label><label>Completion standard<textarea name="completionStandard" required /></label><label>Student preparation<textarea name="preparation" /></label>
+                <SuggestedInput label="Lesson title" name="title" values={workspace.lessons.map((lesson) => lesson.title)} required /><label>Objective<textarea name="objective" required /></label><label>Completion standard<textarea name="completionStandard" required /></label><label>Student preparation<textarea name="preparation" /></label>
                 <div className="form-grid"><label>Ground minutes<input name="groundMinutes" type="number" min="0" defaultValue="30" required /></label><label>Training minutes<input name="trainingMinutes" type="number" min="0" defaultValue="90" required /></label></div>
                 <button className="button button-primary" type="submit">Add lesson</button>
               </form></details>}
             </> : <EmptyCollection label="No phases yet" detail="Add the first phase to establish the course sequence." />}
             {editable && <details className="inline-create"><summary>Add phase</summary><form className="portal-form" onSubmit={createPhase}>
-              <label>Phase number<input name="phaseNumber" type="number" min="1" defaultValue={(phases.at(-1)?.phase_number ?? 0) + 1} required /></label><label>Phase title<input name="title" placeholder="Foundations" required /></label><label>Objective<textarea name="objective" /></label><label>Completion standard<textarea name="completionStandard" /></label><button className="button button-primary" type="submit">Add phase</button>
+              <label>Phase number<input name="phaseNumber" type="number" min="1" defaultValue={(phases.at(-1)?.phase_number ?? 0) + 1} required /></label><SuggestedInput label="Phase title" name="title" values={workspace.phases.map((phase) => phase.title)} placeholder="Foundations" required /><label>Objective<textarea name="objective" /></label><label>Completion standard<textarea name="completionStandard" /></label><button className="button button-primary" type="submit">Add phase</button>
             </form></details>}
           </article>
           <article className="panel builder-panel">
@@ -690,7 +732,7 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
                 <summary>Edit lesson {selectedLesson.lesson_number}</summary>
                 <form className="portal-form" onSubmit={editLesson}>
                   <div className="form-grid"><label>Lesson number<input name="lessonNumber" type="number" min="1" defaultValue={selectedLesson.lesson_number} required /></label><label>Lesson type<select name="kind" defaultValue={selectedLesson.kind}><option value="flight">Flight</option><option value="ground">Ground</option><option value="simulator">Simulator</option><option value="review">Review</option></select></label></div>
-                  <label>Lesson title<input name="title" defaultValue={selectedLesson.title} required /></label>
+                  <SuggestedInput label="Lesson title" name="title" values={workspace.lessons.map((lesson) => lesson.title)} defaultValue={selectedLesson.title} required />
                   <label>Objective<textarea name="objective" defaultValue={selectedLesson.objective} required /></label>
                   <label>Completion standard<textarea name="completionStandard" defaultValue={selectedLesson.completion_standard} required /></label>
                   <label>Student preparation<textarea name="preparation" defaultValue={selectedLesson.preparation ?? ''} /></label>
@@ -698,10 +740,8 @@ function CoursesView({ workspace, run }: { workspace: StaffWorkspace; run: Runne
                   <button className="button button-primary" type="submit">Save lesson changes</button>
                 </form>
               </details>}
-              <div className="acs-builder-list">{selectedItems.map((item) => <div key={item.id}><span className="acs-area">{item.area_of_operation}</span><strong>{item.task}</strong><details className="line-item-edit"><summary>Edit ACS Task</summary><form className="portal-form" onSubmit={(event) => void editAcsItem(event, item)}><label>Area of Operation<input name="area" defaultValue={item.area_of_operation} required /></label><label>Task<input name="task" defaultValue={item.task} required /></label><button className="button button-primary" type="submit">Save ACS Task</button></form></details></div>)}</div>
-              {editable && <details className="inline-create" open={!selectedItems.length}><summary>Attach ACS Task</summary><form className="portal-form" onSubmit={createAcsItem}>
-                <label>Area of Operation<input name="area" placeholder="Takeoffs, Landings, and Go-Arounds" required /></label><label>Task<input name="task" placeholder="Normal Approach and Landing" required /></label><button className="button button-primary" type="submit">Attach ACS Task</button>
-              </form></details>}
+              <div className="acs-builder-list">{selectedItems.map((item) => <div key={item.id}><span className="acs-area">{item.area_of_operation}</span><strong>{item.task}</strong><details className="line-item-edit"><summary>Edit ACS Task</summary><form className="portal-form" onSubmit={(event) => void editAcsItem(event, item)}><SuggestedInput label="Area of Operation" name="area" values={publicationItems.map((entry) => entry.area_of_operation)} defaultValue={item.area_of_operation} required /><SuggestedInput label="Task" name="task" values={publicationItems.filter((entry) => entry.area_of_operation === item.area_of_operation).map((entry) => entry.task)} defaultValue={item.task} required /><button className="button button-primary" type="submit">Save ACS Task</button></form></details></div>)}</div>
+              {editable && <AcsTaskLibrary items={publicationItems} attachedItems={selectedItems} onAttach={attachExistingAcsTask} onCreate={attachAcsTask} />}
             </> : <EmptyCollection label="Select a lesson" detail="ACS Tasks are attached at lesson level and become the grade sheet." />}
           </article>
         </div>
@@ -927,13 +967,13 @@ function LibraryView({ profile, workspace, run }: { profile: PortalProfile; work
     <div className="split-workspace">
       <article className="panel form-panel"><p className="eyebrow dark">New resource</p><h2>Publish training material</h2>
         {workspace.versions.length ? <form className="portal-form" onSubmit={submit}>
-          <label>Title<input name="title" required /></label><div className="form-grid"><label>Type<select value={kind} onChange={(event) => setKind(event.target.value as typeof kind)}><option value="document">Document</option><option value="video">Video</option><option value="link">External link</option></select></label><label>Revision<input name="revision" placeholder="1.0" /></label></div><label>Description<textarea name="description" /></label>
+          <SuggestedInput label="Title" name="title" values={workspace.resources.map((resource) => resource.title)} required /><div className="form-grid"><label>Type<select value={kind} onChange={(event) => setKind(event.target.value as typeof kind)}><option value="document">Document</option><option value="video">Video</option><option value="link">External link</option></select></label><SuggestedInput label="Revision" name="revision" values={workspace.resources.map((resource) => resource.revision)} placeholder="1.0" /></div><label>Description<textarea name="description" /></label>
           {kind === 'link' ? <label>Web address<input name="externalUrl" type="url" placeholder="https://" required /></label> : <label>File<input className="file-input" type="file" accept={kind === 'video' ? 'video/*' : '.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt'} onChange={(event) => setFile(event.target.files?.[0] ?? null)} required /></label>}
           <label>Assign to<select value={targetValue} onChange={(event) => setTargetValue(event.target.value)} required><optgroup label="Course revisions">{workspace.versions.map((version) => <option value={`course:${version.id}`} key={version.id}>{courseName(workspace, version.id)}</option>)}</optgroup><optgroup label="Lessons">{workspace.lessons.map((lesson) => <option value={`lesson:${lesson.id}`} key={lesson.id}>{lessonName(workspace, lesson.id)}</option>)}</optgroup><optgroup label="Student enrollments">{workspace.enrollments.map((entry) => <option value={`enrollment:${entry.id}`} key={entry.id}>{studentName(workspace, entry.student_id)} · {courseName(workspace, entry.course_version_id)}</option>)}</optgroup></select></label>
           <label className="check-field"><input name="required" type="checkbox" />Required preparation</label><button className="button button-primary" type="submit">Publish resource <span>→</span></button>
         </form> : <EmptyCollection label="Create a course first" detail="Resources must be assigned to a course, lesson, or enrollment." />}
       </article>
-      <article className="panel collection-panel"><div className="panel-heading"><div><p className="eyebrow dark">Current library</p><h2>{workspace.resources.length} resource{workspace.resources.length === 1 ? '' : 's'}</h2></div></div>{workspace.resources.length ? <div className="resource-admin-list">{workspace.resources.map((resource) => <div className="resource-admin-record" key={resource.id}><div><span>{resource.kind === 'video' ? '▶' : resource.kind === 'document' ? 'DOC' : '↗'}</span><div><strong>{resource.title}</strong><small>{resource.description || resource.kind} · {workspace.assignments.filter((entry) => entry.resource_id === resource.id).length} assignment</small></div><button className="text-button" onClick={() => void open(resource)}>Open</button></div><details className="line-item-edit"><summary>Edit resource</summary><form className="portal-form" onSubmit={(event) => void saveResource(event, resource)}><label>Title<input name="title" defaultValue={resource.title} required /></label><div className="form-grid"><label>Revision<input name="revision" defaultValue={resource.revision ?? ''} /></label><label className="check-field"><input name="active" type="checkbox" defaultChecked={resource.active} />Active</label></div><label>Description<textarea name="description" defaultValue={resource.description ?? ''} /></label>{resource.external_url && <label>Web address<input name="externalUrl" type="url" defaultValue={resource.external_url} required /></label>}<button className="button button-primary" type="submit">Save resource</button></form></details></div>)}</div> : <EmptyCollection label="No training resources" detail="Your first uploaded document or training video will appear here." />}</article>
+      <article className="panel collection-panel"><div className="panel-heading"><div><p className="eyebrow dark">Current library</p><h2>{workspace.resources.length} resource{workspace.resources.length === 1 ? '' : 's'}</h2></div></div>{workspace.resources.length ? <div className="resource-admin-list">{workspace.resources.map((resource) => <div className="resource-admin-record" key={resource.id}><div><span>{resource.kind === 'video' ? '▶' : resource.kind === 'document' ? 'DOC' : '↗'}</span><div><strong>{resource.title}</strong><small>{resource.description || resource.kind} · {workspace.assignments.filter((entry) => entry.resource_id === resource.id).length} assignment</small></div><button className="text-button" onClick={() => void open(resource)}>Open</button></div><details className="line-item-edit"><summary>Edit resource</summary><form className="portal-form" onSubmit={(event) => void saveResource(event, resource)}><SuggestedInput label="Title" name="title" values={workspace.resources.map((entry) => entry.title)} defaultValue={resource.title} required /><div className="form-grid"><SuggestedInput label="Revision" name="revision" values={workspace.resources.map((entry) => entry.revision)} defaultValue={resource.revision ?? ''} /><label className="check-field"><input name="active" type="checkbox" defaultChecked={resource.active} />Active</label></div><label>Description<textarea name="description" defaultValue={resource.description ?? ''} /></label>{resource.external_url && <label>Web address<input name="externalUrl" type="url" defaultValue={resource.external_url} required /></label>}<button className="button button-primary" type="submit">Save resource</button></form></details></div>)}</div> : <EmptyCollection label="No training resources" detail="Your first uploaded document or training video will appear here." />}</article>
     </div>
   </section>
 }

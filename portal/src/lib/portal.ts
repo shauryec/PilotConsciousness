@@ -403,9 +403,9 @@ export async function loadStudentWorkspace(studentId: string): Promise<StudentWo
 export async function createCourseWithVersion(input: { name: string; shortName: string; acsCode: string; acsTitle: string; acsRevision: string }) {
   const db = client()
   const code = input.acsCode.trim()
-  const existing = await db.from('acs_publications').select('*').eq('code', code).maybeSingle()
+  const existing = await db.from('acs_publications').select('*')
   throwIfError(existing.error)
-  let publication = existing.data as AcsPublication | null
+  let publication = ((existing.data ?? []) as AcsPublication[]).find((entry) => entry.code.trim().toLocaleLowerCase() === code.toLocaleLowerCase()) ?? null
   if (!publication) {
     const inserted = await db.from('acs_publications').insert({ code, title: input.acsTitle.trim(), revision: input.acsRevision.trim() }).select('*').single()
     throwIfError(inserted.error)
@@ -476,9 +476,10 @@ export async function addAcsItemToLesson(input: { publicationId: string; lessonI
   const areaOfOperation = input.areaOfOperation.trim()
   const task = input.task.trim()
   if (!areaOfOperation || !task) throw new Error('Enter the Area of Operation and Task.')
-  const existing = await db.from('acs_items').select('*').eq('publication_id', input.publicationId).eq('area_of_operation', areaOfOperation).eq('task', task).limit(1).maybeSingle()
+  const existing = await db.from('acs_items').select('*').eq('publication_id', input.publicationId)
   throwIfError(existing.error)
-  let item = existing.data as AcsItem | null
+  const normalize = (value: string) => value.trim().toLocaleLowerCase()
+  let item = ((existing.data ?? []) as AcsItem[]).find((candidate) => normalize(candidate.area_of_operation) === normalize(areaOfOperation) && normalize(candidate.task) === normalize(task)) ?? null
   if (!item) {
     const last = await db.from('acs_items').select('sort_order').eq('publication_id', input.publicationId).order('sort_order', { ascending: false }).limit(1).maybeSingle()
     throwIfError(last.error)

@@ -389,6 +389,24 @@ select, textarea, input { border-radius: 0; }
 .acs-builder-list code { margin-bottom: 6px; color: var(--blue); font-size: .75rem; }
 .acs-builder-list strong { font-size: .85rem; line-height: 1.5; }
 .acs-builder-list small { margin-top: 7px; color: var(--muted); font-size: .72rem; line-height: 1.45; }
+.acs-library-shell { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
+.acs-library-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.acs-library-heading h3 { margin: 0; font-family: 'Oswald', sans-serif; font-size: 1.2rem; font-weight: 500; }
+.acs-library-heading > span { padding: 7px 9px; color: var(--blue); border: 1px solid #bfd0d8; font-size: .65rem; font-weight: 750; text-transform: uppercase; }
+.acs-library-tree { margin-top: 16px; border: 1px solid var(--line); }
+.acs-library-tree > details + details { border-top: 1px solid var(--line); }
+.acs-library-tree > details > summary { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; padding: 14px 15px; cursor: pointer; background: #f6f8f9; list-style: none; }
+.acs-library-tree > details > summary::before { margin-right: 8px; color: var(--blue); content: '+'; }
+.acs-library-tree > details[open] > summary::before { content: '−'; }
+.acs-library-tree > details > summary span { font-size: .78rem; font-weight: 700; line-height: 1.45; }
+.acs-library-tree > details > summary b { color: var(--muted); font-size: .65rem; font-weight: 650; text-transform: uppercase; }
+.acs-library-tree > details > div { padding: 0 14px 12px; }
+.acs-library-tree button { display: grid; width: 100%; grid-template-columns: 1fr auto; gap: 14px; padding: 12px 3px; color: var(--ink); background: transparent; border: 0; border-top: 1px solid var(--line); text-align: left; }
+.acs-library-tree button span { font-size: .78rem; line-height: 1.45; }
+.acs-library-tree button b { align-self: center; color: var(--blue); font-size: .65rem; text-transform: uppercase; }
+.acs-library-tree button:disabled { cursor: default; opacity: .5; }
+.acs-new-task { margin-top: 12px; }
+.recommendation-note { margin-top: -7px; color: var(--muted); font-size: .72rem; line-height: 1.5; }
 .course-history { padding: 24px; }
 .history-intro { max-width: 760px; margin: 10px 0 0; color: var(--muted); font-size: .82rem; line-height: 1.55; }
 .history-list { margin-top: 20px; border-top: 1px solid var(--line); }
