@@ -47,6 +47,9 @@ p { line-height: 1.65; }
 .course-chip small { margin-top: 5px; color: rgba(255,255,255,.55); font-size: .72rem; }
 .account-chip { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 10px; margin-top: 14px; padding: 14px 3px 0; border-top: 1px solid rgba(255,255,255,.11); }
 .account-chip > span, .mobile-header > span { display: grid; width: 38px; height: 38px; place-items: center; color: var(--navy); background: #dce8ee; font-size: .7rem; font-weight: 800; }
+.profile-avatar { display: block; width: 38px; height: 38px; flex: 0 0 auto; object-fit: cover; background: #dce8ee; }
+.profile-avatar-fallback { display: grid; place-items: center; color: var(--navy); font-size: .7rem; font-weight: 800; }
+.mobile-account .profile-avatar { width: 38px; height: 38px; }
 .account-chip strong, .account-chip small { display: block; }
 .account-chip strong { font-size: .78rem; }
 .account-chip small { margin-top: 3px; color: rgba(255,255,255,.45); font-size: .67rem; }
@@ -243,7 +246,7 @@ p { line-height: 1.65; }
   .portal-main { margin-left: 0; padding-bottom: 76px; }
   .main-inner { padding: 30px 18px 55px; }
   .mobile-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; color: #fff; background: var(--navy); }
-  .mobile-nav { position: fixed; inset: auto 0 0; z-index: 40; display: grid; grid-template-columns: repeat(5, 1fr); padding: 7px 5px calc(7px + env(safe-area-inset-bottom)); background: var(--navy); box-shadow: 0 -5px 20px rgba(0,0,0,.15); }
+  .mobile-nav { position: fixed; inset: auto 0 0; z-index: 40; display: grid; grid-template-columns: repeat(6, 1fr); padding: 7px 5px calc(7px + env(safe-area-inset-bottom)); background: var(--navy); box-shadow: 0 -5px 20px rgba(0,0,0,.15); }
   .mobile-nav button { display: grid; justify-items: center; gap: 4px; padding: 5px 2px; color: rgba(255,255,255,.45); background: transparent; border: 0; font-size: .52rem; }
   .mobile-nav button span { font-size: .62rem; font-weight: 800; }
   .mobile-nav button.active { color: #fff; }
@@ -570,6 +573,37 @@ select, textarea, input { border-radius: 0; }
 .open-record-card > b { color: var(--blue); font-size: .72rem; text-transform: uppercase; }
 .record-requirements { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 20px; padding: 14px 18px; color: #684d17; background: #fbf3df; border-left: 3px solid #b28732; }
 .record-requirements strong, .record-requirements span { font-size: .76rem; }
+.acs-area { display: block; margin-bottom: 5px; color: var(--blue); font-size: .7rem; font-weight: 750; letter-spacing: .035em; line-height: 1.4; text-transform: uppercase; }
+.profile-layout { display: grid; grid-template-columns: minmax(260px, .62fr) minmax(0, 1.38fr); gap: 22px; align-items: start; }
+.profile-identity { position: sticky; top: 28px; display: grid; justify-items: start; gap: 18px; padding: 28px; }
+.profile-avatar-large { width: 132px; height: 132px; }
+.profile-avatar-medium { width: 54px; height: 54px; }
+.profile-avatar-directory { width: 34px; height: 34px; }
+.profile-identity h2 { margin: 4px 0; font-size: 1.8rem; }
+.profile-identity p { margin: 0; color: var(--muted); font-size: .8rem; overflow-wrap: anywhere; }
+.profile-identity > small { color: var(--muted); font-size: .72rem; line-height: 1.5; }
+.photo-picker { position: relative; display: inline-flex; min-height: 42px; align-items: center; padding: 0 14px; color: var(--ink); border: 1px solid #b9c5cb; font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; cursor: pointer; }
+.photo-picker input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.profile-remove { width: auto; margin-top: -5px; color: #8a3f38; text-transform: none; }
+.profile-forms { display: grid; gap: 18px; }
+.profile-form { margin-top: 0; padding: 28px; }
+.profile-form > div:first-child h2, .profile-section-heading h2 { margin-bottom: 0; }
+.profile-section-heading { margin-top: 12px; padding-top: 24px; border-top: 1px solid var(--line); }
+.profile-section-heading .eyebrow { margin-bottom: 5px; }
+.address-grid { grid-template-columns: 1fr 1fr; }
+.account-security { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 24px 28px; }
+.account-security p { margin-bottom: 0; color: var(--muted); font-size: .78rem; }
+.account-security > div:last-child { display: flex; flex: 0 0 auto; gap: 8px; }
+.student-contact-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 18px; background: var(--line); border: 1px solid var(--line); }
+.student-contact-summary > div { display: grid; gap: 5px; padding: 13px 15px; background: #f7f9fa; }
+.student-contact-summary span { color: var(--blue); font-size: .65rem; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
+.student-contact-summary strong { font-size: .75rem; font-weight: 600; line-height: 1.5; }
+.waiting-profile-page { min-height: 100vh; padding: 36px; }
+.waiting-profile-page > * { width: min(1120px, 100%); margin-right: auto; margin-left: auto; }
+.waiting-profile-intro { display: flex; align-items: center; justify-content: space-between; gap: 45px; margin-bottom: 24px; padding: 28px 32px; }
+.waiting-profile-intro > div:last-child { max-width: 650px; }
+.waiting-profile-intro h1 { margin-bottom: 7px; font-size: 2.25rem; }
+.waiting-profile-intro p:last-child { margin-bottom: 0; color: var(--muted); }
 
 @media (max-width: 1220px) {
   .builder-layout { grid-template-columns: 1fr; }
@@ -592,6 +626,9 @@ select, textarea, input { border-radius: 0; }
   .attempt-list { max-height: 380px; overflow-y: auto; }
   .time-entry { grid-template-columns: 1fr 1fr; }
   .record-time-grid { grid-template-columns: 1fr 1fr; }
+  .profile-layout { grid-template-columns: 1fr; }
+  .profile-identity { position: static; grid-template-columns: auto 1fr; align-items: center; }
+  .profile-identity > :not(.profile-avatar):not(div) { grid-column: 1 / -1; }
 }
 
 @media (max-width: 760px) {
@@ -608,7 +645,7 @@ select, textarea, input { border-radius: 0; }
   .create-drawer > form, .form-panel, .collection-panel, .builder-panel, .grade-editor { padding: 20px; }
   .save-status { right: 16px; bottom: 16px; }
   .revision-lock { grid-template-columns: 1fr; }
-  .staff-mobile-nav { grid-template-columns: repeat(6, 1fr); }
+  .staff-mobile-nav { grid-template-columns: repeat(7, 1fr); }
   .staff-mobile-nav button { font-size: .46rem; }
   .history-list > details > summary { grid-template-columns: 1fr auto; }
   .history-list > details > summary .history-action { grid-column: 1 / -1; }
@@ -622,4 +659,8 @@ select, textarea, input { border-radius: 0; }
   .record-facts, .record-time-grid { grid-template-columns: 1fr 1fr; }
   .record-grade-edit > div { grid-template-columns: 1fr; }
   .record-grade-edit > div > label { grid-column: auto; }
+  .account-security, .waiting-profile-intro { align-items: stretch; flex-direction: column; }
+  .account-security > div:last-child { flex-direction: column; }
+  .student-contact-summary { grid-template-columns: 1fr; }
+  .waiting-profile-page { padding: 18px; }
 }
