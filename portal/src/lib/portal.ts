@@ -12,6 +12,17 @@ export interface PortalProfile {
   full_name: string
   role: PortalRole
   active: boolean
+  phone: string | null
+  address_line_1: string | null
+  address_line_2: string | null
+  city: string | null
+  state_region: string | null
+  postal_code: string | null
+  country: string | null
+  emergency_contact_name: string | null
+  emergency_contact_relationship: string | null
+  emergency_contact_phone: string | null
+  avatar_path: string | null
   created_at?: string
 }
 
@@ -246,8 +257,10 @@ function isMissingTable(error: { code?: string } | null) {
   return Boolean(error && ['42P01', 'PGRST205'].includes(error.code ?? ''))
 }
 
+const profileColumns = 'id, email, full_name, role, active, phone, address_line_1, address_line_2, city, state_region, postal_code, country, emergency_contact_name, emergency_contact_relationship, emergency_contact_phone, avatar_path, created_at'
+
 export async function loadProfile(user: User): Promise<PortalProfile> {
-  const { data, error } = await client().from('profiles').select('id, email, full_name, role, active, created_at').eq('id', user.id).single()
+  const { data, error } = await client().from('profiles').select(profileColumns).eq('id', user.id).single()
   throwIfError(error)
   return data as PortalProfile
 }
@@ -255,7 +268,7 @@ export async function loadProfile(user: User): Promise<PortalProfile> {
 export async function loadStaffWorkspace(): Promise<StaffWorkspace> {
   const db = client()
   const results = await Promise.all([
-    db.from('profiles').select('id, email, full_name, role, active, created_at').order('created_at', { ascending: false }),
+    db.from('profiles').select(profileColumns).order('created_at', { ascending: false }),
     db.from('courses').select('*').order('created_at', { ascending: false }),
     db.from('course_versions').select('*').order('revision', { ascending: false }),
     db.from('acs_publications').select('*').order('created_at', { ascending: false }),
@@ -320,7 +333,7 @@ export async function loadStudentWorkspace(studentId: string): Promise<StudentWo
 
   const [versionResult, instructorResult] = await Promise.all([
     db.from('course_versions').select('*').eq('id', enrollment.course_version_id).single(),
-    db.from('profiles').select('id, email, full_name, role, active, created_at').eq('id', enrollment.instructor_id).maybeSingle(),
+    db.from('profiles').select(profileColumns).eq('id', enrollment.instructor_id).maybeSingle(),
   ])
   throwIfError(versionResult.error)
   throwIfError(instructorResult.error)
@@ -458,16 +471,18 @@ export async function addLesson(input: { phaseId: string; lessonNumber: number; 
   return result.data as PortalLesson
 }
 
-export async function addAcsItemToLesson(input: { publicationId: string; lessonId: string; code: string; areaOfOperation: string; task: string; elementType: AcsItem['element_type']; description: string }) {
+export async function addAcsItemToLesson(input: { publicationId: string; lessonId: string; areaOfOperation: string; task: string }) {
   const db = client()
-  const code = input.code.trim()
-  const existing = await db.from('acs_items').select('*').eq('publication_id', input.publicationId).eq('code', code).maybeSingle()
+  const areaOfOperation = input.areaOfOperation.trim()
+  const task = input.task.trim()
+  if (!areaOfOperation || !task) throw new Error('Enter the Area of Operation and Task.')
+  const existing = await db.from('acs_items').select('*').eq('publication_id', input.publicationId).eq('area_of_operation', areaOfOperation).eq('task', task).limit(1).maybeSingle()
   throwIfError(existing.error)
   let item = existing.data as AcsItem | null
   if (!item) {
     const last = await db.from('acs_items').select('sort_order').eq('publication_id', input.publicationId).order('sort_order', { ascending: false }).limit(1).maybeSingle()
     throwIfError(last.error)
-    const inserted = await db.from('acs_items').insert({ publication_id: input.publicationId, code, area_of_operation: input.areaOfOperation.trim(), task: input.task.trim(), element_type: input.elementType, description: input.description.trim(), sort_order: (last.data?.sort_order ?? 0) + 1 }).select('*').single()
+    const inserted = await db.from('acs_items').insert({ publication_id: input.publicationId, code: `TASK-${crypto.randomUUID()}`, area_of_operation: areaOfOperation, task, element_type: 'skill', description: task, sort_order: (last.data?.sort_order ?? 0) + 1 }).select('*').single()
     throwIfError(inserted.error)
     item = inserted.data as AcsItem
   }
@@ -478,22 +493,93 @@ export async function addAcsItemToLesson(input: { publicationId: string; lessonI
   return item
 }
 
-export async function updateAcsItem(input: { id: string; code: string; areaOfOperation: string; task: string; elementType: AcsItem['element_type']; description: string }) {
+export async function updateAcsItem(input: { id: string; areaOfOperation: string; task: string }) {
+  if (!input.areaOfOperation.trim() || !input.task.trim()) throw new Error('Enter the Area of Operation and Task.')
   const result = await client().from('acs_items').update({
-    code: input.code.trim(),
     area_of_operation: input.areaOfOperation.trim(),
     task: input.task.trim(),
-    element_type: input.elementType,
-    description: input.description.trim(),
+    description: input.task.trim(),
   }).eq('id', input.id).select('*').single()
   throwIfError(result.error)
   return result.data as AcsItem
 }
 
-export async function updateStudentProfile(input: { id: string; fullName: string; active: boolean }) {
-  const result = await client().from('profiles').update({ full_name: input.fullName.trim(), active: input.active }).eq('id', input.id).eq('role', 'student').select('*').single()
+export interface ProfileDetailsInput {
+  id: string
+  fullName: string
+  phone: string
+  addressLine1: string
+  addressLine2: string
+  city: string
+  stateRegion: string
+  postalCode: string
+  country: string
+  emergencyContactName: string
+  emergencyContactRelationship: string
+  emergencyContactPhone: string
+}
+
+function profileDetailsValues(input: ProfileDetailsInput) {
+  const optional = (value: string) => value.trim() || null
+  return {
+    full_name: input.fullName.trim(),
+    phone: optional(input.phone),
+    address_line_1: optional(input.addressLine1),
+    address_line_2: optional(input.addressLine2),
+    city: optional(input.city),
+    state_region: optional(input.stateRegion),
+    postal_code: optional(input.postalCode),
+    country: optional(input.country),
+    emergency_contact_name: optional(input.emergencyContactName),
+    emergency_contact_relationship: optional(input.emergencyContactRelationship),
+    emergency_contact_phone: optional(input.emergencyContactPhone),
+  }
+}
+
+export async function updateOwnProfile(input: ProfileDetailsInput) {
+  if (!input.fullName.trim()) throw new Error('Enter your full name.')
+  const result = await client().from('profiles').update(profileDetailsValues(input)).eq('id', input.id).select('*').single()
   throwIfError(result.error)
   return result.data as PortalProfile
+}
+
+export async function updateStudentProfile(input: ProfileDetailsInput & { active: boolean }) {
+  if (!input.fullName.trim()) throw new Error('Enter the student’s full name.')
+  const result = await client().from('profiles').update({ ...profileDetailsValues(input), active: input.active }).eq('id', input.id).eq('role', 'student').select('*').single()
+  throwIfError(result.error)
+  return result.data as PortalProfile
+}
+
+export async function uploadProfilePhoto(profile: PortalProfile, file: File) {
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) throw new Error('Use a JPG, PNG, or WebP image.')
+  if (file.size > 5 * 1024 * 1024) throw new Error('Profile photos must be 5 MB or smaller.')
+  const db = client()
+  const extension = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg'
+  const path = `${profile.id}/${crypto.randomUUID()}.${extension}`
+  const upload = await db.storage.from('profile-photos').upload(path, file, { contentType: file.type, cacheControl: '3600' })
+  throwIfError(upload.error)
+  const update = await db.from('profiles').update({ avatar_path: path }).eq('id', profile.id).select('*').single()
+  if (update.error) {
+    await db.storage.from('profile-photos').remove([path])
+    throwIfError(update.error)
+  }
+  if (profile.avatar_path) await db.storage.from('profile-photos').remove([profile.avatar_path])
+  return update.data as PortalProfile
+}
+
+export async function removeProfilePhoto(profile: PortalProfile) {
+  const db = client()
+  const update = await db.from('profiles').update({ avatar_path: null }).eq('id', profile.id).select('*').single()
+  throwIfError(update.error)
+  if (profile.avatar_path) await db.storage.from('profile-photos').remove([profile.avatar_path])
+  return update.data as PortalProfile
+}
+
+export async function getProfilePhotoUrl(profile: PortalProfile) {
+  if (!profile.avatar_path) return null
+  const result = await client().storage.from('profile-photos').createSignedUrl(profile.avatar_path, 60 * 60)
+  throwIfError(result.error)
+  return result.data?.signedUrl ?? null
 }
 
 export async function enrollStudent(input: { studentId: string; instructorId: string; courseVersionId: string }) {
