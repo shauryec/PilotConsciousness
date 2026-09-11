@@ -19,7 +19,16 @@ function AuthenticatedPortal({ session }: { session: Session }) {
   const [error, setError] = useState('')
 
   async function refreshStaff() {
-    setStaffWorkspace(await loadStaffWorkspace())
+    const [nextProfile, nextWorkspace] = await Promise.all([loadProfile(session.user), loadStaffWorkspace()])
+    setProfile(nextProfile)
+    setStaffWorkspace(nextWorkspace)
+  }
+
+  async function refreshStudent() {
+    const nextProfile = await loadProfile(session.user)
+    const nextWorkspace = await loadStudentWorkspace(nextProfile.id)
+    setProfile(nextProfile)
+    setStudentWorkspace(nextWorkspace)
   }
 
   useEffect(() => {
@@ -46,7 +55,7 @@ function AuthenticatedPortal({ session }: { session: Session }) {
   if (!profile.active) return <AccountState title="This account is inactive." detail="Contact Pilot Consciousness if you believe this is an error." action={<button className="button button-outline" onClick={() => void supabase?.auth.signOut()}>Sign out</button>} />
   if (profile.role === 'student') {
     if (studentWorkspace === undefined) return <AccountState title="Opening your course…" detail="Loading your syllabus, records, and assigned resources." />
-    return studentWorkspace ? <StudentPortal profile={profile} workspace={studentWorkspace} /> : <StudentWaitingRoom profile={profile} />
+    return studentWorkspace ? <StudentPortal profile={profile} workspace={studentWorkspace} refresh={refreshStudent} /> : <StudentWaitingRoom profile={profile} refresh={refreshStudent} />
   }
   return staffWorkspace ? <StaffPortal profile={profile} workspace={staffWorkspace} refresh={refreshStaff} /> : <AccountState title="Opening your workspace…" detail="Loading students, courses, and current training records." />
 }
